@@ -12,6 +12,10 @@ font-family: "Courier New", Courier, monospace;
 font-size: 25px;
 	font-weight: italic;
 }
+#staff{
+	padding-right: 5%;
+	padding-left: 5%;
+}
 #1{
 	padding-top: 18%;
 	margin-left: 5%;
