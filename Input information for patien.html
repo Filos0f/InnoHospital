@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link href="dashboard.css" rel="stylesheet">
+<title>Input information for patien</title>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">My work</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Exit</a></li>
+          </ul>
+        
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active" id="genAnalVal"><a href="#">Общий анализ<span class="sr-only">(current)</span></a></li>
+            <li><a href="#" id="xRayVal">Ренген</a></li>
+            <li><a href="#" id="diagnostVal">Диагностика</a></li>
+            <li><a href="#" id="bloodVal">Кровь</a></li>
+            <li><a href="#" id="backVal">Назад</a></li>
+            <li><a href="#" id="recVal">Записать</a></li>
+          </ul>
+	  </div>
+      </div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="sub-header"id="patientNameVal">Patients</h2>
+          <div class="panel-group" id="workField">
+          	<div class="row" id="resultPanelVal">
+          		<div style="">
+                	<div class="panel panel-primary" id="xrayPanelVal" style="display:none">
+                    	<div class="panel-heading">
+                        	X-Ray
+                        </div>
+                        <div class="panel-body">
+                        	<div class="text-primary">
+                            	<p class="well">descryption</p>
+                            </div>
+                            <div class="img-thumbnail">
+                            	<img src="http://www.darvill.clara.net/emag/images/xrayhands.jpg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary" id="diagnPanelVal" style="display:none">
+                    	<div class="panel-heading">
+                        	Diagnosis
+                        </div>
+                        <div class="panel-body">
+                        	<div class="text-primary well">
+                            	<p id="typeVal" class="well">TypeField</p>
+                            	<p id="titleVal" class="well">TitleField</p>
+                            </div>
+                            <div class="btn">
+                            	<button class="btn-primary btn" id="diagnBttVal">DONE</button>
+                            </div>
+                        </div>
+                    </div>
+                   	<div class="panel panel-primary" id="bloddPanelVal" style="display:none">
+                    	<div class="panel-heading">
+                        	Blood
+                        </div>
+                        <div class="panel-body">
+                        	<div class="text-primary well" id="commonFieldOfBloodVal">
+                            	<p id="type" class="well">type</p>
+                                <p id="Standart" class="well">standart</p>
+                                <p id="result" class="well">result</p>
+                                <button class="btn btn-primary" id=bloodBtnDone>DONE</button> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary" id="genAnalPanelVal" style="display:none">
+                    	<div class="panel-heading">
+                        	Общий анализ
+                        </div>
+                        <div class="panel-body">
+                        	<div class="text-primary well" id="commonFieldOfGenAnalVal">
+                            	<p id="data" class="well">Data</p>
+                                <p id="title" class="well">title</p>
+                                <p id="result" class="well">result</p>
+                                <button class="btn btn-primary" id=bloodBtnDone>DONE</button> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary col-md-5" id="recordPanelVal" style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
+                    	<div class="panel-heading" style="">
+                        	Record patient
+                        </div>
+                        <div class="panel-body well">
+                        	<div class="row" id="dateVal" style="text-align:center; ">
+                            	<div class="col-md-10 text-center well" >
+                            		<p >data</p>
+                                </div>
+                            </div>
+                            <div class="row " id="timeHourMinVal" style="text-align:center">
+                            	<div class="col-md-5 well text-center" id="getTime" style="height:70px">
+                                	<p><button class="btn btn-success" id="choiseTheTimeBtn">Time</button></p>
+                                </div>
+                                <div class="col-md-5 well text-center" style="text-align:center height:75px">
+                                	<p id=choisenDateTIme> 30-Oct-16 1:15 PM</p>
+                                </div>
+                            </div>
+                            <div class="row" id="patVal" style="text-align:center">
+                            	<div class="col-md-4 text-center well"
+                            		<p >patient</p>
+                                </div>
+                            </div>
+                            <div class="row" id="doctorVal" style="text-align:center">
+                            	<div class="col-md-10 text-center well"
+                            		<p >doctor</p>
+                                </div>
+                            </div>
+                            <div class="row" id="offtTimeVal" style="text-align:center">
+                            	<div class="col-md-10 text-center well"
+                            		<p >Offset Time</p>
+                                </div>
+                            </div>
+                            <div class="row" id="dateVal" style="text-align:center">
+                            	<button class="btn btn-success col-md-5" id="Ok">Ok</button>
+                            	<button class="btn btn-danger col-lg-5" id="Back">Cancel</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
