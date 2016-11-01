@@ -1,0 +1,32 @@
+body{text-align: center;
+	background-image: url("background.jpg");
+}
+h1{
+
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 55px;
+	font-weight: bold;
+}
+p{
+font-family: "Courier New", Courier, monospace;
+font-size: 25px;
+	font-weight: italic;
+}
+#staff{
+	padding-right: 5%;
+	padding-left: 5%;
+}
+#1{
+	padding-top: 18%;
+	margin-left: 5%;
+
+}
+.btn{
+	background-color: #66ffcc;
+	bottom: 0;
+	margin:85px;
+	padding: 3%;
+	font-size: 30px;
+	font-weight: bold;
+	color:#001f3f;
+}
