@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="css/style.css">
+	<title>INNOHOSPITAL</title>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron">
+	<h1>Welcome to Magic Hospital!</h1>
+	<p>Please choose out of two options</p>
+	</div>
+</div>
+<form action="/patient" method="get">
+  <div class="container" id="1">
+  <button id="patient" type="submit" class="btn btn-primary">Patient</button>
+  </div>
+</form>
+<form action="/staff" method="get">
+  <div class="container" id="2">
+  <button id="staff" type="submit" class="btn btn-primary">Staff</button>
+  </div>
+</form>
+ 
+</body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/jquery-3.1.0.js"
+  integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="
+  crossorigin="anonymous"></script>
+</html>
