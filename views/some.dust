@@ -1,0 +1,5 @@
+<form action="/log" method="post">
+  <div class="container" id="1">
+  <button id="patient" type="submit" class="btn btn-primary">Patient</button>
+  </div>
+</form>

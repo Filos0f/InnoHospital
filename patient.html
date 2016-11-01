@@ -5,10 +5,10 @@
   <title>Sign in panel</title>
   <meta name="author" content="Sultan">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="css/patient.css">
+  <link rel="stylesheet" type="text/css" href="style/patient.css">
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=ABeeZee:400,400italic">
-  <script type="js/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <script type="js/javascript" src="js/formslider.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script type="text/javascript" src="formslider.js"></script>
 <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -23,13 +23,13 @@
         <h2>Login to the Site</h2>
         <div class="content">
           <a href="#" class="slidelink" id="showregister">Don't Have An Account? &rarr;</a>
-          <form id="login" name="login" action="/log" method="post">
+          <form id="login" name="login" action="#" method="post">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" class="txtfield" tabindex="1" autocomplete="off">
             
              <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input type="password" name="hashpassword" class="form-control txtfield" id="exampleInputPassword1" placeholder="Password">
+          <input type="password" class="form-control txtfield" id="exampleInputPassword1" placeholder="Password">
         </div>
             <br>
             <input type="submit" name="loginbtn" id="loginbtn" value="Login" class="btn" tabindex="3">
