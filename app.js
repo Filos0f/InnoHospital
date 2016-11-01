@@ -14,9 +14,10 @@ app.set('views',__dirname+'/views');
 
 var client = new pg.Client();
 app.use(express.static(path.join(__dirname,'public')));
+ 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-
+ 
 
 app.get('/',function(req,res){
 	res.render('index');
@@ -25,6 +26,7 @@ app.get('/',function(req,res){
 
 app.get('/patient', function(req, res){
 	res.render('patient');
+
 });
 
 app.post('/add',function(req,res){
