@@ -3,8 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link href="dashboard.css" rel="stylesheet">
+<link href="css/dashboard.css" rel="stylesheet">
 <title>Input information for patien</title>
+
 </head>
 
 <body>
@@ -32,12 +33,12 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active" id="genAnalVal"><a href="#">Общий анализ<span class="sr-only">(current)</span></a></li>
-            <li><a href="#" id="xRayVal">Ренген</a></li>
-            <li><a href="#" id="diagnostVal">Диагностика</a></li>
-            <li><a href="#" id="bloodVal">Кровь</a></li>
-            <li><a href="#" id="backVal">Назад</a></li>
-            <li><a href="#" id="recVal">Записать</a></li>
+            <li><a href="#" id='analVal' onclick="openbox('genAnalPanelVal'); return false">Общий анализ<span class="sr-only">(current)</span></a></li>
+            <li><a href="#" id="xRayVal" onclick="openbox('xrayPanelVal'); return false">Ренген</a></li>
+            <li><a href="#" id="diagnostVal" onclick="openbox('diagnPanelVal'); return false">Диагностика</a></li>
+            <li><a href="#" id="bloodVal" onclick="openbox('bloddPanelVal'); return false">Кровь</a></li>
+            <li><a href="#" id="recVal" onclick="openbox('recordPanelVal'); return false">Записать</a></li>
+			<li><a href="#" id="backVal"><form type='submit' action='/backToStaffMain' method='get'>Назад</form></a></li>
           </ul>
 	  </div>
       </div>
@@ -145,5 +146,22 @@
         </div>
       </div>
     </div>
+	<script type='text/javascript'>
+	function openbox(id){
+		document.getElementById('xrayPanelVal').style.display='none';
+		document.getElementById('genAnalPanelVal').style.display='none';
+		document.getElementById('recordPanelVal').style.display='none';
+		document.getElementById('bloddPanelVal').style.display='none';
+		document.getElementById('diagnPanelVal').style.display='none';
+		
+		display = document.getElementById(id).style.display;
+		if(display=='none'){
+		   document.getElementById(id).style.display='block';
+		}else{
+		   document.getElementById(id).style.display='none';
+		}
+	}
+</script>
+}
 </body>
 </html>

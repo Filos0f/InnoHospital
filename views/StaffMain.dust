@@ -5,9 +5,20 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/dashboard.css" rel="stylesheet">
 <title>Staff main</title>
+	<script type="text/javascript">
+	function clock(){
+		var date = new Date().toISOString().
+		replace(/T/, ' ').  
+		replace(/\..+/, '');
+		document.getElementById('timeSpan').innerHTML = date;
+		
+		var t = setTimeout(clock, 1000);
+	}
+	
+	</script>
 </head>
 
-<body>
+<body onload="clock()">
 <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -38,8 +49,6 @@
           </ul>
 	     </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-
           <h2 class="sub-header">Patients</h2>
           <h3 class="sub-header" id=timeSpan name="dateToday">Дата(сегодня, вчера, период и прочее)</h3>
           <div class="table-responsive" name="tableRep">
@@ -51,30 +60,33 @@
                   <th id=secondNameHeader>SecondName</th>
                   <th id=MiddleNameHeader>MiddleName</th>
                   <th id=ButtonsHeader>Work</th>
-                  <th id=mainCheckBox><input type="checkbox"/></th>
+                  <!--<th id=mainCheckBox><input type="checkbox"/></th>-->
                 </tr>
               </thead>
               <tbody>
                 <tr id=secondRow>
                   <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
-                  <td class="FirstNameTitle" name="FirstNameTitle">Dick</td>
+                  <td class="FirstNameTitle" name="FirstNameTitle">Her</td>
                   <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
                   <td class="MiddleNameTitle" name="MidleNameTitle">Last</td>
-                  <td class="declineButt" name="declineBtt"><button class="btn btn-success appBtt">appointment</button><button class="btn btn-warning declineBtt">decline</button></td>
-                  <th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>
+                  <td class="declineButt" name="declineBtt" action='/pressBtt'method='get'>
+					<span><form action='/appointmentBtt'method='get'>
+					<button class="btn btn-success appBtt" type='submit' >appointment</button>
+					</form>
+					<form action='/declineBtt'method='get'>
+					<button class="btn btn-warning declineBtt">decline</button>
+					</form>
+					</span>
+				  </td>
+                  <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
                 </tr>
-                </tr>
-                </tr>
-              </tbody>
+                </tbody>
             </table>
           </div>
         </div>
 	</div>
 </div>
     
-	<script type="text/javascript">
-	var date = new Date();
-	document.getElementById("timeSpan").innerHTML = getLocaleShortDateString(date);
-	</script>
+
 </body>
 </html>

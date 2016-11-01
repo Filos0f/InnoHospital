@@ -47,6 +47,20 @@ res.redirect('/');
 	});
 });
 
+app.get('/appointmentBtt', function(req,res){
+		
+		res.render('Input information for patien');
+});
+
+app.post('/shit', function(req, res){
+	console.log('shiiiiiiiiiiiiiiiiit');
+});
+
+app.get('/backToStaffMain', function(req,res){
+	console.log('why?!!!!');
+	res.render('StaffMain');
+});
+
 app.post('/log', function(req, res){
 	console.log("-------------LOG -----------");
 	
