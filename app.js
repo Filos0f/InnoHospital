@@ -14,9 +14,10 @@ app.set('views',__dirname+'/views');
 
 var client = new pg.Client();
 app.use(express.static(path.join(__dirname,'public')));
+ 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-
+ 
 
 app.get('/',function(req,res){
 	console.log("-------------  -----------");
@@ -27,6 +28,7 @@ app.get('/',function(req,res){
 app.get('/patient', function(req, res){
 	console.log("------------- PATIENT -----------");
 	res.render('patient');
+
 });
 
 // one@inno.com
@@ -66,11 +68,11 @@ app.get('/registration', function(req, res){
 
 app.post('/addPatient',function(req,res){
  
-	console.log("-------------ADD -----------");
-	console.log(req.session.gridRadios);
+	console.log(req.body.fname);
+	console.log(req.body.gridRadios);
 
 	const pg = require('pg');
-	const connectionString = process.env.DATABASE_URL || 'postgres://postgres:1@localhost:5433/InnoHospital';
+	const connectionString = process.env.DATABASE_URL || 'postgres://sultan:3732264@localhost:5432/InnoHospital';
 	const client = new pg.Client(connectionString);
 	client.connect();
 
@@ -80,8 +82,8 @@ app.post('/addPatient',function(req,res){
 	var sqlQuery = 'INSERT INTO person VALUES(' + req.body.passport + ', ' + 
 	req.body.fname + ', ' + req.body.sname + ', ' +
 	req.body.city + ' ' + req.body.street + ' ' + req.body.appartment +
-	+ ', ' + eq.body.email + ', ' + eq.body.phone + ', ' + eq.body.birthdate +
-	', ' + eq.body.gender + ', ' + hashpassword + ', ' + hashSolt;
+	+ ', ' + req.body.email + ', ' + req.body.phone + ', ' + req.body.birthdate +
+	', ' + req.body.gridRadios + ', ' + hashpassword + ', ' + hashSolt;
 
 	console.log(sqlQuery);
 
