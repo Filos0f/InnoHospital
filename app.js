@@ -5,7 +5,7 @@ cons=require('consolidate'),
 dust=require('dustjs-helpers'),
 pg=require('pg'),
 app=express();
-var connect="postgres://postgres:1@localhost:5433/InnoHospital";
+var connect="postgres://sultan:3732264@localhost/recipebookdb";//Переделал под свой логин с паролем
 //Assign DUST engine to .dust files
 app.engine('dust',cons.dust);
 //Set deafalt ext
@@ -30,6 +30,13 @@ app.get('/patient', function(req, res){
 	res.render('patient');
 
 });
+
+app.get('/cabinet', function(req, res){
+	console.log("------------- PATIENT -----------");
+	res.render('patient_cabinet');
+
+});
+
 
 // one@inno.com
 app.post('/log', function(req, res){
@@ -66,41 +73,24 @@ app.get('/registration', function(req, res){
 	res.render('registration');
 });
 
-app.post('/addPatient',function(req,res){
+app.post('/addPatient',function(req,res){//Изменил только эту часть -*********************
  
-	console.log(req.body.fname);
-	console.log(req.body.gridRadios);
-
-	const pg = require('pg');
-	const connectionString = process.env.DATABASE_URL || 'postgres://sultan:3732264@localhost:5432/InnoHospital';
-	const client = new pg.Client(connectionString);
-	client.connect();
-
+	 
 	var hashSolt = 2132343;
 	var hashpassword = 2132343 * 2132343;
 
-	var sqlQuery = 'INSERT INTO person VALUES(' + req.body.passport + ', ' + 
-	req.body.fname + ', ' + req.body.sname + ', ' +
-	req.body.city + ' ' + req.body.street + ' ' + req.body.appartment +
-	+ ', ' + req.body.email + ', ' + req.body.phone + ', ' + req.body.birthdate +
-	', ' + req.body.gridRadios + ', ' + hashpassword + ', ' + hashSolt;
-
-	console.log(sqlQuery);
-
-	client.query(sqlQuery);
-
-	/*
-	
+	 	
 	pg.connect(connect,function(err,client,done){
 		if(err){
 			return console.error('Error fetching from pool',err);
-	}
-	client.query("INSERT INTO recipes(name,ingredients,directions) VALUES($1,$2,$3)",
-		[req.body.name,req.body.ingredients,req.body.directions]);
+	} var address=req.body.city+req.body.street+req.body.appartment;
+	client.query("INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+		[req.body.passport, req.body.fname, req.body.sname, address, req.body.email, req.body.phone, req.body.birthdate, req.body.gridRadios, hashpassword, hashSolt]);
 	done();
-	res.redirect('/log');
+	res.redirect('/cabinet');
 	});
-	*/
+	 
+ 
 });
 
 
