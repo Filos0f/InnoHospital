@@ -32,6 +32,7 @@ app.get('/patient', function(req, res){
 // one@inno.com
 app.post('/log', function(req, res){
 	console.log("-------------LOG -----------");
+	 
 	
 	const pg = require('pg');
 	const connectionString = process.env.DATABASE_URL || 'postgres://postgres:1@localhost:5433/InnoHospital';
@@ -47,7 +48,7 @@ app.post('/log', function(req, res){
 	var isAutorize = new Autorization();
 	const query = client.query(sqlQuery, function(err, result) {
 		console.log(result.rows.length);
-		if(result.rows.length != 0)
+		if(result.rows.length == 0)
 		{
 			res.render('patient_cabinet');
 		}
@@ -64,9 +65,9 @@ app.get('/registration', function(req, res){
 });
 
 app.post('/addPatient',function(req,res){
-
+ 
 	console.log("-------------ADD -----------");
-	console.log(req.body.gender);
+	console.log(req.session.gridRadios);
 
 	const pg = require('pg');
 	const connectionString = process.env.DATABASE_URL || 'postgres://postgres:1@localhost:5433/InnoHospital';

@@ -22,7 +22,11 @@
       <div id="content-login">
         <h2>Login to the Site</h2>
         <div class="content">
-          <a href="#" class="slidelink" id="showregister">Don't Have An Account? &rarr;</a>
+        <form action="/registration" method="get">
+  <div class="slidelink">
+  <button id="patient" type="submit" class="btn btn-primary">Don't Have An Account? &rarr;</button>
+  </div></form>
+           
           <form id="login" name="login" action="/log" method="post">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" class="txtfield" tabindex="1" autocomplete="off">
