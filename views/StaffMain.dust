@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link href="css/dashboard.css" rel="stylesheet">
+<title>Staff main</title>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">My work</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" id="profile" action="/gotoprofile" method="get">Profile</a></li>
+            <li><a href="#" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
+          </ul>
+        
+        </div>
+      </div>
+    </nav>
+<div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li name="recordSomePatient" action="/recordSomePatient" method="get"><a href="#">Записать на приём<span class="sr-only">(current)</span></a></li>
+            <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Выписать лекарство</a></li>
+            <li name="inputInfoAboutSomePatient" action="/inputInfoAboutSomePatient" method="get"><a href="#">Проставить инфу</a></li>
+          </ul>
+	     </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+
+          <h2 class="sub-header">Patients</h2>
+          <h3 class="sub-header" id=timeSpan name="dateToday">Дата(сегодня, вчера, период и прочее)</h3>
+          <div class="table-responsive" name="tableRep">
+            <table class="table table-striped" name="table">
+              <thead>
+                <tr id=firstRow>
+                  <th id=timeHeader>time</th>
+                  <th id=firstNameHeader>FirstName</th>
+                  <th id=secondNameHeader>SecondName</th>
+                  <th id=MiddleNameHeader>MiddleName</th>
+                  <th id=ButtonsHeader>Work</th>
+                  <th id=mainCheckBox><input type="checkbox"/></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id=secondRow>
+                  <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
+                  <td class="FirstNameTitle" name="FirstNameTitle">Dick</td>
+                  <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
+                  <td class="MiddleNameTitle" name="MidleNameTitle">Last</td>
+                  <td class="declineButt" name="declineBtt"><button class="btn btn-success appBtt">appointment</button><button class="btn btn-warning declineBtt">decline</button></td>
+                  <th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>
+                </tr>
+                </tr>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+	</div>
+</div>
+    
+	<script type="text/javascript">
+	var date = new Date();
+	document.getElementById("timeSpan").innerHTML = getLocaleShortDateString(date);
+	</script>
+</body>
+</html>
