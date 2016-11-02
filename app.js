@@ -93,7 +93,7 @@ app.post('/addPatient',function(req,res){
 		[req.body.passport, req.body.fname, req.body.sname, address, req.body.email, req.body.phone,
 		req.body.birthdate, req.body.gridRadios, md5(req.body.hashpassword + hashSolt), hashSolt]);
 
-	res.redirect('/log');
+	res.redirect('/patient');
 });
 
 
