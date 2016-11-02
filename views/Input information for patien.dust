@@ -38,7 +38,7 @@
             <li><a href="#" id="diagnostVal" onclick="openbox('diagnPanelVal'); return false">Диагностика</a></li>
             <li><a href="#" id="bloodVal" onclick="openbox('bloddPanelVal'); return false">Кровь</a></li>
             <li><a href="#" id="recVal" onclick="openbox('recordPanelVal'); return false">Записать</a></li>
-			<li><a href="#" id="backVal"><form type='submit' action='/backToStaffMain' method='get'>Назад</form></a></li>
+			<li><a href='/backToStaffMain' id="backVal" onclick="back()">Назад</a></input></li>
           </ul>
 	  </div>
       </div>
@@ -160,6 +160,9 @@
 		}else{
 		   document.getElementById(id).style.display='none';
 		}
+	}
+	function back(){
+		
 	}
 </script>
 }
