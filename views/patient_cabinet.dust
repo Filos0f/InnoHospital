@@ -28,6 +28,7 @@
 </nav>
 <body>
 
+
 <div class="col-lg-6">
 
 <div class="PersonalInfo">
@@ -36,18 +37,20 @@
  	 <h3>
  	 	Your general information
  	 </h3>
-
- 	 <span><p>First name</p><div id="fname"></div>  </span>
- 	 <span><p>Last name</p><div id="lname"></div></span>
- 	 <span><p>Passport</p><div id="passport"></div></span>
- 	 <span><p>Sex</p><div id="sex"></div></span>
- 	 <h4 style="font-size: 15px;font-weight: bold;">Contacts</h4>
- 	 <span><p>Phone</p><div id="phone"></div></span>
- 	 <span><p>email</p><div id="email"></div></span>
- 	 <h4 style="font-size: 15px;font-weight: bold;">Address</h4>
- 	 <span><p>City</p><div id="city"></div></span>
+{#patient}
+ 	 <span><p>First Name: <strong>{firstname}</strong></p><div id="fname"></div>  </span>
+ 	 <span><p>Second Name: <strong>{secondname}</strong></p><div id="lname"></div></span>
+ 	 <span><p>Passport number: <strong>{idpassport}</strong></p><div id="passport"></div></span>
+ 	 <span><p>Gender: <strong>{gender}</strong></p><div id="sex"></div></span>
+ 	 <h4 style="font-size: 15px;font-weight: bold;">Contacts: </h4>
+ 	 <span><p>Phone:<strong> {teln}</strong></p><div id="phone"></div></span>
+ 	 <span><p>email: <strong>{email}</strong></p><div id="email"></div></span>
+ 	 <h4 style="font-size: 15px;font-weight: bold;">Address: <strong>{address}</strong></h4>
+ 	<!-- <span><p>City: {}</p><div id="city"></div></span>
  	 <span><p>Street</p><div id="street"></div></span>
- 	 <span><p>Apt.</p><div id="apt"></div></span>
+ 	 <span><p>Apt.</p><div id="apt"></div></span> -->
+
+{/patient}
 	</div>
  </div>
 </div>
@@ -114,8 +117,6 @@ Lorem Ipsum - это текст-"рыба", часто используемый 
     </div>
   </div>
 </div>
-
- 
  
 
 
