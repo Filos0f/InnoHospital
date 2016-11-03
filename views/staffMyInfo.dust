@@ -55,7 +55,8 @@
 		</div>
         
 	</div>
-	<div class="btn"><button id=backBtn class="btn btn-primary">back</button></div>
-
+	<form type='submit' action='/backToStaffMain' method='get'>
+	<div class="btn"><button id=backBtn class="btn btn-primary" action='/backToStaffMain' method='get'>back</button></div>
+	</form>
     </body>
 </html>

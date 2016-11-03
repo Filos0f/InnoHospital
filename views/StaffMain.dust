@@ -28,12 +28,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">My work</a>
+          <a class="navbar-brand text" id="headNavBar" name="navBar" href='/staffMyInfo'method='get'>My work</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" id="profile" action="/gotoprofile" method="get">Profile</a></li>
-            <li><a href="#" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
+            <li><a href="/staffMyInfo" id="profile" action="/gotoprofile" method="get">Profile</a></li>
+            <li><a href="/" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
           </ul>
         
         </div>

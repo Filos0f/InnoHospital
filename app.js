@@ -27,13 +27,63 @@ app.get('/patient', function(req, res){
 	res.render('patient');
 });
 
-app.get('/signinStaff', function(req, res){
-	res.render('StaffMain');
+app.get('/staffMyInfo', function(req,res){
+	var Name;
+    var Gender;
+	var PhoneNumber;
+	var Email;
+	var Adress;
+	var Login;
+	var Password;
+	var Position;
+	var Cabinet;
+	res.render('staffMyInfo');
+	function fillFields(res){
+		//fill the fields;
+		return false;
+		
+	}
 });
 
+
+//pick email & pass from req, check it, true: go to main menu, false: error;
+app.post('/signinStaff', function(req, res){
+	var email = req.body.email;
+	var pass =  req.body.password;
+	function authoriztion(){
+	console.log('I\'m in authoriztion ' + req.body.email+ ' ' + req.body.password + ' & I should return true, ' +
+		'if user is empl & false, if isn\'t');
+	return true;
+	};
+	function fillSchedule(res, email){
+		console.log('In fillSchedule');
+			var staffFirstName;
+			var staffSecondName;
+			var staffMiddleName;
+			var time;
+			var firstName;
+			var secondName;
+			var middleName;
+		//add all patients for today in cycle append it to represent-table;
+		return true;
+	};
+	if(authoriztion(email, pass)){
+		res.render('StaffMain');
+		fillSchedule(res, req.body.className);
+	}
+	else {
+		console.log('wrong mail or pass');
+		res.render('staff');
+
+	}
+
+});
+
+
+
 app.get('/staff', function(req, res){
-						   res.render('staff');
-						   });
+	res.render('staff');
+});
 
 app.post('/add',function(req,res){
 	pg.connect(connect,function(err,client,done){
@@ -49,15 +99,11 @@ res.redirect('/');
 
 app.get('/appointmentBtt', function(req,res){
 		
-		res.render('Input information for patien');
+	res.render('Input information for patien');
 });
 
-app.post('/shit', function(req, res){
-	console.log('shiiiiiiiiiiiiiiiiit');
-});
 
 app.get('/backToStaffMain', function(req,res){
-	console.log('why?!!!!');
 	res.render('StaffMain');
 });
 
