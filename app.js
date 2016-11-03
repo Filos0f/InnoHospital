@@ -6,7 +6,7 @@ dust=require('dustjs-helpers'),
 md5=require('js-md5'),
 pg=require('pg'),
 app=express();
-var connect="postgres://postgres:1@localhost:5433/InnoHospital";
+var connect="postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro";
 //Assign DUST engine to .dust files
 app.engine('dust',cons.dust);
 //Set deafalt ext
@@ -35,7 +35,8 @@ app.post('/log', function(req, res){
 	console.log("-------------LOG -----------");
 	
 	const pg = require('pg');
-	const connectionString = process.env.DATABASE_URL || 'postgres://postgres:1@localhost:5433/InnoHospital';
+	pg.defaults.ssl = true;
+	const connectionString = process.env.DATABASE_URL || 'postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro';
 	const client = new pg.Client(connectionString);
 	client.connect();
 
@@ -45,19 +46,36 @@ app.post('/log', function(req, res){
 	console.log(sqlQuery);
 
 	function Autorization() { this.value = 0; }
-	var isAutorize = new Autorization();
-	const query = client.query(sqlQuery, function(err, result) {
-		console.log(result.rows.length);
-		if(result.rows.length != 0)
-		{
-			console.log(result.rows[0]);
-			res.render('patient_cabinet', {patient:result.rows});
-		}
-		else
-		{
-			res.redirect('/patient');
-		}
-	});
+    var isAutorize = new Autorization();
+    const query = client.query(sqlQuery);
+    
+    const result = [];
+    query.on('rows', function(row) {
+	result.push(row);
+    });
+
+    query.on("end", function(result){
+	if(result.rows[0] === undefined){
+	    res.redirect('/patient');
+	}
+	else{
+	    var hashsalt = result.rows[0].hashsalt;
+	    console.log('------id-------' + hashsalt);
+	    console.log(req.body.hashpassword);
+	    console.log(md5(req.body.hashpassword + hashsalt));
+	    console.log(result.rows[0].hashpassword);
+	    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+		res.render('patient_cabinet');
+	    }
+	    else {
+		//not right password or email
+		res.redirect('/patient');
+	    }
+	}
+	//client.end();
+    });
+
+    console.log('--------This----------' + result);
 });
 
 app.get('/registration', function(req, res){
@@ -71,7 +89,8 @@ app.post('/addPatient',function(req,res){
 	console.log(req.body.gridRadios);
 
 	const pg = require('pg');
-	const connectionString = process.env.DATABASE_URL || 'postgres://postgres:1@localhost:5433/InnoHospital';
+	pg.defaults.ssl = true;
+	const connectionString = process.env.DATABASE_URL || 'postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro';
 	const client = new pg.Client(connectionString);
 	client.connect();
 
@@ -86,6 +105,10 @@ app.post('/addPatient',function(req,res){
 	}
 	var hashSolt = hash(req.body.passport);
 
+	console.log('------hashSolt-------' + hashSolt);
+	console.log(req.body.hashpassword);
+	console.log(md5(req.body.hashpassword + hashSolt));
+
 	var address=req.body.city+ ' ' + req.body.street+ ' ' + req.body.appartment;
 	client.query(
 		'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
@@ -97,6 +120,6 @@ app.post('/addPatient',function(req,res){
 });
 
 
-app.listen(3000,function(){
+app.listen(3000,function() {
 	console.log('Server started on 3000 port');
 });

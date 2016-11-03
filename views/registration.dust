@@ -1,5 +1,5 @@
  
-</!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -13,11 +13,9 @@
 	<h1>Patient, welcome to hospital!</h1>
 	<p>Please choose several options bellow</p>
 	</div>
- 
-
 
 <body>
-<br><br><br>
+ 
 <div class="well" style="width: 520px;">
 <h2>New Patient registration form</h2>
 	<form id="register" name="register" action="/addPatient" method="post">
@@ -30,30 +28,29 @@
 
 	     <label>Phone number</label>
 	    <input class="form-control" type="tel" placeholder="1-(555)-555-5555" id="phone" name="phone">
- 
-		<label>Birth Date  </label>
-        <input type="date" id="birthdate" style="margin:10px; padding: 3px; border-radius: 3px;" class="txtfield" name="birthdate">
+
+		<label>Birth Date</label>e
+        <input type="date" id="birthdate" style="margin:7px; padding: 4px; border-radius: 7px;" class="txtfield" name="birthdate">
 
 		<div class="form-group">
-		 
 	    <label for="InputEmail1">Email address</label>
 	    <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
 	    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 	    </div>
 
-		<div class="form-check"> 
+		<div class="form-check"><span>
           <label class="form-check-label">
           
-            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="1" checked="checked">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="1" name="gender" checked="checked">
             Male
-          </label><br>
+          </label>
           <label class="form-check-label">
           
-            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="0">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="0" name="gender" style="margin-left: 10px;">
             Female
-          </label>
-          <button id="next" class="btn" style="float: right;"><a href="#reg2">Next</a></button>
-            
+          </label></span>
+
+           <a href="#reg2" class="btn btn-info" style="float: right;">Next</a>           
         </div>
 
 	 
@@ -75,11 +72,12 @@
 	    	<input  class="form-control" id="" placeholder="Type in your passport number" name="passport">
 	    	 <div class="form-group">
 			    <label for="exampleInputPassword1">Password</label>
-			    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+			    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="hashpassword">
 			  </div>
 			  <label>Emergency Phone number</label>
-	    <input class="form-control" type="tel" placeholder="1-(555)-555-5555" id="phone">
-
+	    <input class="form-control" type="tel" placeholder="9-(555)-555-5555" id="phone" name="telfamily">
+				<label>Insurance  Number</label>
+	    		<input  class="form-control" id="" placeholder="Your insurance card's number" name="insurance">
 	    	 
 	    	<br>
 	    	 
@@ -88,14 +86,14 @@
 	</div>
 </body>
 </div>
-<!--
+
 <script type="text/javascript">
      
     document.getElementById("home").onclick = function () {
         location.href = "index.html";
     };
 </script>
--->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
  
