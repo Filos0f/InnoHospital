@@ -63,7 +63,7 @@ app.post('/log', function(req, res){
 	    console.log(md5(req.body.hashpassword + hashsalt));
 	    console.log(result.rows[0].hashpassword);
 	    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-		res.render('patient_cabinet', {patient:result.rows});
+			res.render('patient_cabinet', {patient:result.rows});
 	    }
 	    else {
 		//not right password or email
@@ -108,9 +108,9 @@ app.post('/addPatient',function(req,res){
 	console.log(req.body.gridRadios);
 
 	const pg = require('pg');
-
-	const connectionString = process.env.DATABASE_URL || urlDataBase;
-	const client = new pg.Client(urlDataBase);
+	pg.defaults.ssl = true;
+	const connectionString = process.env.DATABASE_URL || 'postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro';
+	const client = new pg.Client(connectionString);
 	client.connect();
 
 	function hash(key)
@@ -123,6 +123,10 @@ app.post('/addPatient',function(req,res){
 	    return h;
 	}
 	var hashSolt = hash(req.body.passport);
+
+	console.log('------hashSolt-------' + hashSolt);
+	console.log(req.body.hashpassword);
+	console.log(md5(req.body.hashpassword + hashSolt));
 
 	var address=req.body.city+ ' ' + req.body.street+ ' ' + req.body.appartment;
 	client.query(
@@ -139,6 +143,6 @@ app.post('/addPatient',function(req,res){
 });
 
 
-app.listen(3000,function(){
+app.listen(3000,function() {
 	console.log('Server started on 3000 port');
 });

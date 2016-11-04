@@ -6,7 +6,7 @@ address varchar(256) NOT NULL,
 email varchar(256) NOT NULL,
 telN varchar(256) NOT NULL,
 birthDay Date NOT NULL, 
-gender boolean NOT NULL,
+gender varchar(1) NOT NULL,
 hashPassword varchar(256) NOT NULL,
 hashSalt varchar(256) NOT NULL,
 Primary key(idPassport)  
@@ -67,7 +67,7 @@ create table VisitSchedule (
 	offsetTime time,
 	idIP varchar(256),
 	idEmp varchar(256),
-	evoluation boolean NOT NULL,
+	evoluation int,
 	primary key (idIP, idEmp),
 	foreign key (idIP) references Patient,
 	foreign key (idEmp) references Employee
