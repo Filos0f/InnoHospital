@@ -72,10 +72,14 @@
 	    	<input  class="form-control" id="" placeholder="Type in your passport number" name="passport">
 	    	 <div class="form-group">
 			    <label for="exampleInputPassword1">Password</label>
-			    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+			    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="hashpassword">
 			  </div>
 			  <label>Emergency Phone number</label>
+<<<<<<< HEAD
 	    <input class="form-control" type="tel" placeholder="9-(555)-555-5555" id="phone">
+=======
+	    <input class="form-control" type="tel" placeholder="9-(555)-555-5555" id="phone" name="telfamily">
+>>>>>>> 247e520dfe2c0cbaa226163cadfa5dce2b69a96b
 				<label>Insurance  Number</label>
 	    		<input  class="form-control" id="" placeholder="Your insurance card's number" name="insurance">
 	    	 
@@ -96,5 +100,5 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
- 
+
 </html>

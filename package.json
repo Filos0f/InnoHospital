@@ -1,12 +1,12 @@
 {
-  "name": "recipebook",
+  "name": "InnoHospital",
   "version": "1.0.0",
-  "description": "Recipe maanager\u001b[D\u001b[D\u001b[D\u001b[D\u001b[\u001b[3~\u001b[3~\u001b[3~\u001b[3~\u001b[3~\u001b[3~\u001b[3~\u001b[C\u001b[C\u001b[C\u001b[D\u001b[\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[nager",
-  "main": "app.js",
+  "description": "InnoHospital",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Sultan Yerumbayev",
+  "author": "InnoHospital team",
   "license": "ISC",
   "dependencies":{
   	"body-parser":"*",
