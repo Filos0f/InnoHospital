@@ -1,4 +1,4 @@
- {>"layout" /}
+{>"layout" /}
 <!DOCTYPE> 
 <html lang="en-US">
 <head>
@@ -8,7 +8,7 @@
  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=ABeeZee:400,400italic">
  
 
-	<title>Patient's Cabinet</title>
+  <title>Patient's Cabinet</title>
 </head>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -33,25 +33,26 @@
 
 <div class="PersonalInfo">
 <div class="container-fluid">
-  	<img height="80" width="80" alt="Photo" src="http://www.yesaccounting.co.uk/wp-content/uploads/2013/06/widget-personal-info1.png">
- 	 <h3>
- 	 	Your general information
- 	 </h3>
+    <img height="80" width="80" alt="Photo" src="http://www.yesaccounting.co.uk/wp-content/uploads/2013/06/widget-personal-info1.png">
+   <h3>
+    Your general information
+   </h3>
 {#patient}
- 	 <span><p>First Name: <strong>{firstname}</strong></p><div id="fname"></div>  </span>
- 	 <span><p>Second Name: <strong>{secondname}</strong></p><div id="lname"></div></span>
- 	 <span><p>Passport number: <strong>{idpassport}</strong></p><div id="passport"></div></span>
- 	 <span><p>Gender: <strong>{gender}</strong></p><div id="sex"></div></span>
- 	 <h4 style="font-size: 15px;font-weight: bold;">Contacts: </h4>
- 	 <span><p>Phone:<strong> {teln}</strong></p><div id="phone"></div></span>
- 	 <span><p>email: <strong>{email}</strong></p><div id="email"></div></span>
- 	 <h4 style="font-size: 15px;font-weight: bold;">Address: <strong>{address}</strong></h4>
- 	<!-- <span><p>City: {}</p><div id="city"></div></span>
- 	 <span><p>Street</p><div id="street"></div></span>
- 	 <span><p>Apt.</p><div id="apt"></div></span> -->
+   <span><p>First Name: <strong>{firstname}</strong></p><div id="fname"></div>  </span>
+   <span><p>Second Name: <strong>{secondname}</strong></p><div id="lname"></div></span>
+   <span><p>Passport number: <strong>{idpassport}</strong></p><div id="passport"></div></span>
+   <span><p>Gender: <strong>{gender}</strong></p><div id="sex"></div></span>
+   <h4 style="font-size: 15px;font-weight: bold;">Contacts: </h4>
+   <span><p>Phone:<strong> {teln}</strong></p><div id="phone"></div></span>
+   <span><p>email: <strong>{email}</strong></p><div id="email"></div></span>
+   <h4 style="font-size: 15px;font-weight: bold;">Address: <strong>{address}</strong></h4>
+   <h4 style="font-size: 15px;font-weight: bold;">Family tep: <strong>{telfamily}</strong></h4>
+  <!-- <span><p>City: {}</p><div id="city"></div></span>
+   <span><p>Street</p><div id="street"></div></span>
+   <span><p>Apt.</p><div id="apt"></div></span> -->
 
 {/patient}
-	</div>
+  </div>
  </div>
 </div>
 
@@ -59,7 +60,7 @@
   <div class="container-fluid" id="right">
    <h2>Your future appointments</h2>
    <div class="well"></div>
-  	<button data-toggle="collapse" data-target="#demo" class="btn btn-warning">See previous results</button>
+    <button data-toggle="collapse" data-target="#demo" class="btn btn-warning">See previous results</button>
 
 <div id="demo" class="collapse">
 Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
@@ -81,10 +82,10 @@ Lorem Ipsum - это текст-"рыба", часто используемый 
       <div class="modal-body">
       <h3>Set data</h3>
        <span>
-     	<input type=date  min=2014-09-08 style="margin-right: 10px;">  
-		<input type=time min=9:00 max=17:00 step=1200>  </span>
-		<br><br>
-	<h2 class="bold">Choose doctor</h2>
+      <input type=date  min=2014-09-08 style="margin-right: 10px;">  
+    <input type=time min=9:00 max=17:00 step=1200>  </span>
+    <br><br>
+  <h2 class="bold">Choose doctor</h2>
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Doctor's list<span class="caret"></span></button>
                 <ul class="dropdown-menu scrollable-menu" role="menu">
