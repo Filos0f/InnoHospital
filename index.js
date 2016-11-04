@@ -27,7 +27,14 @@ app.get('/patient', function(req, res){
 	console.log("------------- PATIENT -----------");
 	res.render('patient');
 });
+app.post('/newAppointment',function(req,res){// Sultan's post route handler
+	console.log(req.body.date);
+	console.log(req.body.time);
+	console.log(req.body.doctor);
 
+
+	
+});
 app.post('/log', function(req, res){
 	console.log("-------------LOG -----------");
 	
