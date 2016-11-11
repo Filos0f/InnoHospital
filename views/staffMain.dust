@@ -22,17 +22,19 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand text" id="headNavBar" name="navBar" href='/staffMyInfo'method='get'>My work</a>
+          <a class="navbar-brand text" type="submit" id="headNavBar" name="navBar" href="/staffMyInfo?navBar=value"
+             action="/staffMyInfo" method="post">My work</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/staffMyInfo" id="profile" action="/gotoprofile" method="get">Profile</a></li>
+            <li><a href="/staffMyInfo" id="profile" href="/gotoprofile" method="get">Profile</a></li>
             <li><a href="/" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
           </ul>
         
@@ -43,14 +45,14 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li name="recordSomePatient" action="/recordSomePatient" method="get"><a href="#">Записать на приём<span class="sr-only">(current)</span></a></li>
-            <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Выписать лекарство</a></li>
-            <li name="inputInfoAboutSomePatient" action="/inputInfoAboutSomePatient" method="get"><a href="#">Проставить инфу</a></li>
+            <li name="recordSomePatient" action="/recordSomePatient" method="get"><a href="#">Р—Р°РїРёСЃР°С‚СЊ РЅР° РїСЂРёС‘Рј<span class="sr-only">(current)</span></a></li>
+            <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Р’С‹РїРёСЃР°С‚СЊ Р»РµРєР°СЂСЃС‚РІРѕ</a></li>
+            <li name="inputInfoAboutSomePatient" action="/inputInfoAboutSomePatient" method="get"><a href="#">РџСЂРѕСЃС‚Р°РІРёС‚СЊ РёРЅС„Сѓ</a></li>
           </ul>
 	     </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h2 class="sub-header">Patients</h2>
-          <h3 class="sub-header" id=timeSpan name="dateToday">Дата(сегодня, вчера, период и прочее)</h3>
+          <h3 class="sub-header" id=timeSpan name="dateToday">Р”Р°С‚Р°(СЃРµРіРѕРґРЅСЏ, РІС‡РµСЂР°, РїРµСЂРёРѕРґ Рё РїСЂРѕС‡РµРµ)</h3>
           <div class="table-responsive" name="tableRep">
             <table class="table table-striped" name="table">
               <thead>

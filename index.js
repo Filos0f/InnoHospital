@@ -122,7 +122,7 @@ app.post('/patient_cabinet', function(req, res){
     console.log('--------This----------' + result);
 });
 
-app.post('/staffMyInfo', function(req,res){
+app.get('/staffMyInfo', function(req,res){
 	res.render('staffMyInfo');
 });
 
@@ -136,7 +136,7 @@ app.get('/staff', function(req, res){
 
 app.get('/appointmentBtt', function(req,res){
 		
-	res.render('Input_information_for_patient');
+	res.render('Input information for patien');
 });
 
 app.get('/backToStaffMain', function(req,res){
