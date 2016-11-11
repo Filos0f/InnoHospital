@@ -1,4 +1,4 @@
-{>"layout" /}
+ 
 <!DOCTYPE> 
 <html lang="en-US">
 <head>
@@ -17,9 +17,9 @@
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li> 
-      <li><a href="#">Page 3</a></li> 
+      <li><a href="/PatientCard">Med Card</a></li>
+      <li><a href="/analysis">Analysis</a></li> 
+      <li><a href="/Scans">Scans</a></li> 
     </ul>
     <button type="button" style="float: right;margin-top: 7px;" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
   New Appointment
@@ -58,15 +58,10 @@
 
 <div class="col-lg-6">
   <div class="container-fluid" id="right">
-   <h2>Your future appointments</h2>
-   <div class="well"></div>
-    <button data-toggle="collapse" data-target="#demo" class="btn btn-warning">See previous results</button>
-
-<div id="demo" class="collapse">
-Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.
-</div>
+    <h2>Your future appointments</h2>
+    <div class="well"></div>
   </div>
-   </div>
+</div>
 
 
 <!-- Modal -->
@@ -81,40 +76,40 @@ Lorem Ipsum - это текст-"рыба", часто используемый 
       </div>
       <div class="modal-body">
       <h3>Set data</h3>
+
+      <form method="post" action="/newAppointment">
        <span>
-      <input type=date  min=2014-09-08 style="margin-right: 10px;">  
-    <input type=time min=9:00 max=17:00 step=1200>  </span>
-    <br><br>
-  <h2 class="bold">Choose doctor</h2>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Doctor's list<span class="caret"></span></button>
-                <ul class="dropdown-menu scrollable-menu" role="menu">
-                    <li><a href="#">Allergist</a></li>
-                    <li><a href="#">Anesthesiologist</a></li>
-                    <li><a href="#">Cardiologist</a></li>
-                    <li><a href="#">Dentist</a></li>
-                    <li><a href="#">Dermatologist</a></li>
-                    <li><a href="#">Endocrinologist</a></li>
-                    <li><a href="#">ENT Specialist</a></li>
-                    <li><a href="#">Gynecologist</a></li>
-                    <li><a href="#">Immunologist</a></li>
-                    <li><a href="#">Physician</a></li>
-                    <li><a href="#">Infectious Disease Specialist</a></li>
-                    <li><a href="#">Neurosurgeon</a></li>
-                    <li><a href="#">Oncologist</a></li>
-                    <li><a href="#">Orthopedic Surgeon</a></li>
-                    <li><a href="#">Pediatrician</a></li>
-                    <li><a href="#">Surgeon</a></li>
-                    <li><a href="#">Urologist</a></li>
-                </ul>
-            </div>
+             <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
+              <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
+              <br><br>
+                   <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
+                      
+                <select name="doctor">
+                    <li><option value="Allergist">Allergist</option></li>
+                    <li><option value="Anesthesiologist">Anesthesiologist</option></li>
+                    <li><option value="Cardiologist">Cardiologist</option></li>
+                    <li><option value="Dentist">Dentist</option></li>
+                    <li><option value="Dermatologist">Dermatologist</option></li>
+                    <li><option value="Endocrinologist">Endocrinologist</option></li>
+                    <li><option value="ENT">ENT Specialist</option></li>
+                    <li><option value="Gynecologist">Gynecologist</option></li>
+                    <li><option value="Immunologist">Immunologist</option></li>
+                    <li><option value="Physician">Physician</option></li>
+                    <li><option value="Infectious">Infectious Disease Specialist</option></li>
+                    <li><option value="Neurosurgeon">Neurosurgeon</option></li>
+                    <li><option value="Oncologist">Oncologist</option></li>
+                    <li><option value="Orthopedic">Orthopedic Surgeon</option></li>
+                    <li><option value="Pediatrician">Pediatrician</option></li>
+                    <li><option value="Surgeon">Surgeon</option></li>
+                    <li><option value="Urologist">Urologist</option></li>
+                    </select>
+               </div>
 
-
-      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+        <input type="submit" class="btn btn-primary" value="Save">
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -124,9 +119,6 @@ Lorem Ipsum - это текст-"рыба", часто используемый 
 
 </body>
 
- <script
-  src="https://code.jquery.com/jquery-2.2.4.js"
-  integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-  crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </html>

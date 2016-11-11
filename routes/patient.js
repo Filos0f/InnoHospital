@@ -116,3 +116,21 @@ exports.addPatient = function(req,res){
 
 	res.redirect('/patient');
 };
+
+exports.newAppointment = function(req, res){
+	console.log(req.body.date);
+	console.log(req.body.time);
+	console.log(req.body.doctor);
+};
+
+exports.medCard = function(req, res){
+	res.render('patientCard');
+};
+
+exports.scans = function(req, res){
+	res.render('scans');
+};
+
+exports.analysis = function(req, res){
+	res.render('patientAnalysis');
+};

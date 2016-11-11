@@ -48,12 +48,16 @@ app.get('/patient_cabinet', 	require('./routes/patient').get_patient_cabinet);
 app.post('/patient_cabinet', 	require('./routes/patient').post_patient_cabinet);
 app.post('/addPatient', 		require('./routes/patient').addPatient);
 app.get('/registration', 		require('./routes/patient').registration);
+app.post('/newAppointment', 	require('./routes/patient').newAppointment);
+app.get('/PatientCard', 		require('./routes/patient').medCard);
+app.get('/Scans', 				require('./routes/patient').scans);
+app.get('/analysis', 			require('./routes/patient').analysis);
 
 app.post('/staffMyInfo', 		require('./routes/staff').staffInfo);
 app.post('/signinStaff', 		require('./routes/staff').StaffMain);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
-app.get('/backToStaffMain', require('./routes/staff').StaffMain);
+app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));
