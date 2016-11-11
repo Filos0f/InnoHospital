@@ -27,7 +27,7 @@
             <button id="patient" type="submit" class="btn btn-primary">Don't Have An Account? &rarr;</button>
           </div>
         </form>
-          <form id="login" name="login" action="/log" method="post">
+          <form id="login" name="login" action="/patient_cabinet" method="post">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" class="txtfield" tabindex="1" autocomplete="off">
             

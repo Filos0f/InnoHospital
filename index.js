@@ -1,6 +1,7 @@
 var express=require('express'),
 path=require('path'),
 bodyParser=require('body-parser'),
+session = require('express-session'),
 cons=require('consolidate'),
 dust=require('dustjs-helpers'),
 md5=require('js-md5'),
@@ -11,12 +12,35 @@ var urlDataBase = 'postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-1
 app.engine('dust',cons.dust);
 app.set('view engine','dust');
 app.set('views',__dirname+'/views');
-
+ 
 var client = new pg.Client();
 app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+//app.use(session({secret: 'ssshhhhh'}));
 
+var cookie_secret = 'ssshhhhh';
+var cookie_name = 'session';
+app.use(session({
+    secret: cookie_secret,
+    name: cookie_name,
+    proxy: true,
+    resave: true,
+    saveUninitialized: true,
+    duration: 30 * 60 * 1000,
+  	activeDuration: 5 * 60 * 1000,
+}));
+
+function ConnectToDataBase()
+{
+	const pg = require('pg');
+	pg.defaults.ssl = true;
+	const connectionString = process.env.DATABASE_URL || urlDataBase;
+	console.log(connectionString);
+	return new pg.Client(connectionString);
+}
+
+var sess;
 
 app.get('/',function(req,res){
 	console.log("-------------  -----------");
@@ -28,13 +52,40 @@ app.get('/patient', function(req, res){
 	res.render('patient');
 });
 
-app.post('/log', function(req, res){
+app.get('/patient_cabinet', function(req, res){
+	console.log("------------- PATIENT CAB -----------");
+	sess = req.session;
+		console.log(sess.email);
+	if(sess.email) {
+		const client = ConnectToDataBase();
+		client.connect();
+
+		var sqlQuery = 'SELECT * from person where email = \'' + sess.email + '\''; 
+		const query = client.query(sqlQuery);
+    
+	    const result = [];
+	    query.on('rows', function(row) {
+		result.push(row);
+	    });
+
+	    query.on("end", function(result){
+		if(result.rows[0] === undefined){
+		    res.redirect('/patient');
+		}
+		else{
+		    res.render('patient_cabinet', {patient:result.rows});
+		}
+		});
+	}
+});
+
+app.post('/patient_cabinet', function(req, res){
 	console.log("-------------LOG -----------");
+	sess = req.session;
+	sess.email=req.body.email;
+		console.log(sess.email);
 	
-	const pg = require('pg');
-	pg.defaults.ssl = true;
-	const connectionString = process.env.DATABASE_URL || urlDataBase;
-	const client = new pg.Client(connectionString);
+	const client = ConnectToDataBase();
 	client.connect();
 
 	var sqlQuery = 
@@ -58,10 +109,6 @@ app.post('/log', function(req, res){
 	}
 	else{
 	    var hashsalt = result.rows[0].hashsalt;
-	    console.log('------id-------' + hashsalt);
-	    console.log(req.body.hashpassword);
-	    console.log(md5(req.body.hashpassword + hashsalt));
-	    console.log(result.rows[0].hashpassword);
 	    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
 			res.render('patient_cabinet', {patient:result.rows});
 	    }
@@ -70,7 +117,6 @@ app.post('/log', function(req, res){
 		res.redirect('/patient');
 	    }
 	}
-	//client.end();
     });
 
     console.log('--------This----------' + result);
@@ -107,10 +153,7 @@ app.post('/addPatient',function(req,res){
 	console.log("-------------ADD -----------");
 	console.log(req.body.gridRadios);
 
-	const pg = require('pg');
-	pg.defaults.ssl = true;
-	const connectionString = process.env.DATABASE_URL || 'postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro';
-	const client = new pg.Client(connectionString);
+	const client = ConnectToDataBase();
 	client.connect();
 
 	function hash(key)
