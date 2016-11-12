@@ -1,6 +1,4 @@
- 
 <!DOCTYPE html>
- 
 <html>
 <head>
 
@@ -30,10 +28,8 @@
 	     <label>Phone number</label>
 	    <input class="form-control" type="tel" placeholder="1-(555)-555-5555" id="phone" name="phone">
 
-   
-		<label>Birth Date</label>
-        <input type="date" id="birthdate" style="margin:7px; padding: 5px; border-radius: 10px;" class="txtfield" name="birthdate">
- 
+		<label>Birth Date</label>e
+        <input type="date" id="birthdate" style="margin:7px; padding: 4px; border-radius: 7px;" class="txtfield" name="birthdate">
 
 		<div class="form-group">
 	    <label for="InputEmail1">Email address</label>

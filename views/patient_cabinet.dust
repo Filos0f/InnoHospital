@@ -18,10 +18,8 @@
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li>
       <li><a href="/PatientCard">Med Card</a></li>
- 
       <li><a href="/analysis">Analysis</a></li> 
       <li><a href="/Scans">Scans</a></li> 
- 
     </ul>
     <button type="button" style="float: right;margin-top: 7px;" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
   New Appointment
@@ -60,12 +58,8 @@
 
 <div class="col-lg-6">
   <div class="container-fluid" id="right">
- 
-    
-  
     <h2>Your future appointments</h2>
     <div class="well"></div>
-
   </div>
 </div>
 

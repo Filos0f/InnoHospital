@@ -1,4 +1,3 @@
-  
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,21 +12,6 @@
 	<p>Please choose out of two options</p>
 	</div>
 </div>
-<<<<<<< HEAD
-<span>
-<form action="/patient" method="get">
-  <div class="container" id="1">
-  <button id="patient" type="submit" class="btn btn-primary">Patient</button>
-  </div>
-</form>
-<form action="/staff" method="get">
-  <div class="container" id="1">
-  <button id="staff" type="submit" class="btn btn-primary">Staff</button>
-  </div>
-</form>
-</span>
- 
-=======
 <div class="col-sm-3"></div>
     <form action="/patient" method="get">
       <div class="col-sm-3" id="1">
@@ -40,7 +24,6 @@
       </div>
     </form>
   
->>>>>>> master
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
