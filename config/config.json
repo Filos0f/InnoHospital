@@ -1,0 +1,13 @@
+{
+	"port": 3000,
+	"dbPort": "postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro",
+	"session": {
+		"secret": "SOME",
+		"key": "sid",
+		"cookie": {
+			"path": "/",
+			"httpOnly": true,
+			"maxAge": null
+		}
+	}
+}

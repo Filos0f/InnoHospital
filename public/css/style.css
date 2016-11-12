@@ -1,5 +1,5 @@
 body{text-align: center;
-	background-image: url("background.jpg");
+	background-image: url("../images/background.jpg");
 }
 h1{
 
@@ -13,19 +13,15 @@ font-size: 25px;
 	font-weight: italic;
 }
 #staff{
-	padding-right: 5%;
-	padding-left: 5%;
+	padding-right: 10%;
+	padding-left: 10%;
 }
-#1{
-	padding-top: 18%;
-	margin-left: 2%;
 
-}
 .btn{
 	background-color: #66ffcc;
 	bottom: 0;
 	margin:85px;
-	padding: 3%;
+	padding: 5%;
 	font-size: 30px;
 	font-weight: bold;
 	color:#001f3f;

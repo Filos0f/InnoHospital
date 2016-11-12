@@ -1,20 +1,22 @@
 {
   "name": "InnoHospital",
-  "version": "1.0.0",
-  "description": "InnoHospital",
-  "main": "index.js",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "author": "InnoHospital team",
-  "license": "ISC",
-  "dependencies":{
-  	"body-parser":"*",
-  	"consolidate":"*",
-  	"dust":"*",
-  	"dustjs-helpers":"*",
-  	"dustjs-linkedin":"*",
-  	"express":"*",
-  	"pg":"*"
+  "dependencies": {
+    "body-parser":"*",
+    "consolidate":"*",
+    "dust":"*",
+    "dustjs-helpers":"*",
+    "dustjs-linkedin":"*",
+    "express": "3.3.8",
+    "nconf": "*",
+    "winston": "*",
+    "pg":"*",
+    "js-md5":"*",
+    "connect-pg-simple":"*",
+    "express-session":"*"
   }
 }
