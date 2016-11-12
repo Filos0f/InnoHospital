@@ -143,6 +143,56 @@ app.post('/addPatient',function(req,res){
 });
 
 
+function addStaff() {
+	console.log("-------------ADD Staff-----------");
+
+	const pg = require('pg');
+	pg.defaults.ssl = true;
+	const connectionString = process.env.DATABASE_URL || 'postgres://ivlmhkficuzslb:WMu8cz613zO4s9lVcDJuHkFeoS@ec2-54-163-230-103.compute-1.amazonaws.com:5432/d361hsb4scaqro';
+	const client = new pg.Client(connectionString);
+	client.connect();
+
+	var fs = require('fs');
+	var stream = fs.createReadStream('/home/lida/GITALL/InnoHospital/Staff.txt', {encoding: 'utf8'});
+
+	stream.on('readable', function() {
+		var buf;
+		while ((buf = stream.read()) !== null) {
+			console.log(buf);
+		}
+	});
+
+	stream.once('end', function() {
+		console.log('Чтение выполнено успешно.');
+	});
+
+	// function hash(key)
+	// {
+	// 	var h = 0;
+    //
+	// 	for (p = 0; p != key.length; p++) {
+	// 		h = h * 31 + key.charAt(p);
+	// 	}
+	// 	return h;
+	// }
+	// var hashSolt = hash(req.body.passport);
+    //
+	// var address=req.body.city+ ' ' + req.body.street+ ' ' + req.body.appartment;
+	// client.query(
+	// 	'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
+	// 	VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+	// 	[req.body.passport, req.body.fname, req.body.sname, address, req.body.email, req.body.phone,
+	// 		req.body.birthdate, req.body.gridRadios, md5(req.body.hashpassword + hashSolt), hashSolt]);
+    //
+	// client.query(
+	// 	'INSERT INTO patient(idip,telfamily,idPassport) VALUES($1,$2,$3)',
+	// 	[req.body.insurance, req.body.telfamily, req.body.passport]);
+    //
+	// res.redirect('/patient');
+};
+
+addStaff();
+
 app.listen(3000,function() {
 	console.log('Server started on 3000 port');
 });
