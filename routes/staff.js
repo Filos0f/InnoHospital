@@ -42,7 +42,7 @@ exports.staff = function(req, res) {
 	const staff = dataBase.ConnectToDataBase();
 	staff.connect();
 
-	var sqlQuery = 'SELECT * from employee';
+	var sqlQuery = 'SELECT * from positions';
 	const query = staff.query(sqlQuery);
 	console.log(query);
 
@@ -55,10 +55,10 @@ exports.staff = function(req, res) {
 		result.push(row);
 	});
 
-	query.on("end", function(result){
+	query.on("end", function(result) {
 
-		console.log("------------------------------"+result[0]+"--------------------------");
-		if(result[0] === undefined)
+		console.log("------------------------------" + result.rows[0]+"--------------------------");
+		if(result.rows[0] === undefined)
 		{
 			for(i = 0; i < EmployeePositionsId.length; i++)
 			{
@@ -99,8 +99,17 @@ exports.staff = function(req, res) {
 			for(i = 0; i < allStaff.length; i++)
 			{
 				console.log("------------- Staff table -----------");
+				console.log("index " + allStaff[i]['People']['idPassport'] + " " + allStaff[i]['People']['firstName'] + " " + " " + allStaff[i]['People']['secondName'] + " " +  allStaff[i]['People']['address'] + " " + allStaff[i]['People']['email'] + " " + allStaff[i]['People']['telN'] + " " +
+					allStaff[i]['People']['birthday'] + " " + allStaff[i]['People']['gender'] + " " + md5(allStaff[i]['People']['password'] + hash(allStaff[i]['People']['idPassport'])) + " " + hash(allStaff[i]['People']['idPassport']));
+
+				console.log("employee " + allStaff[i]['People']['Employee']['idPos'] + " " + allStaff[i]['People']['Employee']['idEmp'] + " " +
+					allStaff[i]['People']['Employee']['roomN'] + " " + allStaff[i]['People']['idPassport']);
+
+				console.log(allStaff[i]['People']['Employee']['WorkingSchedule']['roomN'] + " " + allStaff[i]['People']['Employee']['WorkingSchedule']['startTime'] + " " +
+					allStaff[i]['People']['Employee']['WorkingSchedule']['finishTime'] + " " + allStaff[i]['People']['Employee']['WorkingSchedule']['date']);
+
 				staff.query(
-					'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
+					'INSERT INTO Person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
                     VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
 					[allStaff[i]['People']['idPassport'], allStaff[i]['People']['firstName'], allStaff[i]['People']['secondName'], allStaff[i]['People']['address'], allStaff[i]['People']['email'], allStaff[i]['People']['telN'],
 						allStaff[i]['People']['birthday'], allStaff[i]['People']['gender'], md5(allStaff[i]['People']['password'] + hash(allStaff[i]['People']['idPassport'])), hash(allStaff[i]['People']['idPassport'])]);
@@ -118,7 +127,7 @@ exports.staff = function(req, res) {
 					[allStaff[i]['People']['Employee']['WorkingSchedule']['roomN'], allStaff[i]['People']['Employee']['WorkingSchedule']['startTime'],
 						allStaff[i]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[i]['People']['Employee']['WorkingSchedule']['date']]
 				);
-			}
+			 }
 
 			console.log("------------- Staff end -----------");
 
@@ -137,22 +146,27 @@ exports.StaffMain = function(req,res){
 	sess.email = req.body.email;
 
 	const staff = dataBase.ConnectToDataBase();
+	staff.connect();
 	console.log(req.body.hashpassword);
 
 	var sqlQuery =
 		'SELECT * from Person where email = \'' + req.body.email + '\'';
 
+	//var sqlQuery =
+		//'SELECT * from employee';
+
 	console.log(sqlQuery);
 	const query = staff.query(sqlQuery);
-	console.log(query);
 
 	const result = [];
 	query.on('rows', function(row) {
 		result.push(row);
 	});
 	console.log(sqlQuery);
+
 	query.on("end", function(result){
 		res.render('StaffMyInfo');
+		console.log(result);
 		if(result.rows[0] === undefined){
 			res.render('StaffMain');
 		}
@@ -167,5 +181,4 @@ exports.StaffMain = function(req,res){
 		}
 	});
 	console.log(sqlQuery);
-
 };
