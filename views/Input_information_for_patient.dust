@@ -2,9 +2,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="css/dashboard.css" rel="stylesheet">
-<title>Input information for patien</title>
+  <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+         function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(450)
+                        .height(450);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }   
+</script>
+<title>Input information for patiet</title>
 
 </head>
 
@@ -30,35 +51,101 @@
         </div>
       </div>
     </nav>
+
     <div class="container-fluid">
       <div class="row">
+       <button type="button" style="float: right;margin-top: 7px;" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  New Appointment
+</button>
         <div class="col-sm-3 col-md-2 sidebar">
+        
           <ul class="nav nav-sidebar">
-            <li><a href="#" id='analVal' onclick="openbox('genAnalPanelVal'); return false">Общий анализ<span class="sr-only">(current)</span></a></li>
-            <li><a href="#" id="xRayVal" onclick="openbox('xrayPanelVal'); return false">Ренген</a></li>
-            <li><a href="#" id="diagnostVal" onclick="openbox('diagnPanelVal'); return false">Диагностика</a></li>
-            <li><a href="#" id="bloodVal" onclick="openbox('bloddPanelVal'); return false">Кровь</a></li>
-            <li><a href="#" id="recVal" onclick="openbox('recordPanelVal'); return false">Записать</a></li>
-			<li><a href='/backToStaffMain' id="backVal" onclick="back()">Назад</a></input></li>
+            
+            <li><a href="#" id="WriteReport" onclick="openbox('ReportPage'); return false">Anamnesis&Diagnosis</a></li>
+            <li><a href="#" id='analVal' onclick="openbox('Scans'); return false">Scans<span class="sr-only">(current)</span></a></li>
+            <li><a href="#" id="bloodVal" onclick="openbox('LabRes'); return false">Lab results</a></li>
+            <li><a href="#" id="bloodVal" onclick="openbox('bloddPanelVal'); return false">Lab results</a></li>
+             
+			<li><a href='/backToStaffMain' id="backVal" onclick="back()">Back</a></input></li>
           </ul>
 	  </div>
       </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #E0EEEE">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title" id="myModalLabel">New appointment</h2>
+      </div>
+      <div class="modal-body">
+      <h3>Set data</h3>
+
+      <form method="post" action="/newAppointment">
+       <span>
+             <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
+              <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
+              <br><br>
+                   <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
+                      
+                <select name="doctor">
+                    <li><option value="Allergist">Allergist</option></li>
+                    <li><option value="Anesthesiologist">Anesthesiologist</option></li>
+                    <li><option value="Cardiologist">Cardiologist</option></li>
+                    <li><option value="Dentist">Dentist</option></li>
+                    <li><option value="Dermatologist">Dermatologist</option></li>
+                    <li><option value="Endocrinologist">Endocrinologist</option></li>
+                    <li><option value="ENT">ENT Specialist</option></li>
+                    <li><option value="Gynecologist">Gynecologist</option></li>
+                    <li><option value="Immunologist">Immunologist</option></li>
+                    <li><option value="Physician">Physician</option></li>
+                    <li><option value="Infectious">Infectious Disease Specialist</option></li>
+                    <li><option value="Neurosurgeon">Neurosurgeon</option></li>
+                    <li><option value="Oncologist">Oncologist</option></li>
+                    <li><option value="Orthopedic">Orthopedic Surgeon</option></li>
+                    <li><option value="Pediatrician">Pediatrician</option></li>
+                    <li><option value="Surgeon">Surgeon</option></li>
+                    <li><option value="Urologist">Urologist</option></li>
+                    </select>
+               </div>
+
+      <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+        
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+ 
+
+
+
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header"id="patientNameVal">Patients</h2>
+          <h2 class="sub-header" id="patientNameVal">Patients</h2>
           <div class="panel-group" id="workField">
           	<div class="row" id="resultPanelVal">
+
+           
+
           		<div style="">
-                	<div class="panel panel-primary" id="xrayPanelVal" style="display:none">
+                	<div class="panel panel-primary" id="ReportPage" style="display:none">
                     	<div class="panel-heading">
-                        	X-Ray
+                        	Writing report
                         </div>
                         <div class="panel-body">
                         	<div class="text-primary">
-                            	<p class="well">descryption</p>
+                            	<textarea rows="10" cols="135">
+                                   
+                                    </textarea>
                             </div>
-                            <div class="img-thumbnail">
-                            	<img src="http://www.darvill.clara.net/emag/images/xrayhands.jpg" />
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="panel panel-primary" id="diagnPanelVal" style="display:none">
@@ -75,7 +162,7 @@
                             </div>
                         </div>
                     </div>
-                   	<div class="panel panel-primary" id="bloddPanelVal" style="display:none">
+                   	<div class="panel panel-primary" id="LabRes" style="display:none">
                     	<div class="panel-heading">
                         	Blood
                         </div>
@@ -88,18 +175,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-primary" id="genAnalPanelVal" style="display:none">
+                    <div class="panel panel-primary" id="Scans" style="display:none">
                     	<div class="panel-heading">
-                        	Общий анализ
+                        	Scans
                         </div>
                         <div class="panel-body">
-                        	<div class="text-primary well" id="commonFieldOfGenAnalVal">
-                            	<p id="data" class="well">Data</p>
+                        	<div class="text-primary" id="commonFieldOfGenAnalVal">
+                            	<div class="col-lg-5">
+                                <p id="data" class="well">Data</p>
                                 <p id="title" class="well">title</p>
                                 <p id="result" class="well">result</p>
-                                <button class="btn btn-primary" id=bloodBtnDone>DONE</button> 
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="well">
+                                     <input type='file' onchange="readURL(this);" />
+                                        <img id="blah" src="#" alt="your image" />
+                                        </div>
+                                </div>
+                                 
                             </div>
-                        </div>
+                            <button class="btn-primary btn" style="float: left;">Save</button>
+                        </div> 
                     </div>
                     <div class="panel panel-primary col-md-5" id="recordPanelVal" style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
                     	<div class="panel-heading" style="">
@@ -121,7 +217,7 @@
                             </div>
                             <div class="row" id="patVal" style="text-align:center">
                             	<div class="col-md-4 text-center well"
-                            		<p >patient</p>
+                            		<p> patient</p>
                                 </div>
                             </div>
                             <div class="row" id="doctorVal" style="text-align:center">
@@ -149,10 +245,10 @@
     </div>
 	<script type='text/javascript'>
 	function openbox(id){
-		document.getElementById('xrayPanelVal').style.display='none';
-		document.getElementById('genAnalPanelVal').style.display='none';
+		document.getElementById('ReportPage').style.display='none';
+		document.getElementById('Scans').style.display='none';
 		document.getElementById('recordPanelVal').style.display='none';
-		document.getElementById('bloddPanelVal').style.display='none';
+		document.getElementById('LabRes').style.display='none';
 		document.getElementById('diagnPanelVal').style.display='none';
 		
 		display = document.getElementById(id).style.display;
@@ -168,4 +264,7 @@
 </script>
 }
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script>
 </html>
