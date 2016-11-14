@@ -1,92 +1,151 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link href="css/dashboard.css" rel="stylesheet">
-<title>Staff main</title>
-	<script type="text/javascript">
-	function clock(){
-		var date = new Date().toISOString().
-		replace(/T/, ' ').  
-		replace(/\..+/, '');
-		document.getElementById('timeSpan').innerHTML = date;
-		
-		var t = setTimeout(clock, 1000);
-	}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link type="text/css" href="css/dashboard.css" rel="stylesheet">
 	
-	</script>
+    <title>Staff main</title>
+    <script type="text/javascript">
+        function clock() {
+            var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            document.getElementById('timeSpan').innerHTML = date;
+
+            var t = setTimeout(clock, 1000);
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 </head>
 
 <body onload="clock()">
 <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
+    <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand text" id="headNavBar" name="navBar" href='/staffMyInfo'method='get'>My work</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand text" type="submit" id="headNavBar" name="navBar" href="/gotoprofile"
+               action="/gotoprofile" method="post">My work</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="/staffMyInfo" id="profile" action="/gotoprofile" method="get">Profile</a></li>
-            <li><a href="/" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
-          </ul>
-        
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="profile" href="/gotoprofile" method="get">Profile</a></li>
+                <li><a href="/" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
+            </ul>
+
         </div>
-      </div>
-    </nav>
+    </div>
+</nav>
 <div class="container-fluid">
-      <div class="row">
+    <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li name="recordSomePatient" action="/recordSomePatient" method="get"><a href="#">Записать на приём<span class="sr-only">(current)</span></a></li>
-            <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Выписать лекарство</a></li>
-            <li name="inputInfoAboutSomePatient" action="/inputInfoAboutSomePatient" method="get"><a href="#">Проставить инфу</a></li>
-          </ul>
-	     </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header">Patients</h2>
-          <h3 class="sub-header" id=timeSpan name="dateToday">Дата(сегодня, вчера, период и прочее)</h3>
-          <div class="table-responsive" name="tableRep">
-            <table class="table table-striped" name="table">
-              <thead>
-                <tr id=firstRow>
-                  <th id=timeHeader>time</th>
-                  <th id=firstNameHeader>FirstName</th>
-                  <th id=secondNameHeader>SecondName</th>
-                  <th id=MiddleNameHeader>MiddleName</th>
-                  <th id=ButtonsHeader>Work</th>
-                  <!--<th id=mainCheckBox><input type="checkbox"/></th>-->
-                </tr>
-              </thead>
-              <tbody>
-                <tr id=secondRow>
-                  <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
-                  <td class="FirstNameTitle" name="FirstNameTitle">Her</td>
-                  <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
-                  <td class="MiddleNameTitle" name="MidleNameTitle">Last</td>
-                  <td class="declineButt" name="declineBtt" action='/pressBtt'method='get'>
-					<span><form action='/appointmentBtt'method='get'>
-					<button class="btn btn-success appBtt" type='submit' >appointment</button>
-					</form>
-					<form action='/declineBtt'method='get'>
-					<button class="btn btn-warning declineBtt">decline</button>
-					</form>
-					</span>
-				  </td>
-                  <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
-                </tr>
-                </tbody>
-            </table>
-          </div>
+            <ul class="nav nav-sidebar">
+                <li name="recordSomePatient" action="/recordSomePatient" method="post" data-toggle="modal" data-target="#myModal"
+                    onclick="openbox('recordPanelVal'); return false">
+                    <a href="#">Epidemy status<!--span class="sr-only">(current)</--span--></a>
+                </li>
+                <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Rating</a></li>
+                <li name="inputInfoAboutSomePatient" action="/sayHello" method="use"><a href="#"></a>
+                </li>
+            </ul>
         </div>
-	</div>
-</div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h2 class="sub-header">Patients</h2>
+            <h3 class="sub-header" id=timeSpan name="dateToday">Current time and date</h3>
+
+          
+            <div class="table-responsive" name="tableRep">
+                <table class="table table-striped" name="table">
+                    <thead>
+                    <tr id=firstRow>
+                        <th id=timeHeader>time</th>
+                        <th id=firstNameHeader>FirstName</th>
+                        <th id=secondNameHeader>SecondName</th>
+                        <th id=MiddleNameHeader>MiddleName</th>
+                        <th id=ButtonsHeader>Work</th>
+                        <!--<th id=mainCheckBox><input type="checkbox"/></th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id=secondRow>
+                        <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
+                        <td class="FirstNameTitle" name="FirstNameTitle">Her</td>
+                        <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
+                        <td class="MiddleNameTitle" name="MidleNameTitle">Last</td>
+                        <td class="declineButt" name="declineBtt" action='/pressBtt' method='get'>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <form action='/appointmentBtt' method='get'>
+                                            <button class="btn btn-success appBtt" type='submit'>appointment</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action='/declineBtt' method='get'>
+                                            <button style="margin-left: 10px;" class="btn btn-warning declineBtt">decline</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel panel-primary col-md-6" id="recordPanelVal"
+                 style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
+                <div class="panel-heading" style="">
+                    Record patient
+                </div>
+                <div class="panel-body well">
+                    <div class="row" id="dateVal" style="text-align:center; ">
+                        <div class="col-md-10 text-center well">
+                            <p>data</p>
+                        </div>
+                    </div>
+                    <div class="row " id="timeHourMinVal" style="text-align:center">
+                        <div class="col-md-5 well text-center" id="getTime" style="height:70px">
+                            <p>
+                                <button class="btn btn-success" id="choiseTheTimeBtn">Time</button>
+                            </p>
+                        </div>
+                        <div class="col-md-5 well text-center" style="text-align:center height:75px">
+                            <p id=choisenDateTIme> 30-Oct-16 1:15 PM</p>
+                        </div>
+                    </div>
+                    <div class="row" id="patVal" style="text-align:center">
+                        <div class="col-md-4 text-center well"
+                        <p>patient</p>
+                    </div>
+                </div>
+                <div class="row" id="doctorVal" style="text-align:center">
+                    <div class="col-md-10 text-center well"
+                    <p>doctor</p>
+                </div>
+            </div>
+            <div>
+         
+          
     
 
-</body>
-</html>
+<script type='text/javascript'>
+    function openbox(id) {
+        console.log('idk, why this shit didn\'t work');
+        display = document.getElementById(id).style.display;
+        if (display == 'none') {
+            document.getElementById(id).style.display = 'block';
+            document.getElementById(id).style.position='relative';
+        } else {
+            document.getElementById(id).style.display = 'none';
+        }
+    }
+</script>
+    </body >
+    < / html >
