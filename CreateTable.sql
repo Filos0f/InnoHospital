@@ -1,4 +1,24 @@
-﻿create table Person (
+﻿drop table Prescription;
+drop table Drug;
+drop table DiagnosisHasInfo;
+drop table DiagnosisInfo;
+drop table diagnosis;
+drop table generalizedAnalysis;
+drop table generalizedAnalysisTitles;
+drop table XRay;
+drop table Result;
+drop table Conclusion;
+drop table ConclusionTypes;
+drop table VisitSchedule;
+drop table isOpen;
+drop table WorkingSchedule;
+drop table Patient;
+drop table Employee cascade;
+drop table Positions;
+drop table Person;
+
+
+create table Person (
 	idPassport varchar(256),
 	firstName varchar(256) NOT NULL,
 	secondName varchar(256) NOT NULL,
@@ -11,35 +31,32 @@
 	hashSalt varchar(256) NOT NULL,
 	Primary key(idPassport)  
 );
-
-create table Positions (
-	idPos int NOT NULL,
-	title varchar(256) NOT NULL,
-	idEmp varchar(256),
-	Primary key (idPos)
-);
-
 create table Employee (
 	rating int NOT NULL default(0),
-	idPos int NOT NULL,
+	idPos varchar(256) NOT NULL,
 	idEmp varchar(256) NOT NULL,
 	roomN int NOT NULL,
 	idPassport varchar(256),
-	Primary key (idPassport),
-	Foreign key (idPassport) references Person,
-	Foreign key (idPos) references Positions
+	Primary key (idEmp),
+	Foreign key (idPassport) references Person
 );
 
+
+create table Positions (
+	idPos varchar(256) NOT NULL,
+	title varchar(256) NOT NULL,
+	idEmp varchar(256),
+	Primary key (idPos),
+	Foreign key (idEmp) references Employee
+);
 
 create table Patient (
 	idIP varchar(256) NOT NULL,
 	telFamily varchar(256) NOT NULL,
 	idPassport varchar(256),
-	Primary key (idPassport),
+	Primary key (idIP),
 	Foreign key (idPassport) references Person
 );
-
-ALTER TABLE Positions ADD CONSTRAINT PosForeignKey Foreign key (idEmp) references Employee;
 
 create table WorkingSchedule (
 	roomN int NOT NULL,
@@ -107,7 +124,6 @@ create table XRay (
 create table generalizedAnalysisTitles (
 	idTitle varchar(256),
 	title varchar(256),
-	standard real,
 	primary key(idTitle)
 );
 
@@ -115,6 +131,7 @@ create table generalizedAnalysis (
 	idTitle varchar(256),
 	id int,
 	result real,
+	standard varchar(256),
 	primary key (id),
 	foreign key (id) references conclusion,
 	foreign key (idTitle) references generalizedAnalysisTitles

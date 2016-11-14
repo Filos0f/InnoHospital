@@ -44,13 +44,11 @@ exports.post_patient_cabinet = function(req, res, next){
 	var sqlQuery = 
 	'SELECT * from person \
 	NATURAL JOIN patient \
-	where email = \'' + req.body.email + '\''; 
-
-	var sqlQuery = 'SELECT * from person where email = \'' + req.body.email + '\''; 
+	where email = \'' + req.body.email + '\'';
 	console.log(sqlQuery);
 
 	const query = client.query(sqlQuery);
-    
+    console.log(query);
     const result = [];
     query.on('rows', function(row) {
 	result.push(row);
