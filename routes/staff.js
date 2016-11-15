@@ -317,8 +317,14 @@ exports.Input_information_for_patient = function(req,res){
 	res.render('Input_information_for_patient');
 };
 
-exports.StaffMain = function(req,res){
-	console.log("-------------LOG Staff-----------");
+exports.StaffMain = function(req,res) {
+	res.render('staffMain');
+};
+
+
+/*Авторизация врача*/
+exports.signinStaff = function (req, res) {
+	console.log("-------------LOG signinStaff-----------");
 	sess = req.session;
 	sess.email = req.body.email;
 
