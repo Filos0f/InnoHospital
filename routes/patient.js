@@ -121,6 +121,7 @@ exports.newAppointment = function(req, res){
 	console.log(req.body.date);
 	console.log(req.body.time);
 	console.log(req.body.doctor);
+	res.redirect('/patient_cabinet');
 };
 
 exports.medCard = function(req, res){
