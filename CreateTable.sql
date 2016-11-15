@@ -63,7 +63,7 @@ create table WorkingSchedule (
 	startTime time,
 	finishTime time,
 	day date,
-	Primary key(startTime, finishTime, day)
+	Primary key(startTime, finishTime, day, roomN)
 );
 
 

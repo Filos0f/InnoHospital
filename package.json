@@ -17,6 +17,8 @@
     "pg":"*",
     "js-md5":"*",
     "connect-pg-simple":"*",
-    "express-session":"*"
+    "express-session":"*",
+    "node-fs":"*",
+    "async":"*"
   }
 }
