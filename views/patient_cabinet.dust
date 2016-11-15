@@ -15,12 +15,20 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Patient's cabinet</a>
     </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
+     
+    <ul class="tab nav navbar-nav">
+    <li class="active"><a class="glyphicon glyphicon-home" href="/">&nbsp;Exit</a></li>
+    <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Appointments')">Future Appointments</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Card')">Med Card</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Analysis')">Analysis</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Scans')">Scans</a></li>
+</ul>
+<!--
+      <li class="active"><a class="glyphicon glyphicon-home" href="/">&nbsp;Exit</a></li>
       <li><a href="/PatientCard">Med Card</a></li>
       <li><a href="/analysis">Analysis</a></li> 
-      <li><a href="/Scans">Scans</a></li> 
-    </ul>
+      <li><a href="/Scans">Scans</a></li> -->
+     
     <button type="button" style="float: right;margin-top: 7px;" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
   New Appointment
 </button>
@@ -29,7 +37,7 @@
 <body>
 
 
-<div class="col-lg-6">
+<div class="col-lg-5">
 
 <div class="PersonalInfo">
 <div class="container-fluid">
@@ -56,12 +64,60 @@
  </div>
 </div>
 
-<div class="col-lg-6">
+<div class="col-lg-5">
   <div class="container-fluid" id="right">
+  <div id="Appointments" class="tabcontent">
     <h2>Your future appointments</h2>
     <div class="well"></div>
+    </div>
+
+
+<div id="Card" class="tabcontent">
+  <div class="container">
+  <h1>Patien's Card History</h1>
+     
+      <button data-toggle='collapse' data-target="#record1" class="btn btn-info btn-sm">
+        <h3>Date: { }</h3></button>
+        <br />
+        <div id="record1" class="collapse"> Doctor's Record info here (from Generalized Analysis entity)
+            <p>General Text</p>
+            <p><strong>Diagnosis: </strong></p>
+            <p><strong>Prescribtion: </strong></p>
+        </div>
+     
   </div>
 </div>
+<div id="Analysis" class="tabcontent">
+ <div class="container">
+  <h1>Patien's Analysis results</h1>
+     
+      <button data-toggle='collapse' data-target="#record2" class="btn btn-info btn-sm">
+        <h3>Date: { }</h3></button>
+        <br />
+        <div id="record2" class="collapse">
+              Laborant info and lab report results go here
+             
+        </div>
+    
+  </div>
+
+</div>
+<div id="Scans" class="tabcontent">
+  <div class="container">
+  <h1>Scans and photo</h1>
+     
+      <button data-toggle='collapse' data-target="#record3" class="btn btn-info btn-sm">
+        <h3>Date: { } Results Type { }</h3></button>
+        <br />
+        <div id="record3" class="collapse">  
+            <p>General Text</p>
+             
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+ 
 
 
 <!-- Modal -->
@@ -83,9 +139,12 @@
               <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
               <br><br>
                    <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
-                      
+                  
                 <select name="doctor">
-                    <li><option value="Allergist">Allergist</option></li>
+{#positions}   
+                    <li><option id="Employee_{idPos}" value="{idPos}">{title}</option></li>
+{/positions} 
+                    <!--
                     <li><option value="Anesthesiologist">Anesthesiologist</option></li>
                     <li><option value="Cardiologist">Cardiologist</option></li>
                     <li><option value="Dentist">Dentist</option></li>
@@ -101,19 +160,19 @@
                     <li><option value="Orthopedic">Orthopedic Surgeon</option></li>
                     <li><option value="Pediatrician">Pediatrician</option></li>
                     <li><option value="Surgeon">Surgeon</option></li>
-                    <li><option value="Urologist">Urologist</option></li>
-                    </select>
+                    <li><option value="Urologist">Urologist</option></li>-->
+                    </select>           
                </div>
 
       <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save">
         <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
-        <input type="submit" class="btn btn-primary" value="Save">
+        
       </div>
       </form>
     </div>
   </div>
 </div>
- 
 
 
 
@@ -121,4 +180,20 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script>
+function openTab(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+     
 </html>

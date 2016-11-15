@@ -1,5 +1,6 @@
 var dataBase 	= require('../libs/dbManagement');
 var md5 		= require('js-md5');
+var async = require('async');
 
 exports.patient = function(req, res){
 	console.log("------------- PATIENT -----------");
@@ -13,22 +14,42 @@ exports.get_patient_cabinet = function(req, res){
 	if(sess.email) {
 		const client = dataBase.ConnectToDataBase();
 		client.connect();
-
-		var sqlQuery = 'SELECT * from person where email = \'' + sess.email + '\''; 
-		const query = client.query(sqlQuery);
-    
-	    const result = [];
-	    query.on('rows', function(row) {
-		result.push(row);
-	    });
-
-	    query.on("end", function(result){
-		if(result.rows[0] === undefined){
-		    res.redirect('/patient');
-		}
-		else{
-		    res.render('patient_cabinet', {patient:result.rows});
-		}
+		
+		var results = [];
+		async.series([
+			function(callback) {
+				console.log("FIRST CALLBACK!");
+        		var sqlQuery = 
+				'SELECT * from person \
+				NATURAL JOIN patient \
+				where email = \'' + req.body.email + '\'';
+        		var sqlQuery = 'SELECT * from person where email = \'' + sess.email + '\'';
+        		const query = client.query(sqlQuery);
+        		query.on('row', (row) => {
+        			console.log("FIRST QUERY!");
+			    	results.push(row);
+			    });  
+			    query.on("end", function(result){
+			    	callback();
+			    });
+    		},
+    		function(callback) {
+        		var sqlQuery = 'SELECT * from positions'; 
+				const query = client.query(sqlQuery);
+				query.on('row', (row) => {
+			    	results.push(row);
+			    });
+			    query.on("end", function(result){
+			    	callback();
+			    });
+    		},
+    		function(callback) {
+    			res.render('patient_cabinet', {patient:results[0],positions:results})
+    		},
+    		],
+    		function(err) {
+    			if (err) return callback(err);
+		    	console.log('Both finished!');
 		});
 	}
 };
@@ -48,26 +69,25 @@ exports.post_patient_cabinet = function(req, res, next){
 	console.log(sqlQuery);
 
 	const query = client.query(sqlQuery);
-    console.log(query);
     const result = [];
     query.on('rows', function(row) {
-	result.push(row);
+		result.push(row);
     });
 
     query.on("end", function(result){
-	if(result.rows[0] === undefined){
-	    res.redirect('/patient');
-	}
-	else{
-	    var hashsalt = result.rows[0].hashsalt;
-	    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-			res.render('patient_cabinet', {patient:result.rows});
-	    }
-	    else {
-			//not right password or email
-			res.redirect('/patient');
-	    }
-	}
+		if(result.rows[0] === undefined){
+		    res.redirect('/patient');
+		}
+		else{
+		    var hashsalt = result.rows[0].hashsalt;
+		    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+				res.render('patient_cabinet', {patient:result.rows});
+		    }
+		    else {
+				//not right password or email
+				res.redirect('/patient');
+		    }
+		}
     });
 
     console.log('--------This----------' + result);
@@ -101,6 +121,8 @@ exports.addPatient = function(req,res){
 	console.log(req.body.hashpassword);
 	console.log(md5(req.body.hashpassword + hashSolt));
 
+	console.log(req.body.fname);
+
 	var address=req.body.city+ ' ' + req.body.street+ ' ' + req.body.appartment;
 	client.query(
 		'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
@@ -132,3 +154,5 @@ exports.scans = function(req, res){
 exports.analysis = function(req, res){
 	res.render('patientAnalysis');
 };
+
+
