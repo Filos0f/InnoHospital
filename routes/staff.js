@@ -15,7 +15,7 @@ exports.staffInfo = function(req,res){
 exports.staff = function(req, res) {
 	console.log("------------- Staff init -----------");
 
-	var analizesTitle = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/title_of_analizis", "utf8"));
+	var analizesTitle = JSON.parse(fs.readFileSync("title_of_analizis", "utf8"));
 	console.log("------------- Staff init 1-----------");
 
 	var diagnosesType = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/type_of_diagnoses", "utf8"));

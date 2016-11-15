@@ -134,6 +134,7 @@
       <h3>Set data</h3>
 
       <form method="post" action="/newAppointment">
+      
        <span>
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
               <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
@@ -141,26 +142,13 @@
                    <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
                   
                 <select name="doctor">
-{#positions}   
-                    <li><option id="Employee_{idPos}" value="{idPos}">{title}</option></li>
-{/positions} 
-                    <!--
-                    <li><option value="Anesthesiologist">Anesthesiologist</option></li>
-                    <li><option value="Cardiologist">Cardiologist</option></li>
-                    <li><option value="Dentist">Dentist</option></li>
-                    <li><option value="Dermatologist">Dermatologist</option></li>
-                    <li><option value="Endocrinologist">Endocrinologist</option></li>
-                    <li><option value="ENT">ENT Specialist</option></li>
-                    <li><option value="Gynecologist">Gynecologist</option></li>
-                    <li><option value="Immunologist">Immunologist</option></li>
-                    <li><option value="Physician">Physician</option></li>
-                    <li><option value="Infectious">Infectious Disease Specialist</option></li>
-                    <li><option value="Neurosurgeon">Neurosurgeon</option></li>
-                    <li><option value="Oncologist">Oncologist</option></li>
-                    <li><option value="Orthopedic">Orthopedic Surgeon</option></li>
-                    <li><option value="Pediatrician">Pediatrician</option></li>
-                    <li><option value="Surgeon">Surgeon</option></li>
-                    <li><option value="Urologist">Urologist</option></li>-->
+
+                      {#positions} 
+
+                          <option id="Employee_{idpos}" value="{idpos}">{title}</option>
+
+                      {/positions} 
+
                     </select>           
                </div>
 
@@ -169,6 +157,7 @@
         <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
         
       </div>
+
       </form>
     </div>
   </div>
