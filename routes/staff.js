@@ -19,15 +19,15 @@ exports.staff = function(req, res) {
 	var analizesTitle = JSON.parse(fs.readFileSync("title_of_analizis", "utf8"));
 	console.log("------------- Staff init 1-----------");
 
-	var diagnosesType = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/type_of_diagnoses", "utf8"));
+	var diagnosesType = JSON.parse(fs.readFileSync("type_of_diagnoses", "utf8"));
 	console.log("------------- Staff init 2-----------");
 
-	var analizesType = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/type_of_typeAnaliz", "utf8"));
+	var analizesType = JSON.parse(fs.readFileSync("type_of_typeAnaliz", "utf8"));
 	console.log("------------- Staff init 3-----------");
-	var EmployeePositionsId = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/types_of_id_employee", "utf8"));
+	var EmployeePositionsId = JSON.parse(fs.readFileSync("types_of_id_employee", "utf8"));
 
 	console.log("------------- Staff init 4-----------");
-	var allStaff = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/Staff.txt", "utf8"));
+	var allStaff = JSON.parse(fs.readFileSync("Staff.txt", "utf8"));
 
 	console.log("------------- Staff hash -----------");
 	function hash(key)
