@@ -4,6 +4,7 @@ var config 		= require('../config');
 var pg 			= require('pg');
 var md5 		= require('js-md5');
 var dataBase 	= require('../libs/dbManagement');
+var async       = require('async');
 ////////////////////////////////////////
 
 exports.staffInfo = function(req,res){
@@ -24,6 +25,7 @@ exports.staff = function(req, res) {
 	var analizesType = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/type_of_typeAnaliz", "utf8"));
 	console.log("------------- Staff init 3-----------");
 	var EmployeePositionsId = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/types_of_id_employee", "utf8"));
+
 	console.log("------------- Staff init 4-----------");
 	var allStaff = JSON.parse(fs.readFileSync("/home/lida/GITALL/InnoHospital/Staff.txt", "utf8"));
 
@@ -38,7 +40,7 @@ exports.staff = function(req, res) {
 		return h;
 	}
 	console.log("------------- Staff position -----------");
-
+/*
 	const staff = dataBase.ConnectToDataBase();
 	staff.connect();
 
@@ -54,85 +56,260 @@ exports.staff = function(req, res) {
 		console.log(row);
 		result.push(row);
 	});
+*/
+    async.series([
+       function(callback) {
+           const db = dataBase.ConnectToDataBase();
+           db.connect();
 
+		   var query = db.query( 'Select * from employee');
+		   const result = [];
+		   query.on('rows', function(row) {
+			   result.push(row);
+		   });
+
+		   query.on("end", function(result) {
+			   if (result.rows[0] === undefined) {
+				   for(var y = 0; y < allStaff.length; y++)
+				   {
+					   db.query(
+						   'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
+                          VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+						   [allStaff[y]['People']['idPassport'], allStaff[y]['People']['firstName'], allStaff[y]['People']['secondName'], allStaff[y]['People']['address'], allStaff[y]['People']['email'], allStaff[y]['People']['telN'],
+							   allStaff[y]['People']['birthday'], allStaff[y]['People']['gender'],
+							   md5(allStaff[y]['People']['password'] + hash(allStaff[y]['People']['idPassport'])),
+							   hash(allStaff[y]['People']['idPassport'])]);
+
+					   db.query(
+						   'INSERT INTO Employee(rating,idPos,idEmp,roomN,idPassport) \
+                          VALUES($1,$2,$3,$4,$5)',
+						   ['0', allStaff[y]['People']['Employee']['idPos'], allStaff[y]['People']['Employee']['idEmp'],
+							   allStaff[y]['People']['Employee']['roomN'], allStaff[y]['People']['idPassport']]
+					   );
+
+					   db.query(
+						   'INSERT INTO WorkingSchedule(roomN,startTime, finishTime, day) \
+                          VALUES($1,$2,$3,$4)',
+						   [allStaff[y]['People']['Employee']['WorkingSchedule']['roomN'], allStaff[y]['People']['Employee']['WorkingSchedule']['startTime'],
+							   allStaff[y]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[y]['People']['Employee']['WorkingSchedule']['date']]
+					   );
+
+				   }
+				   for (var i = 0; i < EmployeePositionsId.length; ++i) {
+					   console.log(i);
+					   db.query(
+						   'INSERT INTO positions(idPos, title, idEmp) \
+                           VALUES($1,$2,$3)',
+						   [EmployeePositionsId[i]['id'], EmployeePositionsId[i]['value'], null]
+					   );
+				   }
+				   for(var k = 0; k < analizesType.length; ++k)
+				   {
+					   console.log(k);
+					   db.query(
+						   'INSERT INTO conclusiontypes(idtype, title) \
+                               VALUES($1,$2)',
+						   [analizesType[k]['id'], analizesType[k]['value']]
+					   );
+				   }
+				   for(var m = 0; m < analizesTitle.length; ++m) {
+					   for (var j = 0; j < analizesTitle[m]['value'].length; ++j) {
+						   console.log(analizesTitle[m]['value'][j]['id'] + " " + analizesTitle[m]['value'][j]['title'] + " " + analizesTitle[m]['idType']);
+						   db.query(
+							   'INSERT INTO generalizedAnalysisTitles(idtitle, title, idType) \
+                VALUES($1,$2, $3)',
+							   [analizesTitle[m]['value'][j]['id'], analizesTitle[m]['value'][j]['title'], analizesTitle[m]['idType']]);
+					   }
+				   }
+				   for(var t = 0; t < diagnosesType.length; t++)
+				   {
+					   var id = (t + 1) * 999;
+					   db.query(
+						   'INSERT INTO DiagnosisInfo(title, idtitle, nationalcode, rate) \
+                          VALUES($1,$2, $3, $4)',
+						   [diagnosesType[t]['value'], id, diagnosesType[t]['id'], '0']);
+				   }
+			   }
+		   });
+       }
+    ], function (err) {
+        if(err) callback(err);
+    });
+
+/*
 	query.on("end", function(result) {
-
-		console.log("------------------------------" + result.rows[0]+"--------------------------");
-		if(result.rows[0] === undefined)
-		{
-			for(i = 0; i < EmployeePositionsId.length; i++)
-			{
+		console.log("------------------------------" + result1111111111111.rows[0] + "--------------------------");
+		if (result.rows[0] === undefined) {
+			for (var i = 0; i < EmployeePositionsId.length; ++i) {
+				console.log(i);
 				staff.query(
 					'INSERT INTO positions(idPos, title, idEmp) \
                     VALUES($1,$2,$3)',
-					[EmployeePositionsId[i]['id'], EmployeePositionsId[i]['value'], null]);
-			}
-			console.log("------------- Staff AnalType-----------");
-
-			for(i = 0; i < analizesType.length; i++)
-			{
-				staff.query(
-					'INSERT INTO conclusiontypes(idtype, title) \
-                    VALUES($1,$2)',
-					[analizesType[i]['id'], analizesType[i]['value']]);
-			}
-
-			console.log("------------- Staff titleAnal-----------");
-			for(i = 0; i < analizesTitle.length; i++)
-			{
-				staff.query(
-					'INSERT INTO generalizedAnalysisTitles(idtitle, title) \
-                    VALUES($1,$2)',
-					[analizesTitle[i]['id'], analizesTitle[i]['value']]);
-			}
-			console.log("------------- Staff diagnoz -----------");
-
-			for(i = 0; i < diagnosesType.length; i++)
-			{
-				staff.query(
-					'INSERT INTO DiagnosisInfo(title, idtitle, nationalcode, rate) \
-                    VALUES($1,$2, $3, $4)',
-					[diagnosesType[i]['value'], (i + 1) * 999, diagnosesType[i]['id'], 0]);
-			}
-
-
-			for(i = 0; i < allStaff.length; i++)
-			{
-				console.log("------------- Staff table -----------");
-				console.log("index " + allStaff[i]['People']['idPassport'] + " " + allStaff[i]['People']['firstName'] + " " + " " + allStaff[i]['People']['secondName'] + " " +  allStaff[i]['People']['address'] + " " + allStaff[i]['People']['email'] + " " + allStaff[i]['People']['telN'] + " " +
-					allStaff[i]['People']['birthday'] + " " + allStaff[i]['People']['gender'] + " " + md5(allStaff[i]['People']['password'] + hash(allStaff[i]['People']['idPassport'])) + " " + hash(allStaff[i]['People']['idPassport']));
-
-				console.log("employee " + allStaff[i]['People']['Employee']['idPos'] + " " + allStaff[i]['People']['Employee']['idEmp'] + " " +
-					allStaff[i]['People']['Employee']['roomN'] + " " + allStaff[i]['People']['idPassport']);
-
-				console.log(allStaff[i]['People']['Employee']['WorkingSchedule']['roomN'] + " " + allStaff[i]['People']['Employee']['WorkingSchedule']['startTime'] + " " +
-					allStaff[i]['People']['Employee']['WorkingSchedule']['finishTime'] + " " + allStaff[i]['People']['Employee']['WorkingSchedule']['date']);
-
-				staff.query(
-					'INSERT INTO Person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
-                    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
-					[allStaff[i]['People']['idPassport'], allStaff[i]['People']['firstName'], allStaff[i]['People']['secondName'], allStaff[i]['People']['address'], allStaff[i]['People']['email'], allStaff[i]['People']['telN'],
-						allStaff[i]['People']['birthday'], allStaff[i]['People']['gender'], md5(allStaff[i]['People']['password'] + hash(allStaff[i]['People']['idPassport'])), hash(allStaff[i]['People']['idPassport'])]);
-
-				staff.query(
-					'INSERT INTO Employee(rating,idPos,idEmp,roomN,idPasport) \
-                    VALUES($1,$2,$3,$4,$5)',
-					[0, allStaff[i]['People']['Employee']['idPos'], allStaff[i]['People']['Employee']['idEmp'],
-						allStaff[i]['People']['Employee']['roomN'], allStaff[i]['People']['idPassport']]
+					[EmployeePositionsId[i]['id'], EmployeePositionsId[i]['value'], null]
 				);
-
-				staff.query(
-					'INSERT INTO WorkingSchedule(roomN,startTime, finishTime, day) \
-                    VALUES($1,$2,$3,$4)',
-					[allStaff[i]['People']['Employee']['WorkingSchedule']['roomN'], allStaff[i]['People']['Employee']['WorkingSchedule']['startTime'],
-						allStaff[i]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[i]['People']['Employee']['WorkingSchedule']['date']]
-				);
-			 }
-
-			console.log("------------- Staff end -----------");
-
+			}
 		}
 	});
+
+	var staff2 = dataBase.ConnectToDataBase();
+	staff2.connect();
+
+
+	var sqlQuery2 = 'SELECT * from conclusiontypes';
+	const query2 = staff2.query(sqlQuery2);
+	console.log(query2);
+
+
+
+	console.log(query2.rows);
+	const result2 = [];
+	query2.on('rows', function(row) {
+		console.log(row);
+		result2.push(row);
+	});
+
+
+
+	query2.on("end", function(result2) {
+		console.log("------------------------------" + result2.rows[0] + "--------------------------");
+		if (result2.rows[0] === undefined) {
+			for(var k = 0; k < analizesType.length; ++k)
+			{
+				console.log(k);
+				staff2.query(
+					'INSERT INTO conclusiontypes(idtype, title) \
+                        VALUES($1,$2)',
+					[analizesType[k]['id'], analizesType[k]['value']]
+				);
+			}
+		}
+	});
+*/
+
+	// const staff3 = dataBase.ConnectToDataBase();
+	// staff3.connect();
+    //
+    //
+	// var sqlQuery3 = 'SELECT * from generalizedAnalysisTitles';
+	// const query3 = staff3.query(sqlQuery3);
+	// console.log(query3);
+    //
+    //
+    //
+	// console.log(query3.rows);
+	// const result3 = [];
+	// query3.on('rows', function(row) {
+	// 	console.log(row);
+	// 	result3.push(row);
+	// });
+    //
+    //
+    //
+	// query3.on("end", function(result3) {
+	// 	console.log("------------------------------" + result3.rows[0] + "--------------------------");
+	// 	if (result3.rows[0] === undefined) {
+	// 		for(var m = 0; m < analizesTitle.length; ++m) {
+	// 			for (var j = 0; j < analizesTitle[m]['value'].length; ++j) {
+	// 				console.log(analizesTitle[m]['value'][j]['id'] + " " + analizesTitle[m]['value'][j]['title'] + " " + analizesTitle[m]['idType']);
+	// 				staff3.query(
+	// 					'INSERT INTO generalizedAnalysisTitles(idtitle, title, idType) \
+     //                   VALUES($1,$2, $3)',
+	// 					[analizesTitle[m]['value'][j]['id'], analizesTitle[m]['value'][j]['title'], analizesTitle[m]['idType']]);
+	// 			}
+	// 		}
+	// 	}
+	// });
+    //
+    //
+	// const staff5 = dataBase.ConnectToDataBase();
+	// staff5.connect();
+    //
+    //
+	// var sqlQuery5 = 'SELECT * from generalizedAnalysisTitles';
+	// const query5 = staff5.query(sqlQuery5);
+	// console.log(query5);
+    //
+    //
+    //
+	// console.log(query5.rows);
+	// const result5 = [];
+	// query5.on('rows', function(row) {
+	// 	console.log(row);
+	// 	result5.push(row);
+	// });
+    //
+    //
+    //
+	// query5.on("end", function(result5) {
+	// 	console.log("------------------------------" + result5.rows[0] + "--------------------------");
+	// 	if (result5.rows[0] === undefined) {
+	// 		for(var t = 0; t < diagnosesType.length; t++)
+    // 		{
+    // 			var id = (t + 1) * 999;
+    // 				staff5.query(
+    // 					'INSERT INTO DiagnosisInfo(title, idtitle, nationalcode, rate) \
+    // 			       VALUES($1,$2, $3, $4)',
+    // 					[diagnosesType[t]['value'], id, diagnosesType[t]['id'], '0']);
+    // 		}
+    //
+	// 	}
+	// });
+    //
+    //
+    //
+	// const staff6 = dataBase.ConnectToDataBase();
+	// staff6.connect();
+    //
+    //
+	// var sqlQuery6 = 'SELECT * from generalizedAnalysisTitles';
+	// const query6 = staff6.query(sqlQuery6);
+	// console.log(query6);
+    //
+    //
+    //
+	// console.log(query6.rows);
+	// const result6 = [];
+	// query6.on('rows', function(row) {
+	// 	console.log(row);
+	// 	result6.push(row);
+	// });
+    //
+    //
+    //
+	// query6.on("end", function(result6) {
+	// 	console.log("------------------------------" + result6.rows[0] + "--------------------------");
+	// 	if (result6.rows[0] === undefined) {
+	// 		for(var y = 0; y < allStaff.length; y++)
+	// 		{
+    //
+	// 				staff6.query(
+	// 						'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
+	// 			           VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+	// 						[allStaff[y]['People']['idPassport'], allStaff[y]['People']['firstName'], allStaff[y]['People']['secondName'], allStaff[y]['People']['address'], allStaff[y]['People']['email'], allStaff[y]['People']['telN'],
+	// 							allStaff[y]['People']['birthday'], allStaff[y]['People']['gender'],
+	// 							md5(allStaff[y]['People']['password'] + hash(allStaff[y]['People']['idPassport'])),
+	// 							hash(allStaff[y]['People']['idPassport'])]);
+    //
+	// 				staff6.query(
+	// 					'INSERT INTO Employee(rating,idPos,idEmp,roomN,idPasport) \
+	// 			       VALUES($1,$2,$3,$4,$5)',
+	// 					['0', allStaff[y]['People']['Employee']['idPos'], allStaff[y]['People']['Employee']['idEmp'],
+	// 						allStaff[y]['People']['Employee']['roomN'], allStaff[y]['People']['idPassport']]
+	// 				);
+    //
+	// 				staff6.query(
+	// 					'INSERT INTO WorkingSchedule(roomN,startTime, finishTime, day) \
+	// 			       VALUES($1,$2,$3,$4)',
+	// 					[allStaff[y]['People']['Employee']['WorkingSchedule']['roomN'], allStaff[y]['People']['Employee']['WorkingSchedule']['startTime'],
+	// 						allStaff[y]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[y]['People']['Employee']['WorkingSchedule']['date']]
+	// 				);
+    //
+	// 		}
+	// 	}
+	// });
+	// console.log("------------- Staff end -----------");
+    //
+
 	res.render('staff');
 };
 
@@ -149,33 +326,36 @@ exports.StaffMain = function(req,res){
 	staff.connect();
 	console.log(req.body.hashpassword);
 
-	var sqlQuery =
-		'SELECT * from Person where email = \'' + req.body.email + '\'';
-
 	//var sqlQuery =
-		//'SELECT * from employee';
+	//	'SELECT * from Person where email = \'' + req.body.email + '\'';
 
-	console.log(sqlQuery);
+	var sqlQuery =
+	 	'SELECT * from person';
+
+
 	const query = staff.query(sqlQuery);
+	console.log(sqlQuery);
 
 	const result = [];
-	query.on('rows', function(row) {
-		result.push(row);
+	query.on('fields', function(fields) {
+		console.log(result);
+
+		result.push(fields);
 	});
 	console.log(sqlQuery);
 
 	query.on("end", function(result){
-		res.render('StaffMyInfo');
 		console.log(result);
-		if(result.rows[0] === undefined){
+		if(result.fields[0] === undefined){
 			res.render('StaffMain');
 		}
 		else{
-			var hashsalt = result.rows[0].hashsalt;
-			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+			var hashsalt = result.fields[0].hashsalt;
+			if(md5(req.body.hashpassword + hashsalt) == result.fields[0].hashpassword) {
 				res.render('StaffMyInfo');
 			}
 			else {
+				console.log("error2");
 				res.render('StaffMain');
 			}
 		}

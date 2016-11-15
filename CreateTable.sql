@@ -22,13 +22,13 @@ create table Person (
 	idPassport varchar(256),
 	firstName varchar(256) NOT NULL,
 	secondName varchar(256) NOT NULL,
-	address varchar(256) NOT NULL,
-	email varchar(256) NOT NULL,
+	address varchar(1024) NOT NULL,
+	email varchar(1024) NOT NULL,
 	telN varchar(256) NOT NULL,
 	birthDay Date NOT NULL, 
 	gender varchar(20) NOT NULL,
-	hashPassword varchar(256) NOT NULL,
-	hashSalt varchar(256) NOT NULL,
+	hashPassword varchar(1024) NOT NULL,
+	hashSalt varchar(1024) NOT NULL,
 	Primary key(idPassport)  
 );
 create table Employee (
@@ -123,7 +123,8 @@ create table XRay (
 
 create table generalizedAnalysisTitles (
 	idTitle varchar(256),
-	title varchar(256),
+	title varchar(1024),
+	idType int,
 	primary key(idTitle)
 );
 
