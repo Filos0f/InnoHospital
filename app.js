@@ -58,6 +58,12 @@ app.post('/signinStaff', 		require('./routes/staff').signinStaff);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
 app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
+app.post('/epidStatBox',		require('./routes/staff').fillTheEpidemicBox);
+app.post('/ratingBox',			require('./routes/staff').showRatingBox);
+app.post('/saveAnamAndDiag',	require('./routes/staff').saveAnamAndDiag);
+app.post('/labResultsDone', 	require('./routes/staff').labResultDone);
+app.post('/scanSave', 			require('./routes/staff').scanSave);
+app.post('/createNewAppointment',require('./routes/staff').createNewAppointment);
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));

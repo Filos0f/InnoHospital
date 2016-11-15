@@ -40,12 +40,12 @@
             <span class="icon-bar"></span>
 
           </button>
-          <a class="navbar-brand" href="#">My work</a>
+          <a class="navbar-brand" href="/gotoprofile">My work</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Exit</a></li>
+            <li><a href="/gotoprofile" method="get">Profile</a></li>
+            <li><a href="/" method = "get">Exit</a></li>
           </ul>
         
         </div>
@@ -61,11 +61,10 @@
         
           <ul class="nav nav-sidebar">
             
-            <li><a href="#" id="WriteReport" onclick="openbox('ReportPage'); return false">Anamnesis&Diagnosis</a></li>
-            <li><a href="#" id='analVal' onclick="openbox('Scans'); return false">Scans<span class="sr-only">(current)</span></a></li>
-            <li><a href="#" id="bloodVal" onclick="openbox('LabRes'); return false">Lab results</a></li>
-            <li><a href="#" id="bloodVal" onclick="openbox('bloddPanelVal'); return false">Lab results</a></li>
-             
+            <li><a href="#" id="AnamAndDiagBox" onclick="openbox('AnamAndDiag'); return false">Anamnesis&Diagnosis</a></li>
+            <li><a href="#" id='ScansBox' onclick="openbox('Scans'); return false">Scans<span class="sr-only">(current)</span></a></li>
+            <li><a href="#" id="LabResBox" onclick="openbox('LabRes'); return false">Lab results</a></li>
+
 			<li><a href='/backToStaffMain' id="backVal" onclick="back()">Back</a></input></li>
           </ul>
 	  </div>
@@ -115,9 +114,10 @@
                </div>
 
       <div class="modal-footer">
-      <input type="submit" class="btn btn-primary" value="Save">
+          <form action="/createNewAppointment" method="post">
+      <input type="submit" class="btn btn-primary"  value="Save">
         <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
-        
+          </form>
       </div>
       </form>
     </div>
@@ -135,17 +135,21 @@
            
 
           		<div style="">
-                	<div class="panel panel-primary" id="ReportPage" style="display:none">
+                	<div class="panel panel-primary" id="AnamAndDiag" style="display:none">
                     	<div class="panel-heading">
                         	Writing report
                         </div>
                         <div class="panel-body">
                         	<div class="text-primary">
-                            	<textarea rows="10" cols="135">
+                            	<textarea rows="10" cols="135" >
                                    
                                     </textarea>
                             </div>
-                            
+                            <div class="btn submit success">
+                                <button class="save" action="/saveAnamAndDiag" method="post">
+                                    save
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-primary" id="diagnPanelVal" style="display:none">
@@ -171,7 +175,7 @@
                             	<p id="type" class="well">type</p>
                                 <p id="Standart" class="well">standart</p>
                                 <p id="result" class="well">result</p>
-                                <button class="btn btn-primary" id=bloodBtnDone>DONE</button> 
+                                <button class="btn btn-primary" id=bloodBtnDone action="/labResultsDone">DONE</button>
                             </div>
                         </div>
                     </div>
@@ -194,7 +198,7 @@
                                 </div>
                                  
                             </div>
-                            <button class="btn-primary btn" style="float: left;">Save</button>
+                            <button class="btn-primary btn" action="/scanSave" method="post" style="float: left;">Save</button>
                         </div> 
                     </div>
                     <div class="panel panel-primary col-md-5" id="recordPanelVal" style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
@@ -245,7 +249,7 @@
     </div>
 	<script type='text/javascript'>
 	function openbox(id){
-		document.getElementById('ReportPage').style.display='none';
+		document.getElementById('AnamAndDiag').style.display='none';
 		document.getElementById('Scans').style.display='none';
 		document.getElementById('recordPanelVal').style.display='none';
 		document.getElementById('LabRes').style.display='none';

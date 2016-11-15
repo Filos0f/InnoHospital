@@ -368,3 +368,34 @@ exports.signinStaff = function (req, res) {
 	});
 	console.log(sqlQuery);
 };
+
+exports.fillTheEpidemicBox = function (req, res) {
+	/*Fill the epidemic box in staffMain page*/
+	console.log("______FillTheEpidemicBox_______");
+};
+
+exports.showRatingBox = function (req, res) {
+	/*staffMain, 'rating' ref*/
+	console.log("______showRatingBox_______");
+};
+
+exports.saveAnamAndDiag = function (req, res) {
+	/*Input_information_for_patient Anamnesis&Diagnosis*/
+	console.log("______save Anamnesis&Diagnosis");
+};
+
+exports.labResultDone = function (req, res) {
+	/*In input_inform_for_patient, in Lab result box, button 'DONE'*/
+	Console.log('______LabResultsDone_______');
+};
+
+exports.scanSave = function (req, res) {
+	/*Save scan from input_blablabla_patient page*/
+	COnsole.log("______SaveScans_____________");
+};
+
+exports.createNewAppointment = function (req, res) {
+	/*createNewAppointment on input_info_for_patient page when click button save in NewAppointment box*/
+	Console.log("createNewAppointment");
+}
+

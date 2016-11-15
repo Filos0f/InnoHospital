@@ -11,52 +11,55 @@
 <div class="jumbotron">
 <h1>SOME STAFF</h1>
 </div>
+<{#employee}>
 <div class="well">
 	<div class="row" style="text-decoration:inherit" id=aboutMeTableHeader style="text-align:center"><h2>Smthing about staff</h2></div>
 	<div class="row">
 		<div class="col-lg-2"> Name: </div>
-		<div class="col-lg-6" id=nameVal> firstname middlename secondname additionalname</div>
+		<div class="col-lg-6" id=nameVal> <strong>{firstname}</strong> <strong>{secondname}</strong></div>
 	</div>
 	<div class="row">
 		<div class="col-md-2"> Gender: </div>
-		<div class="col-md-6" id=genderVal> male/female</div>
+		<div class="col-md-6" id=genderVal> <strong>{gender}</strong></div>
 	</div>
 	<div class="row">
 		<div class="col-md-2"> Phone number: </div>
-		<div class="col-md-6" id=phNumVal> +1234567890 </div>
+		<div class="col-md-6" id=phNumVal> <strong>{teln}</strong> </div>
 	</div>
 	<div class="row">
 		<div class="col-md-2"> E-mail: </div>
-		<div class="col-md-6" id=emailVal> darklordofthehospital@stupidmailbox.nah </div>
+		<div class="col-md-6" id=emailVal> <strong>{email}</strong> </div>
 	</div>
     	<div class="row">
 		<div class="col-md-2"> Adress: </div>
-		<div class="col-md-6" id=adrVal> Like street, home 6"f", appartments 131, Russina Federatian, RT Tatarstan, Verhnehyonskii rn, Inno city, 141515 </div>
+		<div class="col-md-6" id=adrVal> <strong>{address}</strong> </div>
 		</div>
     	
-        <div class="row">
+        <!--div class="row">
 			<div class="col-md-2"> Login: </div>
 			<div class="col-md-6" id=logVal> darklordofthehospital </div>
-		</div>
+		</div-->
     	
-        <div class="row">
+        <!--div class="row">
 			<div class="col-md-2"> Password: </div>
 			<div class="col-md-6" id=passVal> qwerty789 </div>
-		</div>
+		</div-->
     	
         <div class="row">
 			<div class="col-md-2"> Position: </div>
-			<div class="col-md-6" id=posVal> 69 </div>
+			<div class="col-md-6" id=posVal> <strong>{title}</strong> </div>
 		</div>
     
     	<div class="row">
 			<div class="col-md-2"> Cabinet: </div>
-			<div class="col-md-6" id=cabVal> 108 </div>
+			<div class="col-md-6" id=cabVal> <strong>{roomn}</strong> </div>
 		</div>
         
 	</div>
+{/patient}
 	<form type='submit' action='/backToStaffMain' method='get'>
 	<div class="btn"><button id=backBtn class="btn btn-primary" action='/backToStaffMain' method='get'>back</button></div>
 	</form>
-    </body>
+</div>
+</body>
 </html>
