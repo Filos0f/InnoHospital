@@ -54,10 +54,10 @@ app.get('/Scans', 				require('./routes/patient').scans);
 app.get('/analysis', 			require('./routes/patient').analysis);
 
 app.get('/gotoprofile', 		require('./routes/staff').staffInfo);
-app.post('/signinStaff', 		require('./routes/staff').StaffMain);
+app.post('/signinStaff', 		require('./routes/staff').staffMain);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
-app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
+app.get('/backToStaffMain', 	require('./routes/staff').staffMain);
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));

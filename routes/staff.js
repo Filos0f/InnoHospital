@@ -136,180 +136,6 @@ exports.staff = function(req, res) {
         if(err) callback(err);
     });
 
-/*
-	query.on("end", function(result) {
-		console.log("------------------------------" + result1111111111111.rows[0] + "--------------------------");
-		if (result.rows[0] === undefined) {
-			for (var i = 0; i < EmployeePositionsId.length; ++i) {
-				console.log(i);
-				staff.query(
-					'INSERT INTO positions(idPos, title, idEmp) \
-                    VALUES($1,$2,$3)',
-					[EmployeePositionsId[i]['id'], EmployeePositionsId[i]['value'], null]
-				);
-			}
-		}
-	});
-
-	var staff2 = dataBase.ConnectToDataBase();
-	staff2.connect();
-
-
-	var sqlQuery2 = 'SELECT * from conclusiontypes';
-	const query2 = staff2.query(sqlQuery2);
-	console.log(query2);
-
-
-
-	console.log(query2.rows);
-	const result2 = [];
-	query2.on('rows', function(row) {
-		console.log(row);
-		result2.push(row);
-	});
-
-
-
-	query2.on("end", function(result2) {
-		console.log("------------------------------" + result2.rows[0] + "--------------------------");
-		if (result2.rows[0] === undefined) {
-			for(var k = 0; k < analizesType.length; ++k)
-			{
-				console.log(k);
-				staff2.query(
-					'INSERT INTO conclusiontypes(idtype, title) \
-                        VALUES($1,$2)',
-					[analizesType[k]['id'], analizesType[k]['value']]
-				);
-			}
-		}
-	});
-*/
-
-	// const staff3 = dataBase.ConnectToDataBase();
-	// staff3.connect();
-    //
-    //
-	// var sqlQuery3 = 'SELECT * from generalizedAnalysisTitles';
-	// const query3 = staff3.query(sqlQuery3);
-	// console.log(query3);
-    //
-    //
-    //
-	// console.log(query3.rows);
-	// const result3 = [];
-	// query3.on('rows', function(row) {
-	// 	console.log(row);
-	// 	result3.push(row);
-	// });
-    //
-    //
-    //
-	// query3.on("end", function(result3) {
-	// 	console.log("------------------------------" + result3.rows[0] + "--------------------------");
-	// 	if (result3.rows[0] === undefined) {
-	// 		for(var m = 0; m < analizesTitle.length; ++m) {
-	// 			for (var j = 0; j < analizesTitle[m]['value'].length; ++j) {
-	// 				console.log(analizesTitle[m]['value'][j]['id'] + " " + analizesTitle[m]['value'][j]['title'] + " " + analizesTitle[m]['idType']);
-	// 				staff3.query(
-	// 					'INSERT INTO generalizedAnalysisTitles(idtitle, title, idType) \
-     //                   VALUES($1,$2, $3)',
-	// 					[analizesTitle[m]['value'][j]['id'], analizesTitle[m]['value'][j]['title'], analizesTitle[m]['idType']]);
-	// 			}
-	// 		}
-	// 	}
-	// });
-    //
-    //
-	// const staff5 = dataBase.ConnectToDataBase();
-	// staff5.connect();
-    //
-    //
-	// var sqlQuery5 = 'SELECT * from generalizedAnalysisTitles';
-	// const query5 = staff5.query(sqlQuery5);
-	// console.log(query5);
-    //
-    //
-    //
-	// console.log(query5.rows);
-	// const result5 = [];
-	// query5.on('rows', function(row) {
-	// 	console.log(row);
-	// 	result5.push(row);
-	// });
-    //
-    //
-    //
-	// query5.on("end", function(result5) {
-	// 	console.log("------------------------------" + result5.rows[0] + "--------------------------");
-	// 	if (result5.rows[0] === undefined) {
-	// 		for(var t = 0; t < diagnosesType.length; t++)
-    // 		{
-    // 			var id = (t + 1) * 999;
-    // 				staff5.query(
-    // 					'INSERT INTO DiagnosisInfo(title, idtitle, nationalcode, rate) \
-    // 			       VALUES($1,$2, $3, $4)',
-    // 					[diagnosesType[t]['value'], id, diagnosesType[t]['id'], '0']);
-    // 		}
-    //
-	// 	}
-	// });
-    //
-    //
-    //
-	// const staff6 = dataBase.ConnectToDataBase();
-	// staff6.connect();
-    //
-    //
-	// var sqlQuery6 = 'SELECT * from generalizedAnalysisTitles';
-	// const query6 = staff6.query(sqlQuery6);
-	// console.log(query6);
-    //
-    //
-    //
-	// console.log(query6.rows);
-	// const result6 = [];
-	// query6.on('rows', function(row) {
-	// 	console.log(row);
-	// 	result6.push(row);
-	// });
-    //
-    //
-    //
-	// query6.on("end", function(result6) {
-	// 	console.log("------------------------------" + result6.rows[0] + "--------------------------");
-	// 	if (result6.rows[0] === undefined) {
-	// 		for(var y = 0; y < allStaff.length; y++)
-	// 		{
-    //
-	// 				staff6.query(
-	// 						'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
-	// 			           VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
-	// 						[allStaff[y]['People']['idPassport'], allStaff[y]['People']['firstName'], allStaff[y]['People']['secondName'], allStaff[y]['People']['address'], allStaff[y]['People']['email'], allStaff[y]['People']['telN'],
-	// 							allStaff[y]['People']['birthday'], allStaff[y]['People']['gender'],
-	// 							md5(allStaff[y]['People']['password'] + hash(allStaff[y]['People']['idPassport'])),
-	// 							hash(allStaff[y]['People']['idPassport'])]);
-    //
-	// 				staff6.query(
-	// 					'INSERT INTO Employee(rating,idPos,idEmp,roomN,idPasport) \
-	// 			       VALUES($1,$2,$3,$4,$5)',
-	// 					['0', allStaff[y]['People']['Employee']['idPos'], allStaff[y]['People']['Employee']['idEmp'],
-	// 						allStaff[y]['People']['Employee']['roomN'], allStaff[y]['People']['idPassport']]
-	// 				);
-    //
-	// 				staff6.query(
-	// 					'INSERT INTO WorkingSchedule(roomN,startTime, finishTime, day) \
-	// 			       VALUES($1,$2,$3,$4)',
-	// 					[allStaff[y]['People']['Employee']['WorkingSchedule']['roomN'], allStaff[y]['People']['Employee']['WorkingSchedule']['startTime'],
-	// 						allStaff[y]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[y]['People']['Employee']['WorkingSchedule']['date']]
-	// 				);
-    //
-	// 		}
-	// 	}
-	// });
-	// console.log("------------- Staff end -----------");
-    //
-
 	res.render('staff');
 };
 
@@ -317,7 +143,7 @@ exports.Input_information_for_patient = function(req,res){
 	res.render('Input_information_for_patient');
 };
 
-exports.StaffMain = function(req,res){
+exports.staffMain = function(req,res){
 	console.log("-------------LOG Staff-----------");
 	sess = req.session;
 	sess.email = req.body.email;
@@ -326,12 +152,8 @@ exports.StaffMain = function(req,res){
 	staff.connect();
 	console.log(req.body.hashpassword);
 
-	//var sqlQuery =
-	//	'SELECT * from Person where email = \'' + req.body.email + '\'';
-
 	var sqlQuery =
 	 	'SELECT * from person';
-
 
 	const query = staff.query(sqlQuery);
 	console.log(sqlQuery);
@@ -347,16 +169,16 @@ exports.StaffMain = function(req,res){
 	query.on("end", function(result){
 		console.log(result);
 		if(result.fields[0] === undefined){
-			res.render('StaffMain');
+			res.render('staffMain');
 		}
 		else{
 			var hashsalt = result.fields[0].hashsalt;
 			if(md5(req.body.hashpassword + hashsalt) == result.fields[0].hashpassword) {
-				res.render('StaffMyInfo');
+				res.render('staffMyInfo');
 			}
 			else {
 				console.log("error2");
-				res.render('StaffMain');
+				res.render('staffMain');
 			}
 		}
 	});
