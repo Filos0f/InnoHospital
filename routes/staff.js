@@ -1,14 +1,12 @@
 var fs 		= require('node-fs');
-//COPYPAST///////////////////////////////
 var config 		= require('../config');
 var pg 			= require('pg');
 var md5 		= require('js-md5');
 var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
-////////////////////////////////////////
 
-exports.staffInfo = function(req,res){
-
+exports.staffInfo = function(req,res){ //пилит федя
+	//вывод информации о стафе
 	console.log("-------------LOG Info-----------");
 	res.render('staffMyInfo');
 };
@@ -40,23 +38,7 @@ exports.staff = function(req, res) {
 		return h;
 	}
 	console.log("------------- Staff position -----------");
-/*
-	const staff = dataBase.ConnectToDataBase();
-	staff.connect();
 
-	var sqlQuery = 'SELECT * from positions';
-	const query = staff.query(sqlQuery);
-	console.log(query);
-
-
-
-	console.log(query.rows);
-	const result = [];
-	query.on('rows', function(row) {
-		console.log(row);
-		result.push(row);
-	});
-*/
     async.series([
        function(callback) {
            const db = dataBase.ConnectToDataBase();
@@ -70,6 +52,15 @@ exports.staff = function(req, res) {
 
 		   query.on("end", function(result) {
 			   if (result.rows[0] === undefined) {
+				   for (var i = 0; i < EmployeePositionsId.length; ++i) {
+					   console.log(i);
+					   db.query(
+						   'INSERT INTO positions(idPos, title) \
+                           VALUES($1,$2)',
+						   [EmployeePositionsId[i]['id'], EmployeePositionsId[i]['value']]
+					   );
+				   }
+
 				   for(var y = 0; y < allStaff.length; y++)
 				   {
 					   db.query(
@@ -94,14 +85,6 @@ exports.staff = function(req, res) {
 							   allStaff[y]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[y]['People']['Employee']['WorkingSchedule']['date']]
 					   );
 
-				   }
-				   for (var i = 0; i < EmployeePositionsId.length; ++i) {
-					   console.log(i);
-					   db.query(
-						   'INSERT INTO positions(idPos, title, idEmp) \
-                           VALUES($1,$2,$3)',
-						   [EmployeePositionsId[i]['id'], EmployeePositionsId[i]['value'], null]
-					   );
 				   }
 				   for(var k = 0; k < analizesType.length; ++k)
 				   {
@@ -141,44 +124,51 @@ exports.staff = function(req, res) {
 
 exports.Input_information_for_patient = function(req,res){	
 	res.render('Input_information_for_patient');
+	//при нажатии на апоимент
 };
 
-exports.staffMain = function(req,res){
+exports.staffMain = function(req,res) { //Fedy
 	console.log("-------------LOG Staff-----------");
+	//все апойманты на сегодня
+};
+
+/*Авторизация врача*/
+exports.signinStaff = function (req, res) {
+	console.log("-------------LOG signinStaff-----------");
 	sess = req.session;
 	sess.email = req.body.email;
 
 	const staff = dataBase.ConnectToDataBase();
 	staff.connect();
 	console.log(req.body.hashpassword);
-
 	var sqlQuery =
-	 	'SELECT * from person';
+		'SELECT * from person \
+        NATURAL JOIN employee \
+        where email = \'' + req.body.email + '\'';
 
 	const query = staff.query(sqlQuery);
 	console.log(sqlQuery);
 
 	const result = [];
-	query.on('fields', function(fields) {
-		console.log(result);
-
-		result.push(fields);
+	query.on('rows', function(row) {
+		console.log("------!!!!!!!!!--------" + row);
+		result.push(row);
 	});
 	console.log(sqlQuery);
 
 	query.on("end", function(result){
-		console.log(result);
-		if(result.fields[0] === undefined){
-			res.render('staffMain');
+		console.log(result.rows[0]);
+		if(result.rows[0] === undefined){
+			res.render('staff');
 		}
 		else{
-			var hashsalt = result.fields[0].hashsalt;
-			if(md5(req.body.hashpassword + hashsalt) == result.fields[0].hashpassword) {
-				res.render('staffMyInfo');
+			var hashsalt = result.rows[0].hashsalt;
+			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+				res.render('staffMain');
 			}
 			else {
 				console.log("error2");
-				res.render('staffMain');
+				res.render('staff');
 			}
 		}
 	});

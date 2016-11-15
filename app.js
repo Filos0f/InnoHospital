@@ -54,7 +54,7 @@ app.get('/Scans', 				require('./routes/patient').scans);
 app.get('/analysis', 			require('./routes/patient').analysis);
 
 app.get('/gotoprofile', 		require('./routes/staff').staffInfo);
-app.post('/signinStaff', 		require('./routes/staff').staffMain);
+app.post('/signinStaff', 		require('./routes/staff').signinStaff);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
 app.get('/backToStaffMain', 	require('./routes/staff').staffMain);
