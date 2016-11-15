@@ -53,7 +53,7 @@ app.get('/PatientCard', 		require('./routes/patient').medCard);
 app.get('/Scans', 				require('./routes/patient').scans);
 app.get('/analysis', 			require('./routes/patient').analysis);
 
-app.post('/staffMyInfo', 		require('./routes/staff').staffInfo);
+app.get('/gotoprofile', 		require('./routes/staff').staffInfo);
 app.post('/signinStaff', 		require('./routes/staff').StaffMain);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
