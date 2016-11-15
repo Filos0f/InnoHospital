@@ -27,7 +27,7 @@ app.use(express.cookieParser());
 
 app.use(express.session({
 	secret: 'SOME',
-	cookie: { maxAge: 600000 }
+	cookie: { maxAge: null }
 }));
 
 app.use(app.router);

@@ -7,49 +7,56 @@ exports.patient = function(req, res){
 	res.render('patient');
 };
 
+function LoadPatientInformation(res, email, patientHandler) {
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+	
+	var results = [];
+	async.series([
+		function(callback) {
+			console.log("FIRST CALLBACK!");
+    		var sqlQuery = 
+			'SELECT * from person \
+			NATURAL JOIN patient \
+			where email = \'' + email + '\'';
+    		//var sqlQuery = 'SELECT * from person where email = \'' + email + '\'';
+    		const query = client.query(sqlQuery);
+    		query.on('row', function(row) {
+    			console.log("FIRST QUERY!");
+		    	results.push(row);
+		    });  
+		    query.on("end", function(result){
+		    	callback();
+		    });
+		},
+		function(callback) {
+    		var sqlQuery = 'SELECT * from positions'; 
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+		    	results.push(row);
+		    });
+		    query.on("end", function(result){
+		    	callback();
+		    });
+		},
+		function(callback) {
+			patientHandler(results);
+			//res.render('patient_cabinet', {patient:results[0],positions:results})
+		},
+		],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
+	});
+}
+
 exports.get_patient_cabinet = function(req, res){
 	console.log("------------- PATIENT CAB -----------");
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		const client = dataBase.ConnectToDataBase();
-		client.connect();
-		
-		var results = [];
-		async.series([
-			function(callback) {
-				console.log("FIRST CALLBACK!");
-        		var sqlQuery = 
-				'SELECT * from person \
-				NATURAL JOIN patient \
-				where email = \'' + req.body.email + '\'';
-        		var sqlQuery = 'SELECT * from person where email = \'' + sess.email + '\'';
-        		const query = client.query(sqlQuery);
-        		query.on('row', (row) => {
-        			console.log("FIRST QUERY!");
-			    	results.push(row);
-			    });  
-			    query.on("end", function(result){
-			    	callback();
-			    });
-    		},
-    		function(callback) {
-        		var sqlQuery = 'SELECT * from positions'; 
-				const query = client.query(sqlQuery);
-				query.on('row', (row) => {
-			    	results.push(row);
-			    });
-			    query.on("end", function(result){
-			    	callback();
-			    });
-    		},
-    		function(callback) {
-    			res.render('patient_cabinet', {patient:results[0],positions:results})
-    		},
-    		],
-    		function(err) {
-    			if (err) return callback(err);
-		    	console.log('Both finished!');
+		LoadPatientInformation(res, sess.email, function(results) {
+			res.render('patient_cabinet', {patient:results[0],positions:results})
 		});
 	}
 };
@@ -75,19 +82,21 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-		if(result.rows[0] === undefined){
-		    res.redirect('/patient');
-		}
-		else{
-		    var hashsalt = result.rows[0].hashsalt;
-		    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-				res.render('patient_cabinet', {patient:result.rows});
-		    }
-		    else {
-				//not right password or email
-				res.redirect('/patient');
-		    }
-		}
+    	LoadPatientInformation(res, sess.email, function(results) {
+			if(result.rows[0] === undefined){
+		    	res.redirect('/patient');
+			}
+			else{
+			    var hashsalt = result.rows[0].hashsalt;
+			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+					res.render('patient_cabinet', {patient:results[0],positions:results})
+			    }
+			    else {
+					//not right password or email
+					res.redirect('/patient');
+			    }
+			}
+		});
     });
 
     console.log('--------This----------' + result);
