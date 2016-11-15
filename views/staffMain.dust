@@ -72,7 +72,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr id=secondRow>
+                    <tr class="patientsTr"id=secondRow>
                         <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
                         <td class="FirstNameTitle" name="FirstNameTitle">Her</td>
                         <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
@@ -86,6 +86,7 @@
                                         </form>
                                     </td>
                                     <td>
+                                        <!--/*не работает. Зачем-то обновляет всю страницу, когда надо просто строчку зачеркнуть. Пиздец*/-->
                                         <form>
                                             <button style="margin-left: 10px;" class="btn btn-warning declineBtt">decline</button>
                                         </form>

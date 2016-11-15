@@ -7,8 +7,43 @@ var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
 ////////////////////////////////////////
 
-exports.staffInfo = function(req,res){
-
+exports.staffInfo = function(req, res, next){
+	console.log("-------------LOG -----------");
+	// sess = req.session;
+	// sess.email=req.body.email;
+	// const client = dataBase.ConnectToDataBase();
+    //
+	// client.connect();
+    //
+	// var sqlQuery =
+	// 	'SELECT * from person \
+     //    NATURAL JOIN employee \
+     //    where email = \'' + req.body.email + '\'';
+	// console.log(sqlQuery);
+    //
+	// const query = client.query(sqlQuery);
+	// const result = [];
+	// query.on('rows', function(row) {
+	// 	result.push(row);
+	// });
+    //
+	// query.on("end", function(result){
+	// 	LoadPatientInformation(res, sess.email, function(results) {
+	// 		if(result.rows[0] === undefined){
+	// 			res.redirect('/staff');
+	// 		}
+	// 		else{
+	// 			var hashsalt = result.rows[0].hashsalt;
+	// 			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+	// 				res.render('staffMyInfo', {employee:results[0],positions:results})
+	// 			}
+	// 			else {
+	// 				//not right password or email
+	// 				res.redirect('/staff');
+	// 			}
+	// 		}
+	// 	});
+	// });
 	console.log("-------------LOG Info-----------");
 	res.render('staffMyInfo');
 };
