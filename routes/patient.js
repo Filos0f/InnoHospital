@@ -19,7 +19,6 @@ function LoadPatientInformation(res, email, patientHandler) {
 			'SELECT * from person \
 			NATURAL JOIN patient \
 			where email = \'' + email + '\'';
-    		//var sqlQuery = 'SELECT * from person where email = \'' + email + '\'';
     		const query = client.query(sqlQuery);
     		query.on('row', function(row) {
     			console.log("FIRST QUERY!");
@@ -41,7 +40,6 @@ function LoadPatientInformation(res, email, patientHandler) {
 		},
 		function(callback) {
 			patientHandler(results);
-			//res.render('patient_cabinet', {patient:results[0],positions:results})
 		},
 		],
 		function(err) {
@@ -147,9 +145,51 @@ exports.addPatient = function(req,res){
 };
 
 exports.newAppointment = function(req, res){
-	console.log(req.body.date);
-	console.log(req.body.time);
-	console.log(req.body.doctor);
+	sess = req.session;
+	if(sess.email) {
+		const client = dataBase.ConnectToDataBase();
+		client.connect();
+
+		var results = [];
+		async.series([
+			function(callback) {
+	    		var sqlQuery = 'SELECT idip from patient NATURAL JOIN person \
+								where email = \'' + sess.email + '\'';
+	    		const query = client.query(sqlQuery);
+	    		query.on('row', function(row) {
+			    	results.push(row);
+			    });  
+			    query.on("end", function(result){
+			    	callback();
+			    });
+			},
+			function(callback) {
+	    		var sqlQuery = 'SELECT idemp from employee \
+	    						NATURAL JOIN person \
+	    						where idpos = \'' + req.body.doctor + '\''; 
+				const query = client.query(sqlQuery);
+				query.on('row', function(row){
+			    	results.push(row);
+			    });
+			    query.on("end", function(result){
+			    	callback();
+			    });
+			},
+			function(callback) {
+				var patientIP = results[0].idip;
+				var employeeID = results[1].idemp;
+				client.query(
+				'INSERT INTO visitschedule(day,startTime,offsetTime,idIp,idEmp,evoluation) \
+				VALUES($1,$2,$3,$4,$5,$6)',
+				[req.body.date,req.body.time,'00:30', patientIP, employeeID, false]);
+			},
+			],
+			function(err) {
+				console.log('ERROR');
+				if (err) return callback(err);
+		    	console.log('Both finished!');
+		});
+	}
 };
 
 exports.medCard = function(req, res){
