@@ -5,6 +5,56 @@ var md5 		= require('js-md5');
 var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
 
+function LoadStaffInformation(res, email, patientHandler) {	
+	var results = [];
+	var appointmentInfo = [];
+	async.series([
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			console.log("FIRST CALLBACK!");
+    		var sqlQuery = 
+			'SELECT * from person \
+			NATURAL JOIN employee \
+			where email = \'' + email + '\'';
+    		const query = client.query(sqlQuery);
+    		query.on('row', function(row) {
+    			console.log("FIRST QUERY!");
+		    	results.push(row);
+		    });  
+		    query.on("end", function(result){
+		    	callback();
+		    });
+		},
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			var sqlQuery = 'SELECT firstname, secondname, day, startTime \
+							from  visitschedule \
+							natural join employee \
+							natural join positions \
+							natural join person \
+							where idemp=\'' + results[0].idemp +'\''; 
+			console.log(sqlQuery);
+
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+		    	appointmentInfo.push(row);
+		    });
+		    query.on("end", function(result){
+		    	callback();
+		    });
+		},
+		function(callback) {
+			patientHandler(results, appointmentInfo);
+		},
+		],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
+	});
+}
+
 exports.staffInfo = function(req,res){ //пилит федя
 	//вывод информации о стафе
 	console.log("-------------LOG Info-----------");
@@ -128,8 +178,14 @@ exports.Input_information_for_patient = function(req,res){
 };
 
 exports.staffMain = function(req,res) { //Fedy
-	console.log("-------------LOG Staff-----------");
+	console.log("-------------Staff Cabinet-----------");
 	//все апойманты на сегодня
+};
+
+exports.declineAppointment = function(req, res) {
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+	//client.query('DELETE FROM visitschedule WHERE ');
 };
 
 /*Авторизация врача*/
@@ -157,6 +213,26 @@ exports.signinStaff = function (req, res) {
 	console.log(sqlQuery);
 
 	query.on("end", function(result){
+		if(result.rows[0] === undefined){
+				res.render('staff');
+			}
+			else{
+				var hashsalt = result.rows[0].hashsalt;
+				if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+					LoadStaffInformation(res, sess.email, function(results, appointmentInfo) {
+						console.log(appointmentInfo);
+						res.render('staffMain', {patientappointment:appointmentInfo});
+					});
+					
+				}
+				else {
+					console.log("error2");
+					res.render('staff');
+				}
+			}
+    });
+/*
+	query.on("end", function(result){
 		console.log(result.rows[0]);
 		if(result.rows[0] === undefined){
 			res.render('staff');
@@ -173,4 +249,5 @@ exports.signinStaff = function (req, res) {
 		}
 	});
 	console.log(sqlQuery);
+	*/
 };

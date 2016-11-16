@@ -58,6 +58,7 @@ app.post('/signinStaff', 		require('./routes/staff').signinStaff);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
 app.get('/backToStaffMain', 	require('./routes/staff').staffMain);
+app.post('/declineAppointment', 	require('./routes/staff').declineAppointment);
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));

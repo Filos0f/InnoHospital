@@ -74,10 +74,11 @@
                     </thead>
                     <tbody>
                     <tr id=secondRow>
-                        <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
-                        <td class="FirstNameTitle" name="FirstNameTitle">Her</td>
-                        <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
-                        <td class="MiddleNameTitle" name="MidleNameTitle">Last</td>
+                        {#patientappointment}
+                        <td class="visistTimeTitle" name="visitTimeTitile">{day};&nbsp;{starttime}</td>
+                        <td class="FirstNameTitle" name="FirstNameTitle">{firstname}</td>
+                        <td class="SecondNameTitle" name="SecondNameTitle">{secondname}</td>
+                        {/patientappointment}
                         <td class="declineButt" name="declineBtt" action='/pressBtt' method='get'>
                             <table>
                                 <tr>
@@ -87,7 +88,7 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <form action='/declineBtt' method='get'>
+                                        <form action='/declineAppointment' method='post'>
                                             <button style="margin-left: 10px;" class="btn btn-warning declineBtt">decline</button>
                                         </form>
                                     </td>
@@ -96,6 +97,7 @@
                         </td>
                         <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
                     </tr>
+
                     </tbody>
                 </table>
             </div>
