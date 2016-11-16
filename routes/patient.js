@@ -1,19 +1,18 @@
 var dataBase 	= require('../libs/dbManagement');
 var md5 		= require('js-md5');
-var async = require('async');
+var async 		= require('async');
 
 exports.patient = function(req, res){
 	console.log("------------- PATIENT -----------");
 	res.render('patient');
 };
 
-function LoadPatientInformation(res, email, patientHandler) {
-	const client = dataBase.ConnectToDataBase();
-	client.connect();
-	
+function LoadPatientInformation(res, email, patientHandler) {	
 	var results = [];
 	async.series([
 		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
 			console.log("FIRST CALLBACK!");
     		var sqlQuery = 
 			'SELECT * from person \
@@ -29,6 +28,8 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    });
 		},
 		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
     		var sqlQuery = 'SELECT * from positions'; 
 			const query = client.query(sqlQuery);
 			query.on('row', function(row){
@@ -147,12 +148,11 @@ exports.addPatient = function(req,res){
 exports.newAppointment = function(req, res){
 	sess = req.session;
 	if(sess.email) {
-		const client = dataBase.ConnectToDataBase();
-		client.connect();
-
 		var results = [];
 		async.series([
 			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
 	    		var sqlQuery = 'SELECT idip from patient NATURAL JOIN person \
 								where email = \'' + sess.email + '\'';
 	    		const query = client.query(sqlQuery);
@@ -164,6 +164,8 @@ exports.newAppointment = function(req, res){
 			    });
 			},
 			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
 	    		var sqlQuery = 'SELECT idemp from employee \
 	    						NATURAL JOIN person \
 	    						where idpos = \'' + req.body.doctor + '\''; 
@@ -176,6 +178,8 @@ exports.newAppointment = function(req, res){
 			    });
 			},
 			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
 				var patientIP = results[0].idip;
 				var employeeID = results[1].idemp;
 				client.query(
