@@ -29,11 +29,10 @@ function LoadStaffInformation(res, email, patientHandler) {
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
 			client.connect();
-			var sqlQuery = 'SELECT firstname, secondname, day, startTime \
-							from  visitschedule \
-							natural join employee \
-							natural join positions \
-							natural join person \
+			var sqlQuery = 'select v.day, v.starttime, per.firstname, per.secondname\
+							from patient p\
+							natural join visitschedule v \
+							natural join person per \
 							where idemp=\'' + results[0].idemp +'\''; 
 			console.log(sqlQuery);
 

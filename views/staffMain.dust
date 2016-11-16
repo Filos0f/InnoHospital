@@ -64,10 +64,9 @@
                 <table class="table table-striped" name="table">
                     <thead>
                     <tr id=firstRow>
-                        <th id=timeHeader>time</th>
-                        <th id=firstNameHeader>FirstName</th>
-                        <th id=secondNameHeader>SecondName</th>
-                        <th id=MiddleNameHeader>MiddleName</th>
+                        <th id=timeHeader>Date and Time</th>
+                        <th id=firstNameHeader>First name</th>
+                        <th id=secondNameHeader>Second name</th>
                         <th id=ButtonsHeader>Work</th>
                         <!--<th id=mainCheckBox><input type="checkbox"/></th>-->
                     </tr>
