@@ -1,4 +1,4 @@
- 
+   
 <!DOCTYPE> 
 <html lang="en-US">
 <head>
@@ -64,11 +64,29 @@
  </div>
 </div>
 
-<div class="col-lg-5">
+<div class="col-lg-7">
   <div class="container-fluid" id="right">
   <div id="Appointments" class="tabcontent">
     <h2>Your future appointments</h2>
-    <div class="well"></div>
+     
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Profession</th>
+    <th>Name</th> 
+    <th>Room No</th>
+    <th>Date,Time</th>
+  </tr>
+  {#appointment}
+  <tr>
+    <td>{title}</td>
+    <td>{firstname}&nbsp;{secondname}</td>
+    <td>{roomn}</td> 
+    <td>{day};&nbsp;{starttime} </td>
+  </tr>
+   {/appointment}
+</table>
+     
     </div>
 
 
