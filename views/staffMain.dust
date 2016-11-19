@@ -46,11 +46,12 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li name="epidStatBox" action="/epidStatBox" method="post" data-toggle="modal" data-target="#myModal"
-                    onclick="openbox('epidStatBox'); return false" method="post">
+                <li name="recordSomePatient" action="/recordSomePatient" method="post" data-toggle="modal" data-target="#myModal"
+                    onclick="openbox('recordPanelVal'); return false">
                     <a href="#">Epidemy status<!--span class="sr-only">(current)</--span--></a>
                 </li>
-                <li name="ratingBox" action="/ratingBox" method="post"><a href="#">Rating</a></li>
+                <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Rating</a></li>
+                <li name="inputInfoAboutSomePatient" action="/sayHello" method="use"><a href="#"></a>
                 </li>
             </ul>
         </div>
@@ -58,7 +59,7 @@
             <h2 class="sub-header">Patients</h2>
             <h3 class="sub-header" id=timeSpan name="dateToday">Current time and date</h3>
 
-
+          
             <div class="table-responsive" name="tableRep">
                 <table class="table table-striped" name="table">
                     <thead>
@@ -72,12 +73,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="patientsTr"id=secondRow>
-                        <td class="visistTimeTitle" name="visitTimeTitile">9:00</td>
-                        <td class="FirstNameTitle" name="FirstNameTitle">Her</td>
-                        <td class="SecondNameTitle" name="SecondNameTitle">Sanches</td>
-                        <td class="MiddleNameTitle" name="MidleNameTitle">Last</td>
+                    <tr id=secondRow>
+                    {#patientappointment}
+                        <td class="visistTimeTitle" name="visitTimeTitile">{starttime}</td>
+                        <td class="FirstNameTitle" name="FirstNameTitle">{firstname}</td>
+                        <td class="SecondNameTitle" name="SecondNameTitle">{secondname}</td>
+                       
                         <td class="declineButt" name="declineBtt" action='/pressBtt' method='get'>
+                       {/patientappointment}
                             <table>
                                 <tr>
                                     <td>
@@ -86,8 +89,7 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <!--/*не работает. Зачем-то обновляет всю страницу, когда надо просто строчку зачеркнуть. Пиздец*/-->
-                                        <form>
+                                        <form action='/declineBtt' method='get'>
                                             <button style="margin-left: 10px;" class="btn btn-warning declineBtt">decline</button>
                                         </form>
                                     </td>
@@ -99,12 +101,10 @@
                     </tbody>
                 </table>
             </div>
-
-
-            <div class="panel panel-primary col-md-6" id="epidStatBox"
+            <div class="panel panel-primary col-md-6" id="recordPanelVal"
                  style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
                 <div class="panel-heading" style="">
-                    Here should be epidemic status
+                    Record patient
                 </div>
                 <div class="panel-body well">
                     <div class="row" id="dateVal" style="text-align:center; ">
@@ -123,44 +123,31 @@
                         </div>
                     </div>
                     <div class="row" id="patVal" style="text-align:center">
-                        <div class="col-md-4 text-center well">
-                            <p>patient</p>
-                        </div>
+                        <div class="col-md-4 text-center well"
+                        <p>patient</p>
                     </div>
                 </div>
                 <div class="row" id="doctorVal" style="text-align:center">
-                    <div class="col-md-10 text-center well">
-                        <p>doctor</p>
-                    </div>
+                    <div class="col-md-10 text-center well"
+                    <p>doctor</p>
                 </div>
             </div>
-
+            <div>
          
           
     
 
 <script type='text/javascript'>
     function openbox(id) {
-        console.log('_____openbox_' + id + '_______');
+        console.log('idk, why this shit didn\'t work');
         display = document.getElementById(id).style.display;
         if (display == 'none') {
             document.getElementById(id).style.display = 'block';
-            document.getElementById(id).style.position= 'relative';
+            document.getElementById(id).style.position='relative';
         } else {
             document.getElementById(id).style.display = 'none';
         }
-    };
-
-    function decline(id){
-        console.log("decline");
-        document.getElementById(id).style.textDecoration = 'line-through';
-
     }
-
-    $('.declineBtt').click(function() {
-        var trId = $(this).closest('tr').prop('id');
-        decline(trId);
-    });
 </script>
-    </body>
-    </html>
+    </body >
+    < / html >

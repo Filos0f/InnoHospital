@@ -7,43 +7,58 @@ var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
 ////////////////////////////////////////
 
+function LoadStaffInformation(res, email, staffHandler) {
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+
+	var results = [];
+	async.series([
+			function(callback) {
+				console.log("FIRST CALLBACK!");
+				var sqlQuery =
+					'SELECT * from person \
+                    NATURAL JOIN employee \
+                    where email = \'' + email + '\'';
+				//var sqlQuery = 'SELECT * from person where email = \'' + email + '\'';
+				const query = client.query(sqlQuery);
+				query.on('row', function(row) {
+					console.log("FIRST QUERY!");
+					results.push(row);
+				});
+				query.on("end", function(result){
+					callback();
+				});
+			},
+			function(callback) {
+				var sqlQuery = 'SELECT * from positions';
+				const query = client.query(sqlQuery);
+				query.on('row', function(row){
+					results.push(row);
+				});
+				query.on("end", function(result){
+					callback();
+				});
+			},
+			function(callback) {
+				staffHandler(results);
+				//res.render('patient_cabinet', {patient:results[0],positions:results})
+			},
+		],
+		function(err) {
+			if (err) return callback(err);
+			console.log('Both finished!');
+		});
+}
+
 exports.staffInfo = function(req, res, next){
 	console.log("-------------LOG -----------");
-	// sess = req.session;
-	// sess.email=req.body.email;
-	// const client = dataBase.ConnectToDataBase();
-    //
-	// client.connect();
-    //
-	// var sqlQuery =
-	// 	'SELECT * from person \
-     //    NATURAL JOIN employee \
-     //    where email = \'' + req.body.email + '\'';
-	// console.log(sqlQuery);
-    //
-	// const query = client.query(sqlQuery);
-	// const result = [];
-	// query.on('rows', function(row) {
-	// 	result.push(row);
-	// });
-    //
-	// query.on("end", function(result){
-	// 	LoadPatientInformation(res, sess.email, function(results) {
-	// 		if(result.rows[0] === undefined){
-	// 			res.redirect('/staff');
-	// 		}
-	// 		else{
-	// 			var hashsalt = result.rows[0].hashsalt;
-	// 			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-	// 				res.render('staffMyInfo', {employee:results[0],positions:results})
-	// 			}
-	// 			else {
-	// 				//not right password or email
-	// 				res.redirect('/staff');
-	// 			}
-	// 		}
-	// 	});
-	// });
+	sess = req.session;
+	console.log("Email session - " + sess.email);
+	if(sess.email) {
+		LoadStaffInformation(res, sess.email, function(results) {
+			res.render('staffMyInfo', {employee:results[0],positions:results})
+		});
+	}
 	console.log("-------------LOG Info-----------");
 	res.render('staffMyInfo');
 };
