@@ -13,8 +13,8 @@ drop table VisitSchedule;
 drop table isOpen;
 drop table WorkingSchedule;
 drop table Patient;
+drop table Positions cascade;
 drop table Employee cascade;
-drop table Positions;
 drop table Person;
 
 
@@ -31,23 +31,23 @@ create table Person (
 	hashSalt varchar(1024) NOT NULL,
 	Primary key(idPassport)  
 );
+
+
+create table Positions (
+	idPos varchar(256),
+	title varchar(256) NOT NULL,
+	Primary key (idPos)
+);
+
 create table Employee (
 	rating int NOT NULL default(0),
-	idPos varchar(256) NOT NULL,
+	idPos varchar(256),
 	idEmp varchar(256) NOT NULL,
 	roomN int NOT NULL,
 	idPassport varchar(256),
 	Primary key (idEmp),
-	Foreign key (idPassport) references Person
-);
-
-
-create table Positions (
-	idPos varchar(256) NOT NULL,
-	title varchar(256) NOT NULL,
-	idEmp varchar(256),
-	Primary key (idPos),
-	Foreign key (idEmp) references Employee
+	Foreign key (idPassport) references Person(idPassport),
+	Foreign key (idPos) references Positions(idPos)
 );
 
 create table Patient (
@@ -72,9 +72,10 @@ create table isOpen (
 	startTime time,
 	finishTime time,
 	day date,
+	roomN int,
 	Primary key (idEmp, startTime, finishTime, day),
-	Foreign key (idEmp) references Employee,
-	Foreign key (startTime, finishTime, day) references WorkingSchedule
+	Foreign key (idEmp) references Employee(idEmp),
+	Foreign key (startTime, finishTime, day, roomN) references WorkingSchedule
 );
 
 create table VisitSchedule (
