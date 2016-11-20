@@ -5,9 +5,11 @@ var md5 		= require('js-md5');
 var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
 
-function LoadStaffInformation(res, email, patientHandler) {	
+function LoadStaffInformation(res, email, patientHandler) {
 	var results = [];
 	var appointmentInfo = [];
+	var epedemy = [];
+	var rating = [];
 	async.series([
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
@@ -46,8 +48,44 @@ function LoadStaffInformation(res, email, patientHandler) {
 		    	client.end();
 		    });
 		},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
+								from employee\
+								natural join person per\
+								natural join positions p\
+								order by rating';
+				console.log(sqlQuery);
+
+				const query = client.query(sqlQuery);
+				query.on('row', function(row){
+					rating.push(row);
+				});
+				query.on("end", function(result){
+					callback();
+					client.end();
+				});
+			},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var sqlQuery = 'select title, rate from DiagnosisInfo\
+									order by rate';
+				console.log(sqlQuery);
+
+				const query = client.query(sqlQuery);
+				query.on('row', function(row){
+					epedemy.push(row);
+				});
+				query.on("end", function(result){
+					callback();
+					client.end();
+				});
+			},
+
 		function(callback) {
-			patientHandler(results, appointmentInfo);
+			patientHandler(results, appointmentInfo, epedemy, rating);
 		},
 		],
 		function(err) {
@@ -223,9 +261,11 @@ exports.signinStaff = function (req, res) {
 		} else {
 			var hashsalt = result.rows[0].hashsalt;
 			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-				LoadStaffInformation(res, sess.email, function(results, appointmentInfo) {
+				LoadStaffInformation(res, sess.email, function(results, appointmentInfo, epidemy, rating) {
 					console.log(appointmentInfo);
-					res.render('staffMain', {patientappointment:appointmentInfo});
+					console.log(epidemy);
+					console.log(rating);
+					res.render('staffMain', {patientappointment:appointmentInfo, epidemy:epidemy, rating:rating});
 				});
 				
 			}

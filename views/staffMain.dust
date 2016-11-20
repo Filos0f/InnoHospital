@@ -75,12 +75,11 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {#patientappointment}
                     <tr id=secondRow>
-                        {#patientappointment}
                         <td class="visistTimeTitle" name="visitTimeTitile">{day};&nbsp;{starttime}</td>
                         <td class="FirstNameTitle" name="FirstNameTitle">{firstname}</td>
                         <td class="SecondNameTitle" name="SecondNameTitle">{secondname}</td>
-                        {/patientappointment}
                         <td class="declineButt" name="declineBtt" action='/pressBtt' method='get'>
                             <table>
                                 <tr>
@@ -99,7 +98,7 @@
                         </td>
                         <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
                     </tr>
-
+                    {/patientappointment}
                     </tbody>
                 </table>
             </div>
@@ -117,12 +116,12 @@
                                 </tr>
                                 </thead>
                               <tbody>
+                              {#epidemy}
                                 <tr id=secondRow>
-                                    {#epidemy}
                                     <td class="DiagnosisTitle" name="diagnosisTitle">{title}</td>
                                     <td class="DiagnosisRate" name="diagnosisRate">{rate}</td>
-                                    {/epidemy}
                                 </tr>
+                                {/epidemy}
                               </tbody>
                             </table>
                         </div>
@@ -142,14 +141,14 @@
                                         </tr>
                                         </thead>
                                       <tbody>
+                                      {#rating}
                                         <tr id=secondRow>
-                                            {#rating}
-                                            <td class="PositionEmp" name="positionEmp">{titlePos}</td>
+                                            <td class="PositionEmp" name="positionEmp">{title}</td>
                                             <td class="FirstName" name="firstName">{firstname}</td>
                                             <td class="SecondName" name="secondName">{secondname}</td>
                                             <td class="Rating" name="rating">{rating}</td>
-                                            {/rating}
                                         </tr>
+                                        {/rating}
                                       </tbody>
                                     </table>
                                 </div>
