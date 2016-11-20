@@ -31,7 +31,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand text" type="submit" id="headNavBar" name="navBar" href="/gotoprofile"
-               action="/gotoprofile" method="post">My work</a>
+               action="/gotoprofile" method="post">InnoHospital</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -44,6 +44,17 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
+        <!--<div class="col-sm-3 col-md-2 sidebar">-->
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li name="recordSomePatient" action="/recordSomePatient" method="post" data-toggle="modal" data-target="#myModal"-->
+                    <!--onclick="openbox('recordPanelVal'); return false">-->
+                    <!--<a href="#">Epidemy status&lt;!&ndash;span class="sr-only">(current)</&#45;&#45;span&ndash;&gt;</a>-->
+                <!--</li>-->
+                <!--<li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Rating</a></li>-->
+                <!--<li name="inputInfoAboutSomePatient" action="/sayHello" method="use"><a href="#"></a>-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</div>-->
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li>
@@ -53,7 +64,6 @@
                 </li>
                 <li>
                     <a href="#" onclick = "openbox('RatingStaffVal'); return false">Rating</a></li>
-                
                 </li>
             </ul>
         </div>
@@ -62,7 +72,7 @@
             <h2 class="sub-header">Patients</h2>
             <h3 class="sub-header" id=timeSpan name="dateToday">Current time and date</h3>
 
-          
+
             <div class="table-responsive" name="tableRep">
                 <table class="table table-striped" name="table">
                     <thead>
@@ -104,6 +114,7 @@
             </div>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+
                         id="EpidemyStatusVal" style="display:none">
                         <h2 class="sub-header">Epidemy Status</h2>
 

@@ -57,11 +57,14 @@ app.get('/gotoprofile', 		require('./routes/staff').staffInfo);
 app.post('/signinStaff', 		require('./routes/staff').signinStaff);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
-app.get('/backToStaffMain', 	require('./routes/staff').staffMain);
-app.post('/declineAppointment', require('./routes/staff').declineAppointment);
-app.post('/submitAD', 			require('./routes/staff').submitAD);
-app.post('/submitScans', 		require('./routes/staff').submitScans);
-app.post('/submitLabResult', 	require('./routes/staff').submitLabResult);
+
+app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
+app.post('/epidStatBox',		require('./routes/staff').fillTheEpidemicBox);
+app.post('/ratingBox',			require('./routes/staff').showRatingBox);
+app.post('/saveAnamAndDiag',	require('./routes/staff').saveAnamAndDiag);
+app.post('/labResultsDone', 	require('./routes/staff').labResultDone);
+app.post('/scanSave', 			require('./routes/staff').scanSave);
+app.post('/createNewAppointment',require('./routes/staff').createNewAppointment);
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));

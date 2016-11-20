@@ -98,29 +98,74 @@ exports.staffInfo = function(req,res){ //пилит федя
 	//вывод информации о стафе
 	console.log("-------------LOG Info-----------");
 	res.render('staffMyInfo');
+}
+
+
+
+exports.staffInfo = function(req, res, next){
+    console.log("-------------staffMyInfo start-----------");
+    sess = req.session;
+    email = sess.email;
+    //console.log("1 - Email session - " + sess.email);
+    if(sess.email) {
+        console.log("Check E-mail - " + sess.email);
+        //LoadStaffInformation(res, sess.email, function(results) {
+        var results = [];
+        const client = dataBase.ConnectToDataBase();
+        client.connect();
+        console.log("before start query");
+
+        var sqlQuery =
+        'SELECT * from person \
+        NATURAL JOIN employee \
+        natural join positions \
+        where email = \'' + email + '\'';
+
+        const query = client.query(sqlQuery);
+        query.on('row', function(row) {
+            console.log("after query + sqlquery and resul: " + sqlQuery + '\n' + row);
+            results.push(row);
+        });
+        query.on("end", function(result){
+            client.end();
+            res.render('staffMyInfo', {employee:results[0],positions:results})
+
+        });
+        //});
+        console.log("3 - Email session - " + sess.email);
+    }
+    console.log("-------------staffMyInfo end-----------");
+    //res.render('staffMyInfo');
+>>>>>>> 33a2b5f7867ba64b88d6e6197bd8390315775ca9
 };
 
 exports.staff = function(req, res) {
-	console.log("------------- Staff init -----------");
 
-	var analizesTitle = JSON.parse(fs.readFileSync("title_of_analizis", "utf8"));
-	console.log("------------- Staff init 1-----------");
+    console.log("------------- Staff init -----------");
 
-	var diagnosesType = JSON.parse(fs.readFileSync("type_of_diagnoses", "utf8"));
-	console.log("------------- Staff init 2-----------");
+    res.render('staff');
+};
 
-	var analizesType = JSON.parse(fs.readFileSync("type_of_typeAnaliz", "utf8"));
-	console.log("------------- Staff init 3-----------");
-	var EmployeePositionsId = JSON.parse(fs.readFileSync("types_of_id_employee", "utf8"));
+exports.Input_information_for_patient = function(req,res){
+    res.render('Input_information_for_patient');
+};
 
-	console.log("------------- Staff init 4-----------");
-	var allStaff = JSON.parse(fs.readFileSync("Staff.txt", "utf8"));
+exports.StaffMain = function(req,res) {
+    res.render('staffMain');
+};
 
-	console.log("------------- Staff hash -----------");
-	function hash(key)
-	{
-		var h = 0;
 
+/*Авторизация врача*/
+exports.signinStaff = function (req, res) {
+    console.log("-------------LOG signinStaff-----------");
+    sess = req.session;
+    sess.email = req.body.email;
+
+    const staff = dataBase.ConnectToDataBase();
+    staff.connect();
+    console.log(req.body.hashpassword);
+
+<<<<<<< HEAD
 		for (p = 0; p != key.length; p++) {
 			h = h * 31 + key.charAt(p);
 		}
@@ -209,8 +254,46 @@ exports.staff = function(req, res) {
        }
     ], function (err) {
         if(err) callback(err);
-    });
+=======
+    //var sqlQuery =
+    //	'SELECT * from Person where email = \'' + req.body.email + '\'';
 
+    var sqlQuery =
+        'SELECT * from person';
+
+
+    const query = staff.query(sqlQuery);
+    console.log(sqlQuery);
+
+    const result = [];
+    query.on('fields', function(fields) {
+        console.log(result);
+
+        result.push(fields);
+    });
+    console.log(sqlQuery);
+
+    query.on("end", function(result){
+        console.log(result);
+        if(result.fields[0] === undefined){
+            res.render('StaffMain');
+        }
+        else{
+            var hashsalt = result.fields[0].hashsalt;
+            if(md5(req.body.hashpassword + hashsalt) == result.fields[0].hashpassword) {
+                res.render('StaffMyInfo');
+            }
+            else {
+                console.log("error2");
+                res.render('StaffMain');
+            }
+        }
+>>>>>>> 33a2b5f7867ba64b88d6e6197bd8390315775ca9
+    });
+    console.log(sqlQuery);
+};
+
+<<<<<<< HEAD
 	res.render('staff');
 };
 
@@ -294,3 +377,34 @@ exports.signinStaff = function (req, res) {
 		staff.end();
     });
 };
+=======
+exports.fillTheEpidemicBox = function (req, res) {
+    /*Fill the epidemic box in staffMain page*/
+    console.log("______FillTheEpidemicBox_______");
+};
+
+exports.showRatingBox = function (req, res) {
+    /*staffMain, 'rating' ref*/
+    console.log("______showRatingBox_______");
+};
+
+exports.saveAnamAndDiag = function (req, res) {
+    /*Input_information_for_patient Anamnesis&Diagnosis*/
+    console.log("______save Anamnesis&Diagnosis");
+};
+
+exports.labResultDone = function (req, res) {
+    /*In input_inform_for_patient, in Lab result box, button 'DONE'*/
+    Console.log('______LabResultsDone_______');
+};
+
+exports.scanSave = function (req, res) {
+    /*Save scan from input_blablabla_patient page*/
+    COnsole.log("______SaveScans_____________");
+};
+
+exports.createNewAppointment = function (req, res) {
+    /*createNewAppointment on input_info_for_patient page when click button save in NewAppointment box*/
+    Console.log("createNewAppointment");
+}
+>>>>>>> 33a2b5f7867ba64b88d6e6197bd8390315775ca9
