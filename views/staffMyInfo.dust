@@ -14,7 +14,7 @@
 	<div class="row" style="text-decoration:inherit" id=aboutMeTableHeader style="text-align:center"><h2>Smthing about staff</h2></div>
 
 	{#employee}
-<div class="well">
+<div class="well" >
 
 	<div class="row">
 		<div class="col-lg-2"> Name: </div>
@@ -40,19 +40,19 @@
 		<div class="col-md-2"> Address: </div>
 		<div class="col-md-6" id=adrVal> <strong>{address}</strong> </div>
 	</div>
-    	
+
    	<div class="row">
 		<div class="col-md-2"> Position: </div>
 		<div class="col-md-6" id=posVal> <strong>{title}</strong> </div>
 	</div>
-    
+
     <div class="row">
 		<div class="col-md-2"> Cabinet: </div>
 		<div class="col-md-6" id=cabVal> <strong>{roomn}</strong> </div>
 	</div>
-        
-	</div>
-{/employee}
+	{/employee}
+	</div >
+
 	<form type='submit' action='/backToStaffMain' method='get'>
 	<div class="btn"><button id=backBtn class="btn btn-primary" action='/backToStaffMain' method='get'>back</button></div>
 	</form>

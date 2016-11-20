@@ -68,20 +68,41 @@ function LoadStaffInformation(res, email, staffHandler) {
         });
 }
 
+
+
 exports.staffInfo = function(req, res, next){
     console.log("-------------staffMyInfo start-----------");
     sess = req.session;
+    email = sess.email;
     console.log("1 - Email session - " + sess.email);
     if(sess.email) {
         console.log("2 - Email session - " + sess.email);
-        LoadStaffInformation(res, sess.email, function(results) {
-            console.log('Here should be results[0] - \n' + results[0].firstname);
-            res.render('staffMyInfo', {employee:results[0],positions:results})
+        //LoadStaffInformation(res, sess.email, function(results) {
+        var results = [];
+        const client = dataBase.ConnectToDataBase();
+        client.connect();
+        console.log("FIRST try in staff my info!");
+
+        var sqlQuery =
+        'SELECT * from person \
+        NATURAL JOIN employee \
+        natural join positions \
+        where email = \'' + email + '\'';
+
+        const query = client.query(sqlQuery);
+        query.on('row', function(row) {
+            console.log("FIRST QUERY!");
+            results.push(row);
         });
+        query.on("end", function(result){
+            client.end();
+        });
+        res.render('staffMyInfo', {employee:results[0],positions:results})
+        //});
         console.log("3 - Email session - " + sess.email);
     }
     console.log("-------------staffMyInfo end-----------");
-    res.render('staffMyInfo');
+    //res.render('staffMyInfo');
 };
 
 exports.staff = function(req, res) {
