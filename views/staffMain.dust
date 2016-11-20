@@ -141,28 +141,28 @@
                                 id="RatingStaffVal" style="display:none">
                                 <h2 class="sub-header">Rating Status</h2>
 
-                                <div class="table-responsive" name="tableRep">
-                                    <table class="table table-striped" name="table">
-                                        <thead>
-                                        <tr id=firstRow>
-                                            <th id=timeHeader>Position</th>
-                                            <th id=firstNameHeader>first Name</th>
-                                            <th id=firstNameHeader>second Name</th>
-                                            <th id=firstNameHeader>rating</th>
-                                        </tr>
-                                        </thead>
-                                      <tbody>
-                                      {#rating}
-                                        <tr id=secondRow>
-                                            <td class="PositionEmp" name="positionEmp">{title}</td>
-                                            <td class="FirstName" name="firstName">{firstname}</td>
-                                            <td class="SecondName" name="secondName">{secondname}</td>
-                                            <td class="Rating" name="rating">{rating}</td>
-                                        </tr>
-                                        {/rating}
-                                      </tbody>
-                                    </table>
-                                </div>
+                                    <div class="table-responsive" name="tableRep">
+                                        <table class="table table-striped" name="table">
+                                            <thead>
+                                            <tr id=firstRow>
+                                                <th id=timeHeader>Position</th>
+                                                <th id=firstNameHeader>first Name</th>
+                                                <th id=firstNameHeader>second Name</th>
+                                                <th id=firstNameHeader>rating</th>
+                                            </tr>
+                                            </thead>
+                                          <tbody>
+                                          {#rating}
+                                            <tr id=secondRow>
+                                                <td class="PositionEmp" name="positionEmp">{title}</td>
+                                                <td class="FirstName" name="firstName">{firstname}</td>
+                                                <td class="SecondName" name="secondName">{secondname}</td>
+                                                <td class="Rating" name="rating">{rating}</td>
+                                            </tr>
+                                            {/rating}
+                                          </tbody>
+                                        </table>
+                                    </div>
                 </div>
     
 

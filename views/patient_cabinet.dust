@@ -22,13 +22,15 @@
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Card')">Med Card</a></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Analysis')">Analysis</a></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Scans')">Scans</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Rating')">Rating</a></li>
 </ul>
 <!--
       <li class="active"><a class="glyphicon glyphicon-home" href="/">&nbsp;Exit</a></li>
       <li><a href="/PatientCard">Med Card</a></li>
       <li><a href="/analysis">Analysis</a></li> 
-      <li><a href="/Scans">Scans</a></li> -->
-     
+      <li><a href="/Scans">Scans</a></li>
+      <li><a href="/Rating">Rating</a></li> -->
+
     <button type="button" style="float: right;margin-top: 7px;" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
   New Appointment
 </button>
@@ -116,10 +118,9 @@
               Laborant info and lab report results go here
              
         </div>
-    
   </div>
-
 </div>
+
 <div id="Scans" class="tabcontent">
   <div class="container">
   <h1>Scans and photo</h1>
@@ -133,9 +134,63 @@
         </div>
     </div>
   </div>
+
+<div id="Rating" class="tabcontent">
+  <div class="container">
+  <h2>Staff's rating</h2>
+  <table style="width:100%; border: 1;
+            border-collapse: collapse;">
+        <div class="table-responsive" name="tableRep">
+                                            <table class="table table-striped" name="table">
+                                                <thead>
+                                                <tr id=firstRow>
+                                                    <th id=timeHeader>Position</th>
+                                                    <th id=firstNameHeader>first Name</th>
+                                                    <th id=firstNameHeader>second Name</th>
+                                                    <th id=firstNameHeader>rating</th>
+                                                </tr>
+                                                </thead>
+                                              <tbody>
+                                              {#rating}
+                                                <tr id=secondRow>
+                                                    <td class="PositionEmp" name="positionEmp">{title}</td>
+                                                    <td class="FirstName" name="firstName">{firstname}</td>
+                                                    <td class="SecondName" name="secondName">{secondname}</td>
+                                                    <td class="Rating" name="rating">{rating}</td>
+                                                </tr>
+                                                {/rating}
+                                              </tbody>
+                                            </table>
+                                        </div>
+
+  </div>
 </div>
 </div>
- 
+<div class="col-lg-7">
+  <div class="container-fluid" id="right">
+  <div id="Appointments" class="tabcontent">
+    <h2>Your future appointments</h2>
+
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Profession</th>
+    <th>Name</th>
+    <th>Room No</th>
+    <th>Date,Time</th>
+  </tr>
+  {#appointment}
+  <tr>
+    <td>{title}</td>
+    <td>{firstname}&nbsp;{secondname}</td>
+    <td>{roomn}</td>
+    <td>{day};&nbsp;{starttime} </td>
+  </tr>
+   {/appointment}
+</table>
+
+    </div>
+</div>
 
 
 <!-- Modal -->

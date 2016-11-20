@@ -10,6 +10,7 @@ exports.patient = function(req, res){
 function LoadPatientInformation(res, email, patientHandler) {	
 	var results = [];
 	var appointmentInfo = [];
+	var rating = [];
 	async.series([
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
@@ -63,8 +64,27 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    	client.end();
 		    });
 		},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
+								from employee\
+								natural join person per\
+								natural join positions p\
+								order by rating';
+				console.log(sqlQuery);
+
+				const query = client.query(sqlQuery);
+				query.on('row', function(row){
+					rating.push(row);
+				});
+				query.on("end", function(result){
+					callback();
+					client.end();
+				});
+			},
 		function(callback) {
-			patientHandler(results, appointmentInfo);
+			patientHandler(results, appointmentInfo, rating);
 		},
 		],
 		function(err) {
@@ -78,8 +98,8 @@ exports.get_patient_cabinet = function(req, res){
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		LoadPatientInformation(res, sess.email, function(results, appointmentInfo) {
-			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo})
+		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating) {
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating})
 		});
 	}
 };
@@ -105,14 +125,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating})
 			    }
 			    else {
 					//not right password or email
