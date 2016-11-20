@@ -8,39 +8,57 @@ var async       = require('async');
 ////////////////////////////////////////
 
 function LoadStaffInformation(res, email, staffHandler) {
-    const client = dataBase.ConnectToDataBase();
-    client.connect();
-
     var results = [];
+    var appointmentInfo = [];
+
     async.series([
             function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
                 console.log("FIRST CALLBACK!");
-                var sqlQuery =
-                    'SELECT * from person \
-                    NATURAL JOIN employee \
-                    where email = \'' + email + '\'';
-                //var sqlQuery = 'SELECT * from person where email = \'' + email + '\'';
-                const query = client.query(sqlQuery);
-                query.on('row', function(row) {
-                    console.log("FIRST QUERY!");
-                    results.push(row);
-                });
+
+            var sqlQuery =
+                'SELECT * from person \
+                NATURAL JOIN employee \
+                natural join positions \
+                where email = \'' + email + '\'';
+
+            const query = client.query(sqlQuery);
+            query.on('row', function(row) {
+                console.log("FIRST QUERY!");
+                results.push(row);
+            });
                 query.on("end", function(result){
                     callback();
+                    client.end();
                 });
             },
+
             function(callback) {
-                var sqlQuery = 'SELECT * from positions';
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                //console.log('Here should be results[0] - \n' + results[0].idemp);
+
+                var sqlQuery =
+                    'select v.day, v.starttime, per.firstname, \
+                    per.secondname\
+					from patient p\
+					natural join visitschedule v \
+					natural join person per \
+					where idemp=\'' + results[0].idemp +'\'';
+                console.log(sqlQuery);
+
                 const query = client.query(sqlQuery);
                 query.on('row', function(row){
-                    results.push(row);
+                    appointmentInfo.push(row);
                 });
                 query.on("end", function(result){
                     callback();
+                    client.end();
                 });
             },
             function(callback) {
-                staffHandler(results);
+                staffHandler(results, appointmentInfo);
                 //res.render('patient_cabinet', {patient:results[0],positions:results})
             },
         ],
@@ -57,6 +75,7 @@ exports.staffInfo = function(req, res, next){
     if(sess.email) {
         console.log("2 - Email session - " + sess.email);
         LoadStaffInformation(res, sess.email, function(results) {
+            console.log('Here should be results[0] - \n' + results[0].firstname);
             res.render('staffMyInfo', {employee:results[0],positions:results})
         });
         console.log("3 - Email session - " + sess.email);
