@@ -57,6 +57,7 @@ app.get('/gotoprofile', 		require('./routes/staff').staffInfo);
 app.post('/signinStaff', 		require('./routes/staff').signinStaff);
 app.get('/staff', 				require('./routes/staff').staff);
 app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
+
 app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
 app.post('/epidStatBox',		require('./routes/staff').fillTheEpidemicBox);
 app.post('/ratingBox',			require('./routes/staff').showRatingBox);
