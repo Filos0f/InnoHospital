@@ -220,21 +220,20 @@ exports.signinStaff = function (req, res) {
 	query.on("end", function(result){
 		if(result.rows[0] === undefined){
 				res.render('staff');
+		} else {
+			var hashsalt = result.rows[0].hashsalt;
+			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+				LoadStaffInformation(res, sess.email, function(results, appointmentInfo) {
+					console.log(appointmentInfo);
+					res.render('staffMain', {patientappointment:appointmentInfo});
+				});
+				
 			}
-			else{
-				var hashsalt = result.rows[0].hashsalt;
-				if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					LoadStaffInformation(res, sess.email, function(results, appointmentInfo) {
-						console.log(appointmentInfo);
-						res.render('staffMain', {patientappointment:appointmentInfo});
-					});
-					
-				}
-				else {
-					console.log("error2");
-					res.render('staff');
-				}
+			else {
+				console.log("error2");
+				res.render('staff');
 			}
-		client.end();
+		}
+		staff.end();
     });
 };
