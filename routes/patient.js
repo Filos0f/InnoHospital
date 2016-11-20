@@ -167,8 +167,6 @@ exports.addPatient = function(req,res){
 		'INSERT INTO patient(idip,telfamily,idPassport) VALUES($1,$2,$3)',
 		[req.body.insurance, req.body.telfamily, req.body.passport]);
 
-	client.end();
-
 	res.redirect('/patient');
 };
 
