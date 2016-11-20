@@ -26,6 +26,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    });  
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
@@ -38,6 +39,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    });
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
@@ -49,7 +51,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 				natural join employee \
 				natural join positions \
 				natural join person\
-				where idip=\'' + results[0].idemp +'\''; 
+				where idip=\'' + results[0].idip +'\''; 
 
 			const query = client.query(sqlQuery);
 			query.on('row', function(row){
@@ -58,6 +60,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    });
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
@@ -117,6 +120,7 @@ exports.post_patient_cabinet = function(req, res, next){
 			    }
 			}
 		});
+		client.end();
     });
 
     console.log('--------This----------' + result);
@@ -163,6 +167,8 @@ exports.addPatient = function(req,res){
 		'INSERT INTO patient(idip,telfamily,idPassport) VALUES($1,$2,$3)',
 		[req.body.insurance, req.body.telfamily, req.body.passport]);
 
+	client.end();
+
 	res.redirect('/patient');
 };
 
@@ -182,6 +188,7 @@ exports.newAppointment = function(req, res){
 			    });  
 			    query.on("end", function(result){
 			    	callback();
+			    	client.end();
 			    });
 			},
 			function(callback) {
@@ -196,6 +203,7 @@ exports.newAppointment = function(req, res){
 			    });
 			    query.on("end", function(result){
 			    	callback();
+			    	client.end();
 			    });
 			},
 			function(callback) {
@@ -207,6 +215,7 @@ exports.newAppointment = function(req, res){
 				'INSERT INTO visitschedule(day,startTime,offsetTime,idIp,idEmp,evoluation) \
 				VALUES($1,$2,$3,$4,$5,$6)',
 				[req.body.date,req.body.time,'00:30', patientIP, employeeID, false]);
+				client.end();
 			},
 			],
 			function(err) {
