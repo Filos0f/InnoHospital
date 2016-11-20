@@ -96,8 +96,9 @@ exports.staffInfo = function(req, res, next){
         });
         query.on("end", function(result){
             client.end();
+            res.render('staffMyInfo', {employee:results[0],positions:results})
+
         });
-        res.render('staffMyInfo', {employee:results[0],positions:results})
         //});
         console.log("3 - Email session - " + sess.email);
     }
