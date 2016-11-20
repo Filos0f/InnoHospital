@@ -108,7 +108,7 @@ exports.staffInfo = function(req, res, next){
 exports.staff = function(req, res) {
 
     console.log("------------- Staff init -----------");
- 
+
     res.render('staff');
 };
 
