@@ -184,7 +184,8 @@ exports.newAppointment = function(req, res){
 	    		query.on('row', function(row) {
 			    	results.push(row);
 			    });  
-			    query.on("end", function(result){
+			    query.on("end", function(result) {
+			    	console.log("Here 1");
 			    	callback();
 			    	client.end();
 			    });
@@ -196,10 +197,11 @@ exports.newAppointment = function(req, res){
 	    						NATURAL JOIN person \
 	    						where idpos = \'' + req.body.doctor + '\''; 
 				const query = client.query(sqlQuery);
-				query.on('row', function(row){
+				query.on('row', function(row) {
 			    	results.push(row);
 			    });
-			    query.on("end", function(result){
+			    query.on("end", function(result) {
+			    	console.log("Here 2");
 			    	callback();
 			    	client.end();
 			    });
@@ -210,9 +212,9 @@ exports.newAppointment = function(req, res){
 				var patientIP = results[0].idip;
 				var employeeID = results[1].idemp;
 				client.query(
-				'INSERT INTO visitschedule(day,startTime,offsetTime,idIp,idEmp,evoluation) \
+				'INSERT INTO visitschedule(day,evoluation,idEmp,idIp,offsetTime,startTime) \
 				VALUES($1,$2,$3,$4,$5,$6)',
-				[req.body.date,req.body.time,'00:30', patientIP, employeeID, false]);
+				[req.body.date,false, employeeID, patientIP, '00:30', req.body.time]);
 				client.end();
 			},
 			],
