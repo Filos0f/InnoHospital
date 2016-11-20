@@ -184,6 +184,7 @@ exports.staffMain = function(req,res) { //Fedy
 exports.declineAppointment = function(req, res) {
 	const client = dataBase.ConnectToDataBase();
 	client.connect();
+
 	//client.query('DELETE FROM visitschedule WHERE ');
 };
 

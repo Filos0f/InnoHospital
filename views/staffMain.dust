@@ -46,16 +46,22 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li name="recordSomePatient" action="/recordSomePatient" method="post" data-toggle="modal" data-target="#myModal"
+                <li name="FutureApoiment" action="/FutureApoiment" method="get"
+                    onclick = "openbox('FutureApoimentVal'); return false">
+                    <a href="#">Future Apoiment</a></li>
+                <li name="recordSomePatient" action="/recordSomePatient" method="get" data-toggle="modal" data-target="#myModal"
                     onclick="openbox('recordPanelVal'); return false">
                     <a href="#">Epidemy status<!--span class="sr-only">(current)</--span--></a>
                 </li>
-                <li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Rating</a></li>
+                <li name="ratingStaff" action="/ratingStaff" method="get"
+                    onclick = "openbox('RatingStaffVal'); return false">
+                    <a href="#">Rating</a></li>
                 <li name="inputInfoAboutSomePatient" action="/sayHello" method="use"><a href="#"></a>
                 </li>
             </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+            id="FutureApoimentVal" style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
             <h2 class="sub-header">Patients</h2>
             <h3 class="sub-header" id=timeSpan name="dateToday">Current time and date</h3>
 
@@ -131,7 +137,7 @@
                     <p>doctor</p>
                 </div>
             </div>
-            <div>
+        <div>
          
           
     

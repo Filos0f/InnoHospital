@@ -60,32 +60,32 @@ create table Patient (
 
 create table WorkingSchedule (
 	roomN int NOT NULL,
-	startTime time,
-	finishTime time,
-	day date,
+	startTime time NOT NULL,
+	finishTime time NOT NULL,
+	day date NOT NULL,
 	Primary key(startTime, finishTime, day, roomN)
 );
 
 
 create table isOpen (
-	idEmp varchar(256),
-	startTime time,
-	finishTime time,
-	day date,
-	roomN int,
+	idEmp varchar(256) NOT NULL,
+	startTime time NOT NULL,
+	finishTime time NOT NULL,
+	day date NOT NULL,
+	roomN int NOT NULL,
 	Primary key (idEmp, startTime, finishTime, day),
 	Foreign key (idEmp) references Employee(idEmp),
 	Foreign key (startTime, finishTime, day, roomN) references WorkingSchedule
 );
 
 create table VisitSchedule (
-	day date,
-	startTime time,
-	offsetTime time,
-	idIP varchar(256),
-	idEmp varchar(256),
+	day date NOT NULL,
+	startTime time NOT NULL,
+	offsetTime time NOT NULL,
+	idIP varchar(256) NOT NULL,
+	idEmp varchar(256) NOT NULL,
 	evoluation boolean default(false),
-	primary key (idIP, idEmp),
+	primary key (idIP, idEmp, startTime, offsetTime, day),
 	foreign key (idIP) references Patient,
 	foreign key (idEmp) references Employee
 );
@@ -98,8 +98,8 @@ create table ConclusionTypes (
 
 create table Conclusion (
 	idType varchar(256) NOT NULL,
-	id int,
-	primary key(id),
+	idConclusion int,
+	primary key(idConclusion),
 	foreign key (idType) references ConclusionTypes 
 );
 
@@ -107,9 +107,9 @@ create table Result (
 	day date NOT NULL,
 	idIP varchar(256),
 	idEmp varchar(256),
-	id int,
-	primary key (id, idIP, idEmp),
-	foreign key (id) references Conclusion,
+	idConclusion int,
+	primary key (idConclusion, idIP, idEmp),
+	foreign key (idConclusion) references Conclusion,
 	foreign key (idIP) references Patient,
 	foreign key (idEmp) references Employee
 );
@@ -117,9 +117,9 @@ create table Result (
 create table XRay (
 	scan bit(2048),
 	description varchar(256),
-	id int,
-	primary key (id),
-	foreign key (id) references Conclusion
+	idConclusion int,
+	primary key (idConclusion),
+	foreign key (idConclusion) references Conclusion
 );
 
 create table generalizedAnalysisTitles (
@@ -131,20 +131,20 @@ create table generalizedAnalysisTitles (
 
 create table generalizedAnalysis (
 	idTitle varchar(256),
-	id int,
+	idConclusion int,
 	result real,
 	standard varchar(256),
-	primary key (id),
-	foreign key (id) references conclusion,
+	primary key (idConclusion),
+	foreign key (idConclusion) references conclusion,
 	foreign key (idTitle) references generalizedAnalysisTitles
 );
 
 create table diagnosis (
 	idTitle int,
-	nationalCode varchar(20),
-	id int,
-	primary key (id),
-	foreign key (id) references Conclusion
+	idConclusion int,
+	primary key (idConclusion),
+	foreign key (idConclusion) references Conclusion,
+	foreign key (idTitle) references DiagnosisInfo
 );
 
 create table DiagnosisInfo (
@@ -153,14 +153,6 @@ create table DiagnosisInfo (
 	nationalCode varchar(20),
 	rate real default(0),
 	primary key (idTitle)
-);
-
-create table DiagnosisHasInfo (
-	idDiagnosis int,
-	idDiagnosisInfo int,
-	primary key (idDiagnosisInfo, idDiagnosis),
-	foreign key (idDiagnosisInfo) references DiagnosisInfo,
-	foreign key (idDiagnosis) references Diagnosis
 );
 
 create table Drug (
