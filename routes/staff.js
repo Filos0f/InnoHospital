@@ -24,6 +24,7 @@ function LoadStaffInformation(res, email, patientHandler) {
 		    });  
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
@@ -42,6 +43,7 @@ function LoadStaffInformation(res, email, patientHandler) {
 		    });
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
@@ -114,24 +116,27 @@ exports.staff = function(req, res) {
 				   {
 					   db.query(
 						   'INSERT INTO person(idPassport,firstName,secondName,address,email,telN,birthDay,gender,hashPassword,hashSalt) \
-                          VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
-						   [allStaff[y]['People']['idPassport'], allStaff[y]['People']['firstName'], allStaff[y]['People']['secondName'], allStaff[y]['People']['address'], allStaff[y]['People']['email'], allStaff[y]['People']['telN'],
+                          	VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+							   [allStaff[y]['People']['idPassport'], allStaff[y]['People']['firstName'], allStaff[y]['People']['secondName'], 
+							   allStaff[y]['People']['address'], allStaff[y]['People']['email'], allStaff[y]['People']['telN'],
 							   allStaff[y]['People']['birthday'], allStaff[y]['People']['gender'],
 							   md5(allStaff[y]['People']['password'] + hash(allStaff[y]['People']['idPassport'])),
 							   hash(allStaff[y]['People']['idPassport'])]);
 
 					   db.query(
 						   'INSERT INTO Employee(rating,idPos,idEmp,roomN,idPassport) \
-                          VALUES($1,$2,$3,$4,$5)',
-						   ['0', allStaff[y]['People']['Employee']['idPos'], allStaff[y]['People']['Employee']['idEmp'],
-							   allStaff[y]['People']['Employee']['roomN'], allStaff[y]['People']['idPassport']]
+						   	VALUES($1,$2,$3,$4,$5)',
+							   	['0', allStaff[y]['People']['Employee']['idPos'], allStaff[y]['People']['Employee']['idEmp'],
+								allStaff[y]['People']['Employee']['roomN'], allStaff[y]['People']['idPassport']]
 					   );
 
 					   db.query(
 						   'INSERT INTO WorkingSchedule(roomN,startTime, finishTime, day) \
-                          VALUES($1,$2,$3,$4)',
-						   [allStaff[y]['People']['Employee']['WorkingSchedule']['roomN'], allStaff[y]['People']['Employee']['WorkingSchedule']['startTime'],
-							   allStaff[y]['People']['Employee']['WorkingSchedule']['finishTime'], allStaff[y]['People']['Employee']['WorkingSchedule']['date']]
+                          	VALUES($1,$2,$3,$4)',
+							   [allStaff[y]['People']['Employee']['WorkingSchedule']['roomN'],
+							   allStaff[y]['People']['Employee']['WorkingSchedule']['startTime'],
+							   allStaff[y]['People']['Employee']['WorkingSchedule']['finishTime'],
+							   allStaff[y]['People']['Employee']['WorkingSchedule']['date']]
 					   );
 
 				   }
@@ -229,24 +234,6 @@ exports.signinStaff = function (req, res) {
 					res.render('staff');
 				}
 			}
+		client.end();
     });
-/*
-	query.on("end", function(result){
-		console.log(result.rows[0]);
-		if(result.rows[0] === undefined){
-			res.render('staff');
-		}
-		else{
-			var hashsalt = result.rows[0].hashsalt;
-			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-				res.render('staffMain');
-			}
-			else {
-				console.log("error2");
-				res.render('staff');
-			}
-		}
-	});
-	console.log(sqlQuery);
-	*/
 };
