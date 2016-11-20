@@ -74,14 +74,14 @@ exports.staffInfo = function(req, res, next){
     console.log("-------------staffMyInfo start-----------");
     sess = req.session;
     email = sess.email;
-    console.log("1 - Email session - " + sess.email);
+    //console.log("1 - Email session - " + sess.email);
     if(sess.email) {
-        console.log("2 - Email session - " + sess.email);
+        console.log("Check E-mail - " + sess.email);
         //LoadStaffInformation(res, sess.email, function(results) {
         var results = [];
         const client = dataBase.ConnectToDataBase();
         client.connect();
-        console.log("FIRST try in staff my info!");
+        console.log("before start query");
 
         var sqlQuery =
         'SELECT * from person \
@@ -91,7 +91,7 @@ exports.staffInfo = function(req, res, next){
 
         const query = client.query(sqlQuery);
         query.on('row', function(row) {
-            console.log("FIRST QUERY!");
+            console.log("after query + sqlquery and resul: " + sqlQuery + '\n' + row);
             results.push(row);
         });
         query.on("end", function(result){
