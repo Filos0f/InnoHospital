@@ -46,22 +46,19 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li name="FutureApoiment" action="/FutureApoiment" method="get"
-                    onclick = "openbox('FutureApoimentVal'); return false">
-                    <a href="#">Future Apoiment</a></li>
-                <li name="recordSomePatient" action="/recordSomePatient" method="get" data-toggle="modal" data-target="#myModal"
-                    onclick="openbox('recordPanelVal'); return false">
-                    <a href="#">Epidemy status<!--span class="sr-only">(current)</--span--></a>
+                <li>
+                    <a href="#" onclick = "openbox('FutureApoimentVal'); return false">Future Apoiment</a></li>
+                <li>
+                    <a href="#" onclick="openbox('EpidemyStatusVal'); return false">Epidemy status<!--span class="sr-only">(current)</--span--></a>
                 </li>
-                <li name="ratingStaff" action="/ratingStaff" method="get"
-                    onclick = "openbox('RatingStaffVal'); return false">
-                    <a href="#">Rating</a></li>
-                <li name="inputInfoAboutSomePatient" action="/sayHello" method="use"><a href="#"></a>
+                <li>
+                    <a href="#" onclick = "openbox('RatingStaffVal'); return false">Rating</a></li>
+                
                 </li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-            id="FutureApoimentVal" style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
+            id="FutureApoimentVal" style="display:none">
             <h2 class="sub-header">Patients</h2>
             <h3 class="sub-header" id=timeSpan name="dateToday">Current time and date</h3>
 
@@ -106,53 +103,74 @@
                     </tbody>
                 </table>
             </div>
-            <div class="panel panel-primary col-md-6" id="recordPanelVal"
-                 style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
-                <div class="panel-heading" style="">
-                    Record patient
-                </div>
-                <div class="panel-body well">
-                    <div class="row" id="dateVal" style="text-align:center; ">
-                        <div class="col-md-10 text-center well">
-                            <p>data</p>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+                        id="EpidemyStatusVal" style="display:none">
+                        <h2 class="sub-header">Epidemy Status</h2>
+
+                        <div class="table-responsive" name="tableRep">
+                            <table class="table table-striped" name="table">
+                                <thead>
+                                <tr id=firstRow>
+                                    <th id=timeHeader>Title</th>
+                                    <th id=firstNameHeader>Rate</th>
+                                </tr>
+                                </thead>
+                              <tbody>
+                                <tr id=secondRow>
+                                    {#epidemy}
+                                    <td class="DiagnosisTitle" name="diagnosisTitle">{title}</td>
+                                    <td class="DiagnosisRate" name="diagnosisRate">{rate}</td>
+                                    {/epidemy}
+                                </tr>
+                              </tbody>
+                            </table>
                         </div>
-                    </div>
-                    <div class="row " id="timeHourMinVal" style="text-align:center">
-                        <div class="col-md-5 well text-center" id="getTime" style="height:70px">
-                            <p>
-                                <button class="btn btn-success" id="choiseTheTimeBtn">Time</button>
-                            </p>
-                        </div>
-                        <div class="col-md-5 well text-center" style="text-align:center height:75px">
-                            <p id=choisenDateTIme> 30-Oct-16 1:15 PM</p>
-                        </div>
-                    </div>
-                    <div class="row" id="patVal" style="text-align:center">
-                        <div class="col-md-4 text-center well"
-                        <p>patient</p>
-                    </div>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+                                id="RatingStaffVal" style="display:none">
+                                <h2 class="sub-header">Rating Status</h2>
+
+                                <div class="table-responsive" name="tableRep">
+                                    <table class="table table-striped" name="table">
+                                        <thead>
+                                        <tr id=firstRow>
+                                            <th id=timeHeader>Position</th>
+                                            <th id=firstNameHeader>first Name</th>
+                                            <th id=firstNameHeader>second Name</th>
+                                            <th id=firstNameHeader>rating</th>
+                                        </tr>
+                                        </thead>
+                                      <tbody>
+                                        <tr id=secondRow>
+                                            {#rating}
+                                            <td class="PositionEmp" name="positionEmp">{titlePos}</td>
+                                            <td class="FirstName" name="firstName">{firstname}</td>
+                                            <td class="SecondName" name="secondName">{secondname}</td>
+                                            <td class="Rating" name="rating">{rating}</td>
+                                            {/rating}
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                </div>
                 </div>
-                <div class="row" id="doctorVal" style="text-align:center">
-                    <div class="col-md-10 text-center well"
-                    <p>doctor</p>
-                </div>
-            </div>
-        <div>
-         
-          
     
 
 <script type='text/javascript'>
-    function openbox(id) {
-        console.log('idk, why this shit didn\'t work');
-        display = document.getElementById(id).style.display;
-        if (display == 'none') {
-            document.getElementById(id).style.display = 'block';
-            document.getElementById(id).style.position='relative';
-        } else {
-            document.getElementById(id).style.display = 'none';
-        }
-    }
+   function openbox(id){
+		document.getElementById('FutureApoimentVal').style.display='none';
+		document.getElementById('EpidemyStatusVal').style.display='none';
+		 
+		document.getElementById('RatingStaffVal').style.display='none';
+		 
+		
+		display = document.getElementById(id).style.display;
+		if(display=='none'){
+		   document.getElementById(id).style.display='block';
+		}else{
+		   document.getElementById(id).style.display='none';
+		}
+	}
 </script>
     </body >
     < / html >

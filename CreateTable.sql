@@ -142,6 +142,7 @@ create table generalizedAnalysis (
 create table diagnosis (
 	idTitle int,
 	idConclusion int,
+	anamnes varchar(2048),
 	primary key (idConclusion),
 	foreign key (idConclusion) references Conclusion,
 	foreign key (idTitle) references DiagnosisInfo
