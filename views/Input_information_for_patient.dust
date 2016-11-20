@@ -142,9 +142,9 @@
                         </div>
 
                         <div class="panel-body">
-                        <form action="/submitAD" method="/post">
+                        <form action="/submitAD" method="post">
                         	<div class="text-primary">
-                            	<textarea rows="10" cols="135">
+                            	<textarea rows="10" cols="135" name="Description">
                                    
                               </textarea>
                               <br>
@@ -174,7 +174,7 @@
                                 <th><p id="result">Result</p></th>
                           </tr>
                           <tr>
-                          <form method="post" action="/submitLab">
+                          <form method="post" action="/submitLabResult">
                                 <td><input type="form-control" name="type"></td>
                                 <td><input type="form-control" name="standart"></td>
                                 <td><input type="form-control" name="result"></td>
@@ -193,26 +193,27 @@
                     	<div class="panel-heading">
                         	Scans
                         </div>
+                        <form action="/submitScans" method="post">
                         <div class="panel-body">
                         	<div class="text-primary" id="commonFieldOfGenAnalVal">
                             	<div class="col-lg-5">
-                              <h4>Date</h4><br/>
+                                <h4>Date</h4><br/>
                                 <input type=date name="date" min=2014-09-08>   
                                 <h4>Name</h4>
-                                <input type="form-control" name="analysis-title"> 
+                                <input type="form-control" name="title"> 
                                 <h4>Conclusion</h4>
-                                <input type="form-control" name="analysis-result"> 
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="well">
-                                     <input type='file' onchange="readURL(this);" />
-                                        <img id="blah" src="#" alt="your image" />
-                                        </div>
-                                </div>
-                                 
-                            </div>
-                            <button class="btn-primary btn" style="float: left;">Save</button>
+                                <input type="form-control" name="result"> 
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="well">
+                                    <input type='file' onchange="readURL(this);" />
+                                    <img id="blah" src="#" alt="your image" />
+                                  </div>
+                              </div>       
+                          </div>
+                            <input type="submit" style="float: right;" value="Save" class="btn btn-info">
                         </div> 
+                        </form>
                     </div>
 
                    

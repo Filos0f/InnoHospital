@@ -211,8 +211,6 @@ exports.newAppointment = function(req, res){
 				client.connect();
 				var patientIP = results[0].idip;
 				var employeeID = results[1].idemp;
-				console.log(patientIP);
-				console.log(employeeID);
 				client.query(
 				'INSERT INTO visitschedule(day,evoluation,idEmp,idIp,offsetTime,startTime) \
 				VALUES($1,$2,$3,$4,$5,$6)',

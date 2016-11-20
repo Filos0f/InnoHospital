@@ -193,6 +193,23 @@ exports.declineAppointment = function(req, res) {
 	//client.query('DELETE FROM visitschedule WHERE ');
 };
 
+exports.submitAD = function(req, res) {
+	console.log(req.body.Description);
+	console.log(req.body.Diagnosis);
+}
+
+exports.submitScans = function(req, res) {
+	console.log(req.body.date);
+	console.log(req.body.title);
+	console.log(req.body.result);
+}
+
+exports.submitLabResult = function(req, res) {
+	console.log(req.body.type);
+	console.log(req.body.standart);
+	console.log(req.body.result);
+}
+
 /*Авторизация врача*/
 exports.signinStaff = function (req, res) {
 	console.log("-------------LOG signinStaff-----------");
