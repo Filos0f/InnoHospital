@@ -136,7 +136,6 @@ exports.staffInfo = function(req, res, next){
     }
     console.log("-------------staffMyInfo end-----------");
     //res.render('staffMyInfo');
->>>>>>> 33a2b5f7867ba64b88d6e6197bd8390315775ca9
 };
 
 exports.staff = function(req, res) {
@@ -165,12 +164,12 @@ exports.signinStaff = function (req, res) {
     staff.connect();
     console.log(req.body.hashpassword);
 
-<<<<<<< HEAD
+	function hash(key) {
 		for (p = 0; p != key.length; p++) {
 			h = h * 31 + key.charAt(p);
 		}
 		return h;
-	}
+	};
 	console.log("------------- Staff position -----------");
 
     async.series([
@@ -254,46 +253,8 @@ exports.signinStaff = function (req, res) {
        }
     ], function (err) {
         if(err) callback(err);
-=======
-    //var sqlQuery =
-    //	'SELECT * from Person where email = \'' + req.body.email + '\'';
-
-    var sqlQuery =
-        'SELECT * from person';
-
-
-    const query = staff.query(sqlQuery);
-    console.log(sqlQuery);
-
-    const result = [];
-    query.on('fields', function(fields) {
-        console.log(result);
-
-        result.push(fields);
     });
     console.log(sqlQuery);
-
-    query.on("end", function(result){
-        console.log(result);
-        if(result.fields[0] === undefined){
-            res.render('StaffMain');
-        }
-        else{
-            var hashsalt = result.fields[0].hashsalt;
-            if(md5(req.body.hashpassword + hashsalt) == result.fields[0].hashpassword) {
-                res.render('StaffMyInfo');
-            }
-            else {
-                console.log("error2");
-                res.render('StaffMain');
-            }
-        }
->>>>>>> 33a2b5f7867ba64b88d6e6197bd8390315775ca9
-    });
-    console.log(sqlQuery);
-};
-
-<<<<<<< HEAD
 	res.render('staff');
 };
 
@@ -377,7 +338,7 @@ exports.signinStaff = function (req, res) {
 		staff.end();
     });
 };
-=======
+
 exports.fillTheEpidemicBox = function (req, res) {
     /*Fill the epidemic box in staffMain page*/
     console.log("______FillTheEpidemicBox_______");
@@ -406,5 +367,4 @@ exports.scanSave = function (req, res) {
 exports.createNewAppointment = function (req, res) {
     /*createNewAppointment on input_info_for_patient page when click button save in NewAppointment box*/
     Console.log("createNewAppointment");
-}
->>>>>>> 33a2b5f7867ba64b88d6e6197bd8390315775ca9
+};
