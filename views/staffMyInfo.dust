@@ -13,7 +13,7 @@
 </div>
 	<div class="row" style="text-decoration:inherit" id=aboutMeTableHeader style="text-align:center"><h2>Smthing about staff</h2></div>
 
-	<{#employee}>
+	{#employee}
 <div class="well">
 
 	<div class="row">

@@ -31,7 +31,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand text" type="submit" id="headNavBar" name="navBar" href="/gotoprofile"
-               action="/gotoprofile" method="post">My work</a>
+               action="/gotoprofile" method="post">InnoHospital</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
