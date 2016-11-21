@@ -306,8 +306,7 @@ exports.Input_information_for_patient = function(req,res){
     const client = dataBase.ConnectToDataBase();
 	client.connect();
 	var now = new Date();
-	var time = (now.getHours() - (now.getMinutes() > '40:00' ? 1 : - 1)) + ':00';
-	//console.log(getDate(0, 1) + " " + time);
+	//var time = (now.getHours() - (now.getMinutes() > '40:00' ? 1 : - 1)) + ':00';
 	var sqlQuery = 'select * from visitschedule\
 					where day > \'' + getDate(0, 1) + '\'';
 	const query = client.query(sqlQuery);
@@ -319,7 +318,64 @@ exports.Input_information_for_patient = function(req,res){
 		console.log(results);
     	client.end();
     });
-	res.render('Input_information_for_patient');
+
+	var positionsRet = [];
+	var nameofempRet = [];
+	var diagnosisRet = [];
+
+    async.series([
+    	function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+    		var sqlQuery = 'SELECT * from positions'; 
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+		    	positionsRet.push(row);
+		    });
+		    query.on("end", function(result){
+		    	callback();
+		    	client.end();
+		    });
+		},
+	  	function(callback) {
+            const client = dataBase.ConnectToDataBase();
+            client.connect();
+            var sqlQuery = 'SELECT firstname, secondname, p.idpos from employee NATURAL JOIN person NATURAL JOIN positions p';
+            const query = client.query(sqlQuery);
+            query.on('row', function(row) {
+                nameofempRet.push(row);
+            });
+            query.on("end", function(result) {
+                console.log("Here 1");
+                callback();
+                client.end();
+            });
+        },
+        function(callback) {
+            const client = dataBase.ConnectToDataBase();
+            client.connect();
+            var sqlQuery = 'SELECT * FROM DiagnosisInfo';
+            const query = client.query(sqlQuery);
+            query.on('row', function(row) {
+                diagnosisRet.push(row);
+            });
+            query.on("end", function(result) {
+                console.log("Here 1");
+                callback();
+                client.end();
+            });
+        },
+        function(callback) {
+			res.render('Input_information_for_patient', {diagnosisInformation:diagnosisRet,positions:positionsRet,nameofemp:nameofempRet});
+		},
+    	],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
+	});
+	console.log(positionsRet);
+	console.log(nameofempRet);
+	
 	//при нажатии на апоимент
 };
 
@@ -344,10 +400,8 @@ function getDate(inc, dec) {
 }
 
 exports.submitAD = function(req, res) {
-	sess = req.session;
-    email = sess.email; 
 	console.log(getDate(0, 0));
-	console.log(req.body.Description);
+	console.log(req.body.Anamnesis);
 	console.log(req.body.Diagnosis);
 }
 

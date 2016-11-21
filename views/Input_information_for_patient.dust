@@ -182,21 +182,21 @@
                         </div>
 
                         <div class="panel-body">
-                        <form action="/submitAD" method="/post">
+                        <form action="/submitAD" method="post">
                         	<div class="text-primary">
                             	<textarea rows="10" cols="135" name="Anamnesis">
                                    
                               </textarea>
                               <br>
-                                <p style="margin-left: 7px;margin-top: 10px;">Choose diagnosis</p>
-                                    <input id="textbox" type="text" />
-                                      <select id="select">
-                                        <option class="1" value="1">1</option>
-                                        <option class="2" value="234567890">234567890</option>
-                                        <option class="3" value="better">better</option>
-                                        <option class="4" value="world">world</option>
-                                        <option class="5" value="goodly deeds">goodly deeds</option>
-                                       </select>
+                                <p style="margin-left: 7px;margin-top:10px;">Choose diagnosis</p>
+                                    <input style="padding:5px; margin: 10px;width: 500px;" id="textbox" type="text" /><br/>
+                                    
+
+                                      <select style="width: 500px;padding:10px;margin:10px; " id="select" name="Diagnosis">
+                                      {#diagnosisInformation}
+                                        <option class="1" value={nationalcode}>{title}</option>
+                                      {/diagnosisInformation}
+                                      </select>
                                 
                                </div>
                               <input type="submit" style="float: right;" value="Save" class="btn btn-info">
@@ -242,9 +242,7 @@
                         </div>
                         <div class="panel-body">
                         	<div class="text-primary" id="commonFieldOfGenAnalVal">
-                            	<div class="col-lg-5">
-                              <h4>Date</h4><br/>
-                                <input type=date name="date" min=2014-09-08>   
+                            	<div class="col-lg-5"> 
                                 <h4>Name</h4>
                                 <input type="form-control" name="analysis-title"> 
                                 <h4>Conclusion</h4>
