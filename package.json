@@ -19,6 +19,7 @@
     "connect-pg-simple":"*",
     "express-session":"*",
     "node-fs":"*",
-    "async":"*"
+    "async":"*",
+    "nodemailer":"*"
   }
 }

@@ -43,6 +43,8 @@ app.use(function(err, req, res, next){
 
 app.get('/', 					require('./routes/index').index);
 
+app.post('/SendMail', 			require('./routes/mymailer').SendNotification);
+
 // Patient handlers
 app.get('/patient', 			require('./routes/patient').patient);
 app.get('/patient_cabinet', 	require('./routes/patient').get_patient_cabinet);
@@ -73,6 +75,9 @@ app.post('/submitLabResult',	require('./routes/staff').submitLabResult);
 app.post('/submitScans',		require('./routes/staff').submitScans);
 app.post('/declineAppointment',	require('./routes/staff').declineAppointment);
 app.post('/newAppointment', 	require('./routes/staff').newAppointment);
+
+
+
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));

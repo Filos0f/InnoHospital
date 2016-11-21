@@ -134,36 +134,28 @@
         </div>
     </div>
   </div>
+<div class="container-fluid" id="right">
+  <div id="Rating" class="tabcontent">
+    <h2>Rating</h2>
 
-<div id="Rating" class="tabcontent">
-  <div class="container">
-  <h2>Staff's rating</h2>
-  <table style="width:100%; border: 1;
-            border-collapse: collapse;">
-        <div class="table-responsive" name="tableRep">
-                                            <table class="table table-striped" name="table">
-                                                <thead>
-                                                <tr id=firstRow>
-                                                    <th id=timeHeader>Position</th>
-                                                    <th id=firstNameHeader>first Name</th>
-                                                    <th id=firstNameHeader>second Name</th>
-                                                    <th id=firstNameHeader>rating</th>
-                                                </tr>
-                                                </thead>
-                                              <tbody>
-                                              {#rating}
-                                                <tr id=secondRow>
-                                                    <td class="PositionEmp" name="positionEmp">{title}</td>
-                                                    <td class="FirstName" name="firstName">{firstname}</td>
-                                                    <td class="SecondName" name="secondName">{secondname}</td>
-                                                    <td class="Rating" name="rating">{rating}</td>
-                                                </tr>
-                                                {/rating}
-                                              </tbody>
-                                            </table>
-                                        </div>
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Position</th>
+    <th>first name</th>
+    <th>second name</th>
+    <th>rating</th>
+  </tr>
+  {#rating}
+  <tr>
+    <td>{title}</td>
+    <td>{firstname}</td>
+    <td>{secondname}</td>
+    <td>{rating}</td>
+  </tr>
+   {/rating}
+</table>
 
-  </div>
 </div>
 </div>
 <div class="col-lg-7">
@@ -212,17 +204,24 @@
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
               <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
               <br><br>
-                   <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
-                  
-                <select name="doctor">
+                   <h2 class="bold">Choose doctor</h2></p>
+                  <span>
+                <select name="doctor" id="doctor">
 
                       {#positions} 
 
                           <option id="Employee_{idpos}" value="{idpos}">{title}</option>
 
                       {/positions} 
-
-                    </select>           
+                </select>
+                    <select id="sub_groups" name="doctorName">
+                    {#nameofemp}
+                     
+                        <option  data-group="{idpos}" value='{secondname}'>{firstname}&nbsp;{secondname}</option>
+                    {/nameofemp}
+                         
+                    <select>
+                    </span>
                </div>
 
       <div class="modal-footer">
@@ -243,6 +242,25 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script>
+$(function(){
+    $('#doctor').on('change', function(){
+        var val = $(this).val();
+        var sub = $('#sub_groups');
+        if(val == '--All--') {
+            $('#sub_groups').find('option').show();
+        }
+        else {
+            sub.find('option').hide();
+            $('option', sub).filter(function(){
+                if($(this).attr('data-group') == val){
+                    $(this).show();
+                }
+            });
+        }
+        sub.val(0);
+    });
+});
+
 function openTab(evt, cityName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");

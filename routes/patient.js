@@ -11,6 +11,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 	var results = [];
 	var appointmentInfo = [];
 	var rating = [];
+	var nameOfEmp = [];
 	async.series([
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
@@ -43,6 +44,20 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    	client.end();
 		    });
 		},
+            function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                var sqlQuery = 'SELECT firstname, secondname, p.idpos from employee NATURAL JOIN person NATURAL JOIN positions p';
+                const query = client.query(sqlQuery);
+                query.on('row', function(row) {
+                    nameOfEmp.push(row);
+                });
+                query.on("end", function(result) {
+                    console.log("Here 1");
+                    callback();
+                    client.end();
+                });
+            },
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
 			client.connect();
@@ -84,7 +99,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 				});
 			},
 		function(callback) {
-			patientHandler(results, appointmentInfo, rating);
+			patientHandler(results, appointmentInfo, rating, nameOfEmp);
 		},
 		],
 		function(err) {
@@ -98,8 +113,8 @@ exports.get_patient_cabinet = function(req, res){
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating) {
-			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating})
+		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp) {
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp})
 		});
 	}
 };
@@ -125,14 +140,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp})
 			    }
 			    else {
 					//not right password or email
@@ -194,6 +209,7 @@ exports.newAppointment = function(req, res){
 	sess = req.session;
 	if(sess.email) {
 		var results = [];
+		var nameOfEmp = [];
 		async.series([
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();

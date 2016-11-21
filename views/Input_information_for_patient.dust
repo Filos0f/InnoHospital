@@ -40,12 +40,12 @@
             <span class="icon-bar"></span>
 
           </button>
-          <a class="navbar-brand" href="/gotoprofile">InnoHospital</a>
+          <a class="navbar-brand" href="#">My work</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/gotoprofile" method="get">Profile</a></li>
-            <li><a href="/" method = "get">Exit</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Exit</a></li>
           </ul>
         
         </div>
@@ -61,9 +61,11 @@
         
           <ul class="nav nav-sidebar">
             
-            <li><a href="#" id="AnamAndDiagBox" onclick="openbox('AnamAndDiag'); return false">Anamnesis&Diagnosis</a></li>
-            <li><a href="#" id='ScansBox' onclick="openbox('Scans'); return false">Scans<span class="sr-only">(current)</span></a></li>
-            <li><a href="#" id="LabResBox" onclick="openbox('LabRes'); return false">Lab results</a></li>
+            <li><a href="#" id="WriteReport" onclick="openbox('ReportPage'); return false">Anamnesis&Diagnosis</a></li>
+            <li><a href="#" id='analVal' onclick="openbox('Scans'); return false">Scans<span class="sr-only">(current)</span></a></li>
+            <li><a href="#" id="bloodVal" onclick="openbox('LabRes'); return false">Lab results</a></li>
+             
+                       
 			<li><a href='/backToStaffMain' id="backVal" onclick="back()">Back</a></input></li>
           </ul>
 	  </div>
@@ -71,8 +73,7 @@
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #E0EEEE">
@@ -85,74 +86,122 @@
       <h3>Set data</h3>
 
       <form method="post" action="/newAppointment">
+      
        <span>
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
               <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
               <br><br>
-                   <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
-                      
-                <select name="doctor">
-                    <li><option value="Allergist">Allergist</option></li>
-                    <li><option value="Anesthesiologist">Anesthesiologist</option></li>
-                    <li><option value="Cardiologist">Cardiologist</option></li>
-                    <li><option value="Dentist">Dentist</option></li>
-                    <li><option value="Dermatologist">Dermatologist</option></li>
-                    <li><option value="Endocrinologist">Endocrinologist</option></li>
-                    <li><option value="ENT">ENT Specialist</option></li>
-                    <li><option value="Gynecologist">Gynecologist</option></li>
-                    <li><option value="Immunologist">Immunologist</option></li>
-                    <li><option value="Physician">Physician</option></li>
-                    <li><option value="Infectious">Infectious Disease Specialist</option></li>
-                    <li><option value="Neurosurgeon">Neurosurgeon</option></li>
-                    <li><option value="Oncologist">Oncologist</option></li>
-                    <li><option value="Orthopedic">Orthopedic Surgeon</option></li>
-                    <li><option value="Pediatrician">Pediatrician</option></li>
-                    <li><option value="Surgeon">Surgeon</option></li>
-                    <li><option value="Urologist">Urologist</option></li>
-                    </select>
+                   <h2 class="bold">Choose doctor</h2></p>
+                  <span>
+                <select name="doctor" id="doctor">
+
+                      {#positions} 
+
+                          <option id="Employee_{idpos}" value="{idpos}">{title}</option>
+
+                      {/positions} 
+                </select>
+                    <select id="sub_groups" name="doctorName">
+                    {#nameofemp}
+                     
+                        <option  data-group="{idpos}" value='{secondname}'>{firstname}&nbsp;{secondname}</option>
+                    {/nameofemp}
+                         
+                    <select>
+                    </span>
                </div>
 
       <div class="modal-footer">
-          <form action="/createNewAppointment" method="post">
-      <input type="submit" class="btn btn-primary"  value="Save">
+      <input type="submit" class="btn btn-primary" value="Save">
         <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
-          </form>
+        
       </div>
+
       </form>
     </div>
   </div>
 </div>
- 
 
 
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           
           <div class="panel-group" id="workField">
-          	<div class="row" id="resultPanelVal">
 
-           
-          		<div style="">
-                	<div class="panel panel-primary" id="AnamAndDiag" style="display:none">
+          	<div class="row" id="resultPanelVal">
+          		
+                	<div class="panel panel-primary" id="ReportPage" style="display:none">
+
+
+                        <button type="button" style="float: right;margin: 2px;" class="btn btn-warning" data-toggle="modal" data-target="#myModal1">
+                          Med History
+                        </button>
+
+                        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header" style="background-color: #E0EEEE">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                                      <h2 class="modal-title" id="myModalLabel">Patient Medical History</h2>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="well">
+                                        <h3 style=" font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Patient History</h3>
+                                            <p style="color: #00BFFF; font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Anamnesis</p>
+                                          <div class="well" style="background-color: #FFE4B5;"></div>
+                                          <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;">Diagnosis</p>
+                                          <h5 style="font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Diagnosis name goes here</h5>
+                                          <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;">Lab analysis reports</p>
+                                          <div class="well" style="background-color: #FFE4B5;"></div>
+                                          {#medHistory}
+                                          
+
+
+                                          {/medHistory}
+                                                 </div>
+
+                                      </div>
+
+                                    <div class="modal-footer">
+      
+                              <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                          
+                        </div>
+
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+
+
                     	<div class="panel-heading">
                         	Anamnesis and Diagnosis
                         </div>
 
                         <div class="panel-body">
-                        <form action="/submitAD" method="post">
+                        <form action="/submitAD" method="/post">
                         	<div class="text-primary">
-                            	<textarea rows="10" cols="135" >
+                            	<textarea rows="10" cols="135" name="Anamnesis">
+                                   
                               </textarea>
                               <br>
-                                <span><p style="margin-left: 7px;margin-top: 10px;">Choose diagnosis</p>
-                                <input style=" border-color: green; border-radius: 10px;width: 280px;" type="form-control" name="Diagnosis">
-                                </span>
-                            </div>
-                            <div class="btn submit success">
-                                <button class="save" action="/saveAnamAndDiag" method="post">
-                                    save
-                                </button>
-                            </div>
+                                <p style="margin-left: 7px;margin-top: 10px;">Choose diagnosis</p>
+                                    <input id="textbox" type="text" />
+                                      <select id="select">
+                                        <option class="1" value="1">1</option>
+                                        <option class="2" value="234567890">234567890</option>
+                                        <option class="3" value="better">better</option>
+                                        <option class="4" value="world">world</option>
+                                        <option class="5" value="goodly deeds">goodly deeds</option>
+                                       </select>
+                                
+                               </div>
+                              <input type="submit" style="float: right;" value="Save" class="btn btn-info">
+                        </form>
+                            
                         </div>
                     </div>
 
@@ -165,10 +214,23 @@
                         </div>
                         <div class="panel-body">
                         	<div class="text-primary well" id="commonFieldOfBloodVal">
-                            	<p id="type" class="well">type</p>
-                                <p id="Standart" class="well">standart</p>
-                                <p id="result" class="well">result</p>
-                                <button class="btn btn-primary" id=bloodBtnDone action="/labResultsDone">DONE</button>
+                          <table>
+                          <tr>
+                            	<th> <p id="type">Type</p></th>
+                                <th> <p id="Standart">Standart</p></th>
+                                <th><p id="result">Result</p></th>
+                          </tr>
+                          <tr>
+                          <form method="post" action="/submitLab">
+                                <td><input type="form-control" name="type"></td>
+                                <td><input type="form-control" name="standart"></td>
+                                <td><input type="form-control" name="result"></td>
+                          </tr>
+                                
+                                </table>
+                                <input type="submit" class="btn btn-primary" style="margin: 8px; float: right;" value="Save"> 
+                                 </form>
+                                </div>
                             </div>
                            
                     </div>
@@ -178,13 +240,15 @@
                     	<div class="panel-heading">
                         	Scans
                         </div>
-                        <form action="/submitScans" method="post">
                         <div class="panel-body">
                         	<div class="text-primary" id="commonFieldOfGenAnalVal">
                             	<div class="col-lg-5">
-                                <p id="data" class="well">Data</p>
-                                <p id="title" class="well">title</p>
-                                <p id="result" class="well">result</p>
+                              <h4>Date</h4><br/>
+                                <input type=date name="date" min=2014-09-08>   
+                                <h4>Name</h4>
+                                <input type="form-control" name="analysis-title"> 
+                                <h4>Conclusion</h4>
+                                <input type="form-control" name="analysis-result"> 
                                 </div>
                                 <div class="col-md-6">
                                     <div class="well">
@@ -194,9 +258,8 @@
                                 </div>
                                  
                             </div>
-                            <button class="btn-primary btn" action="/scanSave" method="post" style="float: left;">Save</button>
-                        </div>
-                        </form>
+                            <button class="btn-primary btn" style="float: left;">Save</button>
+                        </div> 
                     </div>
 
                    
@@ -206,9 +269,45 @@
         </div>
       </div>
     </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	<script type='text/javascript'>
+    jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
+        return this.each(function() {
+            var select = this;
+            var options = [];
+            $(select).find('option').each(function() {
+                options.push({value: $(this).val(), text: $(this).text()});
+            });
+            $(select).data('options', options);
+            $(textbox).bind('change keyup', function() {
+                var options = $(select).empty().data('options');
+                var search = $(this).val().trim();
+                var regex = new RegExp(search,"gi");
+              
+                $.each(options, function(i) {
+                    var option = options[i];
+                    if(option.text.match(regex) !== null) {
+                        $(select).append(
+                           $('<option>').text(option.text).val(option.value)
+                        );
+                    }
+                });
+                if (selectSingleMatch === true && $(select).children().length === 1) {
+                    $(select).children().get(0).selected = true;
+                }
+            });            
+        });
+    };
+
+    $(function() {
+        $('#select').filterByText($('#textbox'), false);
+      $("select option").click(function(){
+        alert(1);
+      });
+    });
+
 	function openbox(id){
-		document.getElementById('AnamAndDiag').style.display='none';
+		document.getElementById('ReportPage').style.display='none';
 		document.getElementById('Scans').style.display='none';
 		 
 		document.getElementById('LabRes').style.display='none';
@@ -224,10 +323,32 @@
 	function back(){
 		
 	}
+
+
+
+  $(function(){
+    $('#doctor').on('change', function(){
+        var val = $(this).val();
+        var sub = $('#sub_groups');
+        if(val == '--All--') {
+            $('#sub_groups').find('option').show();
+        }
+        else {
+            sub.find('option').hide();
+            $('option', sub).filter(function(){
+                if($(this).attr('data-group') == val){
+                    $(this).show();
+                }
+            });
+        }
+        sub.val(0);
+    });
+});
 </script>
 }
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script>
 </html>
