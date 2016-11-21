@@ -204,17 +204,24 @@
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
               <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
               <br><br>
-                   <h2 class="bold">Choose doctor</h2> <p id="out"> </p>
-                  
-                <select name="doctor">
+                   <h2 class="bold">Choose doctor</h2></p>
+                  <span>
+                <select name="doctor" id="doctor">
 
                       {#positions} 
 
                           <option id="Employee_{idpos}" value="{idpos}">{title}</option>
 
                       {/positions} 
-
-                    </select>           
+                </select>
+                    <select id="sub_groups" name="doctorName">
+                    {#nameofemp}
+                     
+                        <option  data-group="{idpos}" value='{secondname}'>{firstname}&nbsp;{secondname}</option>
+                    {/nameofemp}
+                         
+                    <select>
+                    </span>
                </div>
 
       <div class="modal-footer">
@@ -235,6 +242,25 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script>
+$(function(){
+    $('#doctor').on('change', function(){
+        var val = $(this).val();
+        var sub = $('#sub_groups');
+        if(val == '--All--') {
+            $('#sub_groups').find('option').show();
+        }
+        else {
+            sub.find('option').hide();
+            $('option', sub).filter(function(){
+                if($(this).attr('data-group') == val){
+                    $(this).show();
+                }
+            });
+        }
+        sub.val(0);
+    });
+});
+
 function openTab(evt, cityName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
