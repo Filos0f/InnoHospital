@@ -54,7 +54,7 @@
 
     <div class="container-fluid">
       <div class="row">
-       <button type="button" style="float: right;margin-top: 7px;" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+       <button type="button" style="float: right;margin: 7px;" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
   New Appointment
 </button>
         <div class="col-sm-3 col-md-2 sidebar">
@@ -64,7 +64,6 @@
             <li><a href="#" id="AnamAndDiagBox" onclick="openbox('AnamAndDiag'); return false">Anamnesis&Diagnosis</a></li>
             <li><a href="#" id='ScansBox' onclick="openbox('Scans'); return false">Scans<span class="sr-only">(current)</span></a></li>
             <li><a href="#" id="LabResBox" onclick="openbox('LabRes'); return false">Lab results</a></li>
-
 			<li><a href='/backToStaffMain' id="backVal" onclick="back()">Back</a></input></li>
           </ul>
 	  </div>
@@ -128,22 +127,26 @@
 
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header" id="patientNameVal">Patients</h2>
+          
           <div class="panel-group" id="workField">
           	<div class="row" id="resultPanelVal">
 
            
-
           		<div style="">
                 	<div class="panel panel-primary" id="AnamAndDiag" style="display:none">
                     	<div class="panel-heading">
-                        	Writing report
+                        	Anamnesis and Diagnosis
                         </div>
+
                         <div class="panel-body">
+                        <form action="/submitAD" method="post">
                         	<div class="text-primary">
                             	<textarea rows="10" cols="135" >
-                                   
-                                    </textarea>
+                              </textarea>
+                              <br>
+                                <span><p style="margin-left: 7px;margin-top: 10px;">Choose diagnosis</p>
+                                <input style=" border-color: green; border-radius: 10px;width: 280px;" type="form-control" name="Diagnosis">
+                                </span>
                             </div>
                             <div class="btn submit success">
                                 <button class="save" action="/saveAnamAndDiag" method="post">
@@ -152,23 +155,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-primary" id="diagnPanelVal" style="display:none">
-                    	<div class="panel-heading">
-                        	Diagnosis
-                        </div>
-                        <div class="panel-body">
-                        	<div class="text-primary well">
-                            	<p id="typeVal" class="well">TypeField</p>
-                            	<p id="titleVal" class="well">TitleField</p>
-                            </div>
-                            <div class="btn">
-                            	<button class="btn-primary btn" id="diagnBttVal">DONE</button>
-                            </div>
-                        </div>
-                    </div>
+
+
+                     
+
                    	<div class="panel panel-primary" id="LabRes" style="display:none">
                     	<div class="panel-heading">
-                        	Blood
+                        	Lab Report
                         </div>
                         <div class="panel-body">
                         	<div class="text-primary well" id="commonFieldOfBloodVal">
@@ -177,12 +170,15 @@
                                 <p id="result" class="well">result</p>
                                 <button class="btn btn-primary" id=bloodBtnDone action="/labResultsDone">DONE</button>
                             </div>
-                        </div>
+                           
                     </div>
+                        
+
                     <div class="panel panel-primary" id="Scans" style="display:none">
                     	<div class="panel-heading">
                         	Scans
                         </div>
+                        <form action="/submitScans" method="post">
                         <div class="panel-body">
                         	<div class="text-primary" id="commonFieldOfGenAnalVal">
                             	<div class="col-lg-5">
@@ -199,48 +195,11 @@
                                  
                             </div>
                             <button class="btn-primary btn" action="/scanSave" method="post" style="float: left;">Save</button>
-                        </div> 
-                    </div>
-                    <div class="panel panel-primary col-md-5" id="recordPanelVal" style="display:none;margin-left:25%; margin-right:25% ; text-align:center">
-                    	<div class="panel-heading" style="">
-                        	Record patient
                         </div>
-                        <div class="panel-body well">
-                        	<div class="row" id="dateVal" style="text-align:center; ">
-                            	<div class="col-md-10 text-center well" >
-                            		<p >data</p>
-                                </div>
-                            </div>
-                            <div class="row " id="timeHourMinVal" style="text-align:center">
-                            	<div class="col-md-5 well text-center" id="getTime" style="height:70px">
-                                	<p><button class="btn btn-success" id="choiseTheTimeBtn">Time</button></p>
-                                </div>
-                                <div class="col-md-5 well text-center" style="text-align:center height:75px">
-                                	<p id=choisenDateTIme> 30-Oct-16 1:15 PM</p>
-                                </div>
-                            </div>
-                            <div class="row" id="patVal" style="text-align:center">
-                            	<div class="col-md-4 text-center well"
-                            		<p> patient</p>
-                                </div>
-                            </div>
-                            <div class="row" id="doctorVal" style="text-align:center">
-                            	<div class="col-md-10 text-center well"
-                            		<p >doctor</p>
-                                </div>
-                            </div>
-                            <div class="row" id="offtTimeVal" style="text-align:center">
-                            	<div class="col-md-10 text-center well"
-                            		<p >Offset Time</p>
-                                </div>
-                            </div>
-                            <div class="row" id="dateVal" style="text-align:center">
-                            	<button class="btn btn-success col-md-5" id="Ok">Ok</button>
-                            	<button class="btn btn-danger col-lg-5" id="Back">Cancel</button>
+                        </form>
+                    </div>
 
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
           </div>
@@ -251,9 +210,9 @@
 	function openbox(id){
 		document.getElementById('AnamAndDiag').style.display='none';
 		document.getElementById('Scans').style.display='none';
-		document.getElementById('recordPanelVal').style.display='none';
+		 
 		document.getElementById('LabRes').style.display='none';
-		document.getElementById('diagnPanelVal').style.display='none';
+		 
 		
 		display = document.getElementById(id).style.display;
 		if(display=='none'){

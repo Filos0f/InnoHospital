@@ -1,5 +1,6 @@
 body{
-	background-image: url(http://eskipaper.com/images/free-simple-phone-backgrounds-1.jpg);
+	background-image: url(http://cdn.paper4pc.com/images/sexy-girl-wallpaper-1.jpg);
+    /*url(http://eskipaper.com/images/free-simple-phone-backgrounds-1.jpg);*/
 	font-family: "Lato", sans-serif;
 }
 .PersonalInfo{
@@ -14,8 +15,16 @@ body{
     overflow-x: hidden;
 }
 #right{
-margin:20px;
+ 
 border-color: white;
+}
+th{
+    background-color:#EEF3E2; 
+}
+td{
+    background-color: #6495ED;
+    font-family: "New Century Schoolbook", serif ;
+    font-size: 16.5px;
 }
 
 ul.tab {

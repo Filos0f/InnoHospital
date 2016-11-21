@@ -1,25 +1,25 @@
 var dataBase 	= require('../libs/dbManagement');
 var md5 		= require('js-md5');
-var async = require('async');
+var async 		= require('async');
 
 exports.patient = function(req, res){
 	console.log("------------- PATIENT -----------");
 	res.render('patient');
 };
 
-function LoadPatientInformation(res, email, patientHandler) {
-	const client = dataBase.ConnectToDataBase();
-	client.connect();
-	
+function LoadPatientInformation(res, email, patientHandler) {	
 	var results = [];
+	var appointmentInfo = [];
+	var rating = [];
 	async.series([
 		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
 			console.log("FIRST CALLBACK!");
     		var sqlQuery = 
 			'SELECT * from person \
 			NATURAL JOIN patient \
 			where email = \'' + email + '\'';
-    		//var sqlQuery = 'SELECT * from person where email = \'' + email + '\'';
     		const query = client.query(sqlQuery);
     		query.on('row', function(row) {
     			console.log("FIRST QUERY!");
@@ -27,9 +27,12 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    });  
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
     		var sqlQuery = 'SELECT * from positions'; 
 			const query = client.query(sqlQuery);
 			query.on('row', function(row){
@@ -37,11 +40,51 @@ function LoadPatientInformation(res, email, patientHandler) {
 		    });
 		    query.on("end", function(result){
 		    	callback();
+		    	client.end();
 		    });
 		},
 		function(callback) {
-			patientHandler(results);
-			//res.render('patient_cabinet', {patient:results[0],positions:results})
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			console.log("Ya zawel")
+    		var sqlQuery = 'select firstname, secondname, roomn, title, day, starttime, offsettime, teln \
+    		from  visitschedule\
+				natural join employee \
+				natural join positions \
+				natural join person\
+				where idip=\'' + results[0].idip +'\''; 
+
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+				console.log("Row added");
+		    	appointmentInfo.push(row);
+		    });
+		    query.on("end", function(result){
+		    	callback();
+		    	client.end();
+		    });
+		},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
+								from employee\
+								natural join person per\
+								natural join positions p\
+								order by rating';
+				console.log(sqlQuery);
+
+				const query = client.query(sqlQuery);
+				query.on('row', function(row){
+					rating.push(row);
+				});
+				query.on("end", function(result){
+					callback();
+					client.end();
+				});
+			},
+		function(callback) {
+			patientHandler(results, appointmentInfo, rating);
 		},
 		],
 		function(err) {
@@ -55,8 +98,8 @@ exports.get_patient_cabinet = function(req, res){
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		LoadPatientInformation(res, sess.email, function(results) {
-			res.render('patient_cabinet', {patient:results[0],positions:results})
+		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating) {
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating})
 		});
 	}
 };
@@ -82,14 +125,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating})
 			    }
 			    else {
 					//not right password or email
@@ -97,6 +140,7 @@ exports.post_patient_cabinet = function(req, res, next){
 			    }
 			}
 		});
+		client.end();
     });
 
     console.log('--------This----------' + result);
@@ -147,9 +191,59 @@ exports.addPatient = function(req,res){
 };
 
 exports.newAppointment = function(req, res){
-	console.log(req.body.date);
-	console.log(req.body.time);
-	console.log(req.body.doctor);
+	sess = req.session;
+	if(sess.email) {
+		var results = [];
+		async.series([
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+	    		var sqlQuery = 'SELECT idip from patient NATURAL JOIN person \
+								where email = \'' + sess.email + '\'';
+	    		const query = client.query(sqlQuery);
+	    		query.on('row', function(row) {
+			    	results.push(row);
+			    });  
+			    query.on("end", function(result) {
+			    	console.log("Here 1");
+			    	callback();
+			    	client.end();
+			    });
+			},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+	    		var sqlQuery = 'SELECT idemp from employee \
+	    						NATURAL JOIN person \
+	    						where idpos = \'' + req.body.doctor + '\''; 
+				const query = client.query(sqlQuery);
+				query.on('row', function(row) {
+			    	results.push(row);
+			    });
+			    query.on("end", function(result) {
+			    	console.log("Here 2");
+			    	callback();
+			    	client.end();
+			    });
+			},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var patientIP = results[0].idip;
+				var employeeID = results[1].idemp;
+				client.query(
+				'INSERT INTO visitschedule(day,evoluation,idEmp,idIp,offsetTime,startTime) \
+				VALUES($1,$2,$3,$4,$5,$6)',
+				[req.body.date,false, employeeID, patientIP, '00:30', req.body.time]);
+				client.end();
+			},
+			],
+			function(err) {
+				console.log('ERROR');
+				if (err) return callback(err);
+		    	console.log('Both finished!');
+		});
+	}
 };
 
 exports.medCard = function(req, res){

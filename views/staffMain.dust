@@ -64,12 +64,11 @@
                 </li>
                 <li>
                     <a href="#" onclick = "openbox('RatingStaffVal'); return false">Rating</a></li>
-
                 </li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-             id="FutureApoimentVal" style="display:none">
+            id="FutureApoimentVal" style="display:none">
             <h2 class="sub-header">Patients</h2>
             <h3 class="sub-header" id=timeSpan name="dateToday">Current time and date</h3>
 
@@ -86,12 +85,11 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {#patientappointment}
                     <tr id=secondRow>
-                        {#patientappointment}
                         <td class="visistTimeTitle" name="visitTimeTitile">{day};&nbsp;{starttime}</td>
                         <td class="FirstNameTitle" name="FirstNameTitle">{firstname}</td>
                         <td class="SecondNameTitle" name="SecondNameTitle">{secondname}</td>
-                        {/patientappointment}
                         <td class="declineButt" name="declineBtt" action='/pressBtt' method='get'>
                             <table>
                                 <tr>
@@ -110,76 +108,79 @@
                         </td>
                         <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
                     </tr>
-
+                    {/patientappointment}
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-             id="EpidemyStatusVal" style="display:none">
-            <h2 class="sub-header">Epidemy Status</h2>
 
-            <div class="table-responsive" name="tableRep">
-                <table class="table table-striped" name="table">
-                    <thead>
-                    <tr id=firstRow>
-                        <th id=timeHeader>Title</th>
-                        <th id=firstNameHeader>Rate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr id=secondRow>
-                        {#epidemy}
-                        <td class="DiagnosisTitle" name="diagnosisTitle">{title}</td>
-                        <td class="DiagnosisRate" name="diagnosisRate">{rate}</td>
-                        {/epidemy}
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                        id="EpidemyStatusVal" style="display:none">
+                        <h2 class="sub-header">Epidemy Status</h2>
+
+                        <div class="table-responsive" name="tableRep">
+                            <table class="table table-striped" name="table">
+                                <thead>
+                                <tr id=firstRow>
+                                    <th id=timeHeader>Title</th>
+                                    <th id=firstNameHeader>Rate</th>
+                                </tr>
+                                </thead>
+                              <tbody>
+                              {#epidemy}
+                                <tr id=secondRow>
+                                    <td class="DiagnosisTitle" name="diagnosisTitle">{title}</td>
+                                    <td class="DiagnosisRate" name="diagnosisRate">{rate}</td>
+                                </tr>
+                                {/epidemy}
+                              </tbody>
+                            </table>
+                        </div>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
-             id="RatingStaffVal" style="display:none">
-            <h2 class="sub-header">Rating Status</h2>
+                                id="RatingStaffVal" style="display:none">
+                                <h2 class="sub-header">Rating Status</h2>
 
-            <div class="table-responsive" name="tableRep">
-                <table class="table table-striped" name="table">
-                    <thead>
-                    <tr id=firstRow>
-                        <th id=timeHeader>Position</th>
-                        <th id=firstNameHeader>first Name</th>
-                        <th id=firstNameHeader>second Name</th>
-                        <th id=firstNameHeader>rating</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr id=secondRow>
-                        {#rating}
-                        <td class="PositionEmp" name="positionEmp">{titlePos}</td>
-                        <td class="FirstName" name="firstName">{firstname}</td>
-                        <td class="SecondName" name="secondName">{secondname}</td>
-                        <td class="Rating" name="rating">{rating}</td>
-                        {/rating}
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-         
-          
+                                    <div class="table-responsive" name="tableRep">
+                                        <table class="table table-striped" name="table">
+                                            <thead>
+                                            <tr id=firstRow>
+                                                <th id=timeHeader>Position</th>
+                                                <th id=firstNameHeader>first Name</th>
+                                                <th id=firstNameHeader>second Name</th>
+                                                <th id=firstNameHeader>rating</th>
+                                            </tr>
+                                            </thead>
+                                          <tbody>
+                                          {#rating}
+                                            <tr id=secondRow>
+                                                <td class="PositionEmp" name="positionEmp">{title}</td>
+                                                <td class="FirstName" name="firstName">{firstname}</td>
+                                                <td class="SecondName" name="secondName">{secondname}</td>
+                                                <td class="Rating" name="rating">{rating}</td>
+                                            </tr>
+                                            {/rating}
+                                          </tbody>
+                                        </table>
+                                    </div>
+                </div>
     
 
 <script type='text/javascript'>
-    function openbox(id) {
-        console.log('idk, why this shit didn\'t work');
-        display = document.getElementById(id).style.display;
-        if (display == 'none') {
-            document.getElementById(id).style.display = 'block';
-            document.getElementById(id).style.position='relative';
-        } else {
-            document.getElementById(id).style.display = 'none';
-        }
-    }
+   function openbox(id){
+		document.getElementById('FutureApoimentVal').style.display='none';
+		document.getElementById('EpidemyStatusVal').style.display='none';
+		 
+		document.getElementById('RatingStaffVal').style.display='none';
+		 
+		
+		display = document.getElementById(id).style.display;
+		if(display=='none'){
+		   document.getElementById(id).style.display='block';
+		}else{
+		   document.getElementById(id).style.display='none';
+		}
+	}
 </script>
     </body >
     < / html >
