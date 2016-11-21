@@ -43,6 +43,9 @@ app.use(function(err, req, res, next){
 
 app.get('/', 					require('./routes/index').index);
 
+
+app.post('/SendMail', 			require('./routes/mymailer').SendNotification);
+
 app.get('/patient', 			require('./routes/patient').patient);
 app.get('/patient_cabinet', 	require('./routes/patient').get_patient_cabinet);
 app.post('/patient_cabinet', 	require('./routes/patient').post_patient_cabinet);
@@ -65,6 +68,9 @@ app.post('/saveAnamAndDiag',	require('./routes/staff').saveAnamAndDiag);
 app.post('/labResultsDone', 	require('./routes/staff').labResultDone);
 app.post('/scanSave', 			require('./routes/staff').scanSave);
 app.post('/createNewAppointment',require('./routes/staff').createNewAppointment);
+
+
+
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));
