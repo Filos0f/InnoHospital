@@ -32,7 +32,7 @@ function LoadStaffInformation(res, email, patientHandler) {
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
 			client.connect();
-			var sqlQuery = 'select v.day, v.starttime, per.firstname, per.secondname\
+			var sqlQuery = 'select p.idip, v.day, v.starttime, per.firstname, per.secondname\
 							from patient p\
 							natural join visitschedule v \
 							natural join person per \
@@ -146,6 +146,8 @@ exports.staff = function(req, res) {
 };
 
 exports.Input_information_for_patient = function(req,res){
+	console.log(req.body.fname);
+	console.log(req.body.SecondNameTitle);
     res.render('Input_information_for_patient');
 };
 
@@ -258,7 +260,65 @@ exports.signinStaff = function (req, res) {
 	res.render('staff');
 };
 
+exports.newAppointment = function(req, res){
+	sess = req.session;
+	if(sess.email) {
+		var results = [];
+		async.series([
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+	    		var sqlQuery = 'SELECT idemp from employee \
+	    						NATURAL JOIN person \
+	    						where idpos = \'' + req.body.doctor + '\''; 
+				const query = client.query(sqlQuery);
+				query.on('row', function(row) {
+			    	results.push(row);
+			    });
+			    query.on("end", function(result) {
+			    	callback();
+			    	client.end();
+			    });
+			},
+			function(callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var patientIP = results[0].idip;
+				var employeeID = results[1].idemp;
+				client.query(
+				'INSERT INTO visitschedule(day,startTime,offsetTime,evoluation,idIp,idEmp) \
+				VALUES($1,$2,$3,$4,$5,$6)',
+				[req.body.date,req.body.time,'00:30',false, patientIP,employeeID]);
+				client.end();
+			},
+			],
+			function(err) {
+				console.log('ERROR');
+				if (err) return callback(err);
+		    	console.log('Both finished!');
+		});
+	}
+};
+
 exports.Input_information_for_patient = function(req,res){	
+	sess = req.session;
+    email = sess.email; 
+    const client = dataBase.ConnectToDataBase();
+	client.connect();
+	var now = new Date();
+	var time = (now.getHours() - (now.getMinutes() > '40:00' ? 1 : - 1)) + ':00';
+	//console.log(getDate(0, 1) + " " + time);
+	var sqlQuery = 'select * from visitschedule\
+					where day > \'' + getDate(0, 1) + '\'';
+	const query = client.query(sqlQuery);
+	var results = [];
+	query.on('row', function(row) {
+    	results.push(row);
+    });
+	query.on("end", function(result) {
+		console.log(results);
+    	client.end();
+    });
 	res.render('Input_information_for_patient');
 	//при нажатии на апоимент
 };
@@ -275,18 +335,30 @@ exports.declineAppointment = function(req, res) {
 	//client.query('DELETE FROM visitschedule WHERE ');
 };
 
+function getDate(inc, dec) {
+	var now = new Date();
+	var month = now.getMonth() + 1;
+	var day = now.getDate() + inc - dec;
+	var year = now.getFullYear();
+	return year + "-" + month + "-" + day;
+}
+
 exports.submitAD = function(req, res) {
+	sess = req.session;
+    email = sess.email; 
+	console.log(getDate(0, 0));
 	console.log(req.body.Description);
 	console.log(req.body.Diagnosis);
 }
 
 exports.submitScans = function(req, res) {
-	console.log(req.body.date);
+	console.log(getDate(0, 0));
 	console.log(req.body.title);
 	console.log(req.body.result);
 }
 
 exports.submitLabResult = function(req, res) {
+	console.log(getDate(0, 0));
 	console.log(req.body.type);
 	console.log(req.body.standart);
 	console.log(req.body.result);

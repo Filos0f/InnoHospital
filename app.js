@@ -43,6 +43,7 @@ app.use(function(err, req, res, next){
 
 app.get('/', 					require('./routes/index').index);
 
+// Patient handlers
 app.get('/patient', 			require('./routes/patient').patient);
 app.get('/patient_cabinet', 	require('./routes/patient').get_patient_cabinet);
 app.post('/patient_cabinet', 	require('./routes/patient').post_patient_cabinet);
@@ -53,10 +54,12 @@ app.get('/PatientCard', 		require('./routes/patient').medCard);
 app.get('/Scans', 				require('./routes/patient').scans);
 app.get('/analysis', 			require('./routes/patient').analysis);
 
+
+//Staff handlers
 app.get('/gotoprofile', 		require('./routes/staff').staffInfo);
 app.post('/signinStaff', 		require('./routes/staff').signinStaff);
 app.get('/staff', 				require('./routes/staff').staff);
-app.get('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
+app.post('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
 
 app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
 app.post('/epidStatBox',		require('./routes/staff').fillTheEpidemicBox);
@@ -65,6 +68,11 @@ app.post('/saveAnamAndDiag',	require('./routes/staff').saveAnamAndDiag);
 app.post('/labResultsDone', 	require('./routes/staff').labResultDone);
 app.post('/scanSave', 			require('./routes/staff').scanSave);
 app.post('/createNewAppointment',require('./routes/staff').createNewAppointment);
+app.post('/submitAD',			require('./routes/staff').submitAD);
+app.post('/submitLabResult',	require('./routes/staff').submitLabResult);
+app.post('/submitScans',		require('./routes/staff').submitScans);
+app.post('/declineAppointment',	require('./routes/staff').declineAppointment);
+app.post('/newAppointment', 	require('./routes/staff').newAppointment);
 
 http.createServer(app).listen(config.get('port'), function(){
   console.log('Express server listening on port ' + config.get('port'));
