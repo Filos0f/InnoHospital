@@ -134,36 +134,28 @@
         </div>
     </div>
   </div>
+<div class="container-fluid" id="right">
+  <div id="Rating" class="tabcontent">
+    <h2>Rating</h2>
 
-<div id="Rating" class="tabcontent">
-  <div class="container">
-  <h2>Staff's rating</h2>
-  <table style="width:100%; border: 1;
-            border-collapse: collapse;">
-        <div class="table-responsive" name="tableRep">
-                                            <table class="table table-striped" name="table">
-                                                <thead>
-                                                <tr id=firstRow>
-                                                    <th id=timeHeader>Position</th>
-                                                    <th id=firstNameHeader>first Name</th>
-                                                    <th id=firstNameHeader>second Name</th>
-                                                    <th id=firstNameHeader>rating</th>
-                                                </tr>
-                                                </thead>
-                                              <tbody>
-                                              {#rating}
-                                                <tr id=secondRow>
-                                                    <td class="PositionEmp" name="positionEmp">{title}</td>
-                                                    <td class="FirstName" name="firstName">{firstname}</td>
-                                                    <td class="SecondName" name="secondName">{secondname}</td>
-                                                    <td class="Rating" name="rating">{rating}</td>
-                                                </tr>
-                                                {/rating}
-                                              </tbody>
-                                            </table>
-                                        </div>
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Position</th>
+    <th>first name</th>
+    <th>second name</th>
+    <th>rating</th>
+  </tr>
+  {#rating}
+  <tr>
+    <td>{title}</td>
+    <td>{firstname}</td>
+    <td>{secondname}</td>
+    <td>{rating}</td>
+  </tr>
+   {/rating}
+</table>
 
-  </div>
 </div>
 </div>
 <div class="col-lg-7">
