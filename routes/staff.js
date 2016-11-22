@@ -4,6 +4,7 @@ var pg 			= require('pg');
 var md5 		= require('js-md5');
 var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
+var mymailer 	= require('./mymailer');
 
 function LoadStaffInformation(res, email, patientHandler) {
 	var results = [];
@@ -14,7 +15,7 @@ function LoadStaffInformation(res, email, patientHandler) {
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
 			client.connect();
-			console.log("FIRST CALLBACK!");
+			console.log("FIRST CALLBACK! " + email);
     		var sqlQuery = 
 			'SELECT * from person \
 			NATURAL JOIN employee \
@@ -152,7 +153,18 @@ exports.Input_information_for_patient = function(req,res){
 };
 
 exports.StaffMain = function(req,res) {
-    res.render('staffMain');
+    sess = req.session;
+    sess.email = req.body.email;
+	if(sess.email != null) {
+        LoadStaffInformation(res, sess.email, function (results, appointmentInfo, epidemy, rating) {
+            console.log(appointmentInfo);
+            console.log(epidemy);
+            console.log(rating);
+            res.render('staffMain', {patientappointment: appointmentInfo, epidemy: epidemy, rating: rating});
+        });
+    }
+    console.log("OHH");
+	res.render('staffMain');
 };
 
 
@@ -269,8 +281,9 @@ exports.newAppointment = function(req, res){
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
 	    		var sqlQuery = 'SELECT idemp from employee \
-	    						NATURAL JOIN person \
-	    						where idpos = \'' + req.body.doctor + '\''; 
+	    						NATURAL JOIN person p\
+	    						where idpos = \'' + req.body.doctor + '\' \
+								and p.secondname = \'' + req.body.doctorName + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 			    	results.push(row);
@@ -284,12 +297,35 @@ exports.newAppointment = function(req, res){
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
 				var employeeID = results[0].idemp;
-				client.query(
+				var query = client.query(
 				'INSERT INTO visitschedule(day,startTime,offsetTime,evoluation,idIp,idEmp) \
 				VALUES($1,$2,$3,$4,$5,$6)',
 				[req.body.date,req.body.time,'00:30',false, sess.idip,employeeID]);
-				client.end();
+                query.on("end", function(result) {
+                    callback();
+                    client.end();
+                });
 			},
+			function (callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var sqlQuery = 'SELECT email from patient \
+	    						NATURAL JOIN person \
+	    						where idip = \'' + sess.idip + '\'';
+				const query = client.query(sqlQuery);
+				query.on('row', function(row) {
+					results.push(row);
+				});
+				query.on("end", function(result) {
+					var patientMail = results[0].email;
+					var roomN = 108; // сюда номер комнаты!
+					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + req.body.doctor
+						+" на " + req.body.date + " " + req.body.time + " кабинет: " + roomN;
+					console.log("Maile sender, message: " + message + " to email: " + patientMail);
+					mymailer.SendNotification(patientMail, message);
+					client.end();
+				});
+			}
 			],
 			function(err) {
 				console.log('ERROR');
@@ -297,6 +333,7 @@ exports.newAppointment = function(req, res){
 		    	console.log('Both finished!');
 		});
 	}
+    res.render('Input_information_for_patient');
 };
 
 exports.Input_information_for_patient = function(req,res){	
@@ -512,47 +549,51 @@ exports.submitLabResult = function(req, res) {
 exports.signinStaff = function (req, res) {
 	console.log("-------------LOG signinStaff-----------");
 	sess = req.session;
-	sess.email = req.body.email;
+	    sess.email = req.body.email;
 
-	const staff = dataBase.ConnectToDataBase();
-	staff.connect();
-	console.log(req.body.hashpassword);
-	var sqlQuery =
-		'SELECT * from person \
-        NATURAL JOIN employee \
-        where email = \'' + req.body.email + '\'';
+        const staff = dataBase.ConnectToDataBase();
+        staff.connect();
+        console.log(req.body.hashpassword);
+        var sqlQuery =
+            'SELECT * from person \
+            NATURAL JOIN employee \
+            where email = \'' + req.body.email + '\'';
 
-	const query = staff.query(sqlQuery);
-	console.log(sqlQuery);
+        const query = staff.query(sqlQuery);
+        console.log(sqlQuery);
 
-	const result = [];
-	query.on('rows', function(row) {
-		console.log("------!!!!!!!!!--------" + row);
-		result.push(row);
-	});
-	console.log(sqlQuery);
+        const result = [];
+        query.on('rows', function (row) {
+            console.log("------!!!!!!!!!--------" + row);
+            result.push(row);
+        });
+        console.log(sqlQuery);
 
-	query.on("end", function(result){
-		if(result.rows[0] === undefined){
-				res.render('staff');
-		} else {
-			var hashsalt = result.rows[0].hashsalt;
-			if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-				LoadStaffInformation(res, sess.email, function(results, appointmentInfo, epidemy, rating) {
-					console.log(appointmentInfo);
-					console.log(epidemy);
-					console.log(rating);
-					res.render('staffMain', {patientappointment:appointmentInfo, epidemy:epidemy, rating:rating});
-				});
-				
-			}
-			else {
-				console.log("error2");
-				res.render('staff');
-			}
-		}
-		staff.end();
-    });
+        query.on("end", function (result) {
+            if (result.rows[0] === undefined) {
+                res.render('staff');
+            } else {
+                var hashsalt = result.rows[0].hashsalt;
+                if (md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
+                    LoadStaffInformation(res, sess.email, function (results, appointmentInfo, epidemy, rating) {
+                        console.log(appointmentInfo);
+                        console.log(epidemy);
+                        console.log(rating);
+                        res.render('staffMain', {
+                            patientappointment: appointmentInfo,
+                            epidemy: epidemy,
+                            rating: rating
+                        });
+                    });
+
+                }
+                else {
+                    console.log("error2");
+                    res.render('staff');
+                }
+            }
+            staff.end();
+        });
 };
 
 exports.fillTheEpidemicBox = function (req, res) {
