@@ -250,14 +250,16 @@ exports.newAppointment = function(req, res){
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
-                console.log("Here 3" + results[1].idemp + " " + results[0].idip);
                 var patientIP = results[0].idip;
 				var employeeID = results[1].idemp;
-				client.query(
+                console.log("Here 3 " + req.body.date + " " + req.body.time + " " + '00:30' + " " + patientIP + " " + employeeID);
+                var query = client.query(
 				'INSERT INTO visitschedule(day, startTime, offsetTime, idIp, idEmp, evoluation) \
 				VALUES($1,$2,$3,$4,$5,$6)',
 				[req.body.date, req.body.time, '00:30', patientIP, employeeID, false]);
-				client.end();
+                query.on("end", function(result) {
+                    client.end();
+                });
 			},
 			],
 			function(err) {
