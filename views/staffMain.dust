@@ -80,23 +80,23 @@
                         <th id=timeHeader>Date and Time</th>
                         <th id=firstNameHeader>First name</th>
                         <th id=secondNameHeader>Second name</th>
-                        <th id=ButtonsHeader>Work</th>
+                        <th id=ButtonsHeader>Insurence</th>
                         <!--<th id=mainCheckBox><input type="checkbox"/></th>-->
                     </tr>
                     </thead>
                     <tbody>
+
                     {#patientappointment}
+                    <form action='/appointmentBtt' method='post'>
                     <tr id=secondRow>
                         <td class="visistTimeTitle" name="visitTimeTitile">{day};&nbsp;{starttime}</td>
-                        <td class="FirstNameTitle" name="FirstNameTitle">{firstname}</td>
+                        <td class="FirstNameTitle"  name="FirstNameTitle">{firstname}</td>
                         <td class="SecondNameTitle" name="SecondNameTitle">{secondname}</td>
-                        <td class="declineButt" name="declineBtt" action='/pressBtt' method='get'>
+                        <td class="declineButt" name="declineBtt" action='/declineAppointment' method='get'>
                             <table>
                                 <tr>
                                     <td>
-                                        <form action='/appointmentBtt' method='get'>
-                                            <button class="btn btn-success appBtt" type='submit'>appointment</button>
-                                        </form>
+                                        <button class="btn btn-success appBtt" type='submit'>appointment</button>
                                     </td>
                                     <td>
                                         <form action='/declineAppointment' method='post'>
@@ -108,6 +108,7 @@
                         </td>
                         <!--<th class="checkboxTitle" name="checkboxTitle"><input type="checkbox"/></th>-->
                     </tr>
+                    </form>
                     {/patientappointment}
                     </tbody>
                 </table>

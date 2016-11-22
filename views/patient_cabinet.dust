@@ -250,7 +250,7 @@ $(function(){
             $('#sub_groups').find('option').show();
         }
         else {
-            sub.find('option').not(':first').hide();
+            sub.find('option').hide();
             $('option', sub).filter(function(){
                 if($(this).attr('data-group') == val){
                     $(this).show();
