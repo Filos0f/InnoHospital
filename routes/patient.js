@@ -206,11 +206,8 @@ exports.addPatient = function(req,res){
 };
 
 exports.newAppointment = function(req, res){
-	console.log("HEREEEEEEEEEEEEEEEEEE");
 	sess = req.session;
-	if(sess.email) {
 		var results = [];
-		var nameOfEmp = [];
 		async.series([
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
@@ -220,6 +217,7 @@ exports.newAppointment = function(req, res){
 	    		const query = client.query(sqlQuery);
 	    		query.on('row', function(row) {
 			    	results.push(row);
+			    	console.log("push");
 			    });  
 			    query.on("end", function(result) {
 			    	console.log("Here 1");
@@ -230,15 +228,20 @@ exports.newAppointment = function(req, res){
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
+                console.log(req.body.doctorName);
+                console.log(req.body.doctor);
 	    		var sqlQuery = 'SELECT idemp from employee \
-	    						NATURAL JOIN person \
-	    						where idpos = \'' + req.body.doctor + '\''; 
+	    						NATURAL JOIN person p\
+	    						where idpos = \'' + req.body.doctor + '\' \
+								and p.secondname = \'' + req.body.doctorName + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 			    	results.push(row);
+                    console.log("push");
+			    	console.log(row);
 			    });
 			    query.on("end", function(result) {
-			    	console.log("Here 2");
+			    	console.log("Here 2" + results[1] + " " + results[0]);
 			    	callback();
 			    	client.end();
 			    });
@@ -246,13 +249,16 @@ exports.newAppointment = function(req, res){
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
-				var patientIP = results[0].idip;
+                var patientIP = results[0].idip;
 				var employeeID = results[1].idemp;
-				client.query(
-				'INSERT INTO visitschedule(day,evoluation,idEmp,idIp,offsetTime,startTime) \
+                console.log("Here 3 " + req.body.date + " " + req.body.time + " " + '00:30' + " " + patientIP + " " + employeeID);
+                var query = client.query(
+				'INSERT INTO visitschedule(day, startTime, offsetTime, idIp, idEmp, evoluation) \
 				VALUES($1,$2,$3,$4,$5,$6)',
-				[req.body.date,false, employeeID, patientIP, '00:30', req.body.time]);
-				client.end();
+				[req.body.date, req.body.time, '00:30', patientIP, employeeID, false]);
+                query.on("end", function(result) {
+                    client.end();
+                });
 			},
 			],
 			function(err) {
@@ -260,7 +266,7 @@ exports.newAppointment = function(req, res){
 				if (err) return callback(err);
 		    	console.log('Both finished!');
 		});
-	}
+		res.redirect('patient_cabinet')
 };
 
 exports.medCard = function(req, res){
