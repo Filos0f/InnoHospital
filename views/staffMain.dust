@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link type="text/css" href="css/dashboard.css" rel="stylesheet">
-	
+
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/humanity/jquery-ui.css">
     <title>Staff main</title>
     <script type="text/javascript">
         function clock() {
@@ -17,7 +18,10 @@
         }
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" ></script>
 </head>
+
+<body>
 
 <body onload="clock()">
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -32,40 +36,35 @@
             </button>
             <a class="navbar-brand text" type="submit" id="headNavBar" name="navBar" href="/gotoprofile"
                action="/gotoprofile" method="post">InnoHospital</a>
+
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a id="profile" href="/gotoprofile" method="get">Profile</a></li>
-                <li><a href="/" id="exitStaff" action="/exitStaff" method="get">Exit</a></li>
+                <li><a href="/" id="exitStaff"  method="get">Exit</a></li>
             </ul>
 
         </div>
     </div>
 </nav>
 <div class="container-fluid">
+
     <div class="row">
-        <!--<div class="col-sm-3 col-md-2 sidebar">-->
-            <!--<ul class="nav nav-sidebar">-->
-                <!--<li name="recordSomePatient" action="/recordSomePatient" method="post" data-toggle="modal" data-target="#myModal"-->
-                    <!--onclick="openbox('recordPanelVal'); return false">-->
-                    <!--<a href="#">Epidemy status&lt;!&ndash;span class="sr-only">(current)</&#45;&#45;span&ndash;&gt;</a>-->
-                <!--</li>-->
-                <!--<li name="drugsForSomePatient" action="/drugsForSomePatient" method="get"><a href="#">Rating</a></li>-->
-                <!--<li name="inputInfoAboutSomePatient" action="/sayHello" method="use"><a href="#"></a>-->
-                <!--</li>-->
-            <!--</ul>-->
-        <!--</div>-->
+        
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li>
                     <a href="#" onclick = "openbox('FutureApoimentVal'); return false">Future Apoiment</a></li>
                 <li>
-                    <a href="#" onclick="openbox('EpidemyStatusVal'); return false">Epidemy status<!--span class="sr-only">(current)</--span--></a>
+                    <a href="#" onclick="openbox('EpidemyStatusVal'); return false">Epidemy status</a>
                 </li>
                 <li>
                     <a href="#" onclick = "openbox('RatingStaffVal'); return false">Rating</a></li>
                 </li>
             </ul>
+             <button type="button" style="margin-top: 360px; border-color: #CAFF70; border-width: 1.5px;" class="btn btn-success" data-toggle="modal" data-target="#Sch">
+                        Set Working Schedule
+            </button>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
             id="FutureApoimentVal" style="display:none">
@@ -80,8 +79,8 @@
                         <th id=timeHeader>Date and Time</th>
                         <th id=firstNameHeader>First name</th>
                         <th id=secondNameHeader>Second name</th>
-                        <th id=ButtonsHeader>Insurence</th>
-                        <!--<th id=mainCheckBox><input type="checkbox"/></th>-->
+                        
+                        
                     </tr>
                     </thead>
                     <tbody>
@@ -96,11 +95,11 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <button class="btn btn-success appBtt" type='submit'>appointment</button>
+                                        <button class="btn btn-success appBtt" type='submit'>Accept</button>
                                     </td>
                                     <td>
                                         <form action='/declineAppointment' method='post'>
-                                            <button style="margin-left: 10px;" class="btn btn-warning declineBtt">decline</button>
+                                            <button style="margin-left: 10px;" class="btn btn-warning declineBtt">Cancel</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -160,14 +159,50 @@
                                                 <td class="SecondName" name="secondName">{secondname}</td>
                                                 <td class="Rating" name="rating">{rating}</td>
                                             </tr>
-                                            {/rating}
+                                          {/rating}
                                           </tbody>
                                         </table>
                                     </div>
                 </div>
-    
 
+
+
+ <div class="modal fade" id="Sch" style="border-radius: 7px;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header" style="background-color: #66CD00;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title" id="myModalLabel" style="font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; color: white;">Set working shift</h2>
+      </div>
+
+                  <div class="modal-body">
+                  <h5 style="font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Set data and time</h5>
+                  <form method="post" action="/setShift">
+                          <input type='text' id='datepicker' placeholder='Select date' />&nbsp;
+                          <input type=time name="Start_time"   step=1200> 
+                          <input type=time name="Finish_time"   step=1200> 
+
+                  <div class="modal-footer">
+                  <input type="submit" class="btn btn-primary" value="Save">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+        </form>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+    
+</body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type='text/javascript'>
+$('#datepicker').datepicker({minDate:0});
+
    function openbox(id){
 		document.getElementById('FutureApoimentVal').style.display='none';
 		document.getElementById('EpidemyStatusVal').style.display='none';
