@@ -4,6 +4,7 @@ var pg 			= require('pg');
 var md5 		= require('js-md5');
 var dataBase 	= require('../libs/dbManagement');
 var async       = require('async');
+var mymailer 	= require('./mymailer');
 
 function LoadStaffInformation(res, email, patientHandler) {
 	var results = [];
@@ -288,8 +289,29 @@ exports.newAppointment = function(req, res){
 				'INSERT INTO visitschedule(day,startTime,offsetTime,evoluation,idIp,idEmp) \
 				VALUES($1,$2,$3,$4,$5,$6)',
 				[req.body.date,req.body.time,'00:30',false, sess.idip,employeeID]);
+				callback();
 				client.end();
 			},
+			function (callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
+				var sqlQuery = 'SELECT email from patient \
+	    						NATURAL JOIN person \
+	    						where idip = \'' + sess.idip + '\'';
+				const query = client.query(sqlQuery);
+				query.on('row', function(row) {
+					results.push(row);
+				});
+				query.on("end", function(result) {
+					var patientMail = results[0].email;
+					var roomN = 108; // сюда номер комнаты!
+					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + req.body.doctor
+						+" на " + req.body.date + " " + req.body.time + " кабинет: " + roomN;
+					console.log("Maile sender, message: " + message + " to email: " + patientMail);
+					mymailer.SendNotification(patientMail, message);
+					client.end();
+				});
+			}
 			],
 			function(err) {
 				console.log('ERROR');

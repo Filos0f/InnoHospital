@@ -5,10 +5,10 @@ var transporter = nodemailer.createTransport('smtps://innoprojecthospital@gmail.
 
 //Не знаю как, но надо вызывать эту функцию от куда-то и передавать ей с запросом сообщение
 //и мыло кому
-exports.SendNotification = function (req) {
+exports.SendNotification = function (email, message) {
 
-    var email = req.body.email;
-    var text = req.body.message;
+    //var email = req.body.email;
+    var text = message;
 // setup e-mail data with unicode symbols
     var mailOptions = {
         from: 'innoprojecthospital@gmail.com <innoprojecthospital@gmail.com>', // sender address
