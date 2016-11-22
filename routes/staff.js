@@ -281,8 +281,9 @@ exports.newAppointment = function(req, res){
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
 	    		var sqlQuery = 'SELECT idemp from employee \
-	    						NATURAL JOIN person \
-	    						where idpos = \'' + req.body.doctor + '\''; 
+	    						NATURAL JOIN person p\
+	    						where idpos = \'' + req.body.doctor + '\' \
+								and p.secondname = \'' + req.body.doctorName + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 			    	results.push(row);
@@ -296,12 +297,14 @@ exports.newAppointment = function(req, res){
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
 				var employeeID = results[0].idemp;
-				client.query(
+				var query = client.query(
 				'INSERT INTO visitschedule(day,startTime,offsetTime,evoluation,idIp,idEmp) \
 				VALUES($1,$2,$3,$4,$5,$6)',
 				[req.body.date,req.body.time,'00:30',false, sess.idip,employeeID]);
-				callback();
-				client.end();
+                query.on("end", function(result) {
+                    callback();
+                    client.end();
+                });
 			},
 			function (callback) {
 				const client = dataBase.ConnectToDataBase();
@@ -330,6 +333,7 @@ exports.newAppointment = function(req, res){
 		    	console.log('Both finished!');
 		});
 	}
+    res.render('Input_information_for_patient');
 };
 
 exports.Input_information_for_patient = function(req,res){	
