@@ -263,8 +263,10 @@ exports.signinStaff = function (req, res) {
 
 exports.newAppointment = function(req, res){
 	sess = req.session;
+ 
 	if(sess.idip) {
 		var results = [];
+		var doctorInfRet = [];
 		async.series([
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
@@ -295,23 +297,50 @@ exports.newAppointment = function(req, res){
 			function (callback) {
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
+				var sqlQuery = 'select title,roomn\
+									from person natural join employee natural join positions\
+									where idpos=\''+req.body.doctor+'\' and secondname=\''+req.body.doctorName+'\'';
+				const query = client.query(sqlQuery);
+				
+				query.on('row', function(row) {
+					doctorInfRet.push(row);
+					 
+					
+				});
+				query.on("end", function(result) {
+					 
+					 callback();
+
+					 client.end();
+				});
+			},
+
+			function (callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
 				var sqlQuery = 'SELECT email from patient \
 	    						NATURAL JOIN person \
 	    						where idip = \'' + sess.idip + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 					results.push(row);
+					
 				});
 				query.on("end", function(result) {
-					var patientMail = results[0].email;
-					var roomN = 108; // сюда номер комнаты!
-					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + req.body.doctor
-						+" на " + req.body.date + " " + req.body.time + " кабинет: " + roomN;
-					console.log("Maile sender, message: " + message + " to email: " + patientMail);
+					
+					var patientMail = results[2].email;
+					var roomN = doctorInfRet[0].roomn; // сюда номер комнаты!
+					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + doctorInfRet[0].title
+						+" на " + req.body.date + " " + req.body.time + " кабинет: " + doctorInfRet[0].roomn;
+					console.log("Mail sender, message: " + message + " to email: " + patientMail);
 					mymailer.SendNotification(patientMail, message);
-					client.end();
+					 
+					 client.end();
 				});
 			}
+
+
+
 			],
 			function(err) {
 				console.log('ERROR');
