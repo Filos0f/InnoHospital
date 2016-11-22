@@ -165,8 +165,7 @@
                                           {/labinformation}
                                           <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;" align="center">X-rays</p>
                                           {#scans}
-                                          Date: {day}<br>
-                                          <div class="well" style="background-color: #FFE4B5;">{description}</div>
+                                          Date: {day}
                                           <img src={title} width="100" height="80" />
                                           {/scans}
                                           </div>
@@ -230,15 +229,18 @@
                                 <th><p id="result">Result</p></th>
                           </tr>
                           <tr>
+                          <tr>
                           <form method="post" action="/submitLabResult">
                                
                                 <td>
-                                      <input style="padding:5px; margin: 10px;width: 200px;" id="textbox2" type="text" /><br/>
+                                      
                                       <select style="width: 200px;padding:10px;margin:10px; " id="select2" name="Diagnosis">
                                       {#labtypes}
                                         <option class="1" value={idTitle}>{title}</option>
                                       {/labtypes}
                                       </select>
+                                      <br/>
+                                      <input style="padding:5px; margin: 10px;width: 200px;" id="textbox2" type="text" />
                                 </td>
                                 <td><input style="padding:5px; margin: 10px;width: 100px;"type="form-control" name="standart"></td>
                                 <td><input style="padding:5px; margin: 10px;width: 100px;"type="form-control" name="result"></td>
@@ -257,18 +259,13 @@
                     	<div class="panel-heading">
                         	Scans
                         </div>
-                        <form action="/submitScans" method="post">
                         <div class="panel-body">
                         	<div class="text-primary" id="commonFieldOfGenAnalVal">
                             	<div class="col-lg-5"> 
-                                <h4>Type</h4>
-                                  <select name="scantype" id="scantype">
-                                    {#scanstype} 
-                                    <option value="{idtitle}">{title}</option>
-                                    {/scanstype} 
-                                  </select>
+                                <h4>Name</h4>
+                                <input type="form-control" name="analysis-title"> 
                                 <h4>Conclusion</h4>
-                                <input type="form-control" name="conclusion"> 
+                                <input type="form-control" name="analysis-result"> 
                                 </div>
                                 <div class="col-md-6">
                                     <div class="well">
@@ -278,9 +275,8 @@
                                 </div>
                                  
                             </div>
-                            <input type="submit" style="float: right;" value="Save" class="btn btn-info">
+                            <button class="btn-primary btn" style="float: left;">Save</button>
                         </div> 
-                        </form>
                     </div>
 
                    
@@ -325,12 +321,15 @@
       $("select option").click(function(){
         alert(1);
       });
-       $(function() {
+    });
+
+$(function() {
         $('#select2').filterByText($('#textbox2'), false);
       $("select option").click(function(){
         alert(1);
       });
     });
+
 
 	function openbox(id){
 		document.getElementById('ReportPage').style.display='none';
