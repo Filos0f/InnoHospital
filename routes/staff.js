@@ -262,7 +262,7 @@ exports.signinStaff = function (req, res) {
 
 exports.newAppointment = function(req, res){
 	sess = req.session;
-	if(sess.email) {
+	if(sess.idip) {
 		var results = [];
 		async.series([
 			function(callback) {
@@ -283,12 +283,11 @@ exports.newAppointment = function(req, res){
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
-				var patientIP = results[0].idip;
-				var employeeID = results[1].idemp;
+				var employeeID = results[0].idemp;
 				client.query(
 				'INSERT INTO visitschedule(day,startTime,offsetTime,evoluation,idIp,idEmp) \
 				VALUES($1,$2,$3,$4,$5,$6)',
-				[req.body.date,req.body.time,'00:30',false, patientIP,employeeID]);
+				[req.body.date,req.body.time,'00:30',false, sess.idip,employeeID]);
 				client.end();
 			},
 			],
@@ -307,7 +306,7 @@ exports.Input_information_for_patient = function(req,res){
 	client.connect();
 	var now = new Date();
 	//var time = (now.getHours() - (now.getMinutes() > '40:00' ? 1 : - 1)) + ':00';
-	var sqlQuery = 'select * from visitschedule\
+	var sqlQuery = 'select idip from visitschedule\
 					where day > \'' + getDate(0, 1) + '\'';
 	const query = client.query(sqlQuery);
 	var results = [];
@@ -315,7 +314,7 @@ exports.Input_information_for_patient = function(req,res){
     	results.push(row);
     });
 	query.on("end", function(result) {
-		console.log(results);
+		sess.idip = results[0].idip;
     	client.end();
     });
 

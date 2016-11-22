@@ -85,7 +85,7 @@
       <div class="modal-body">
       <h3>Set data</h3>
 
-      <form method="post" action="/newAppointment">
+      <form method="post" action="/newAppointmentFromDoctor">
       
        <span>
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
@@ -107,7 +107,7 @@
                         <option  data-group="{idpos}" value='{secondname}'>{firstname}&nbsp;{secondname}</option>
                     {/nameofemp}
                          
-                    <select>
+                    </select>
                     </span>
                </div>
 
@@ -149,18 +149,26 @@
                                     <div class="modal-body">
                                         <div class="well">
                                         <h3 style=" font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Patient History</h3>
-                                            <p style="color: #00BFFF; font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Anamnesis</p>
-                                          <div class="well" style="background-color: #FFE4B5;"></div>
+                                          <p style="color: #00BFFF; font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;" align="center">Anamnesis</p>
+                                          {#generalinfo}
+                                          Date: {day}
+                                          <div class="well" style="background-color: #FFE4B5;">
+                                          {title}
+                                          </div>
                                           <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;">Diagnosis</p>
-                                          <h5 style="font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Diagnosis name goes here</h5>
-                                          <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;">Lab analysis reports</p>
-                                          <div class="well" style="background-color: #FFE4B5;"></div>
-                                          {#medHistory}
-                                          
-
-
-                                          {/medHistory}
-                                                 </div>
+                                          <h5 style="font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">{title}</h5>
+                                          {/generalinfo}
+                                          <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;" align="center">Lab analysis reports</p>
+                                          {#labinformation}
+                                          Date: {day}
+                                          <div class="well" style="background-color: #FFE4B5;">{title}</div>
+                                          {/labinformation}
+                                          <p style="color: #00BFFF; font-family: 'Comic Sans MS', cursive, sans-serif;" align="center">X-rays</p>
+                                          {#scans}
+                                          Date: {day}
+                                          <img src={title} width="100" height="80" />
+                                          {/scans}
+                                          </div>
 
                                       </div>
 

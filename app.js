@@ -74,7 +74,7 @@ app.post('/submitAD',			require('./routes/staff').submitAD);
 app.post('/submitLabResult',	require('./routes/staff').submitLabResult);
 app.post('/submitScans',		require('./routes/staff').submitScans);
 app.post('/declineAppointment',	require('./routes/staff').declineAppointment);
-app.post('/newAppointment', 	require('./routes/staff').newAppointment);
+app.post('/newAppointmentFromDoctor', 	require('./routes/staff').newAppointment);
 
 
 
