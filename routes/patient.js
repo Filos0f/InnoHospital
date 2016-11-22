@@ -206,7 +206,6 @@ exports.addPatient = function(req,res){
 };
 
 exports.newAppointment = function(req, res){
-	console.log("HEREEEEEEEEEEEEEEEEEE");
 	sess = req.session;
 	if(sess.email) {
 		var results = [];
