@@ -233,8 +233,8 @@
                           <form method="post" action="/submitLabResult">
                                
                                 <td>
-                                      <input style="padding:5px; margin: 10px;width: 200px;" id="textbox" type="text" /><br/>
-                                      <select style="width: 200px;padding:10px;margin:10px; " id="select" name="Diagnosis">
+                                      <input style="padding:5px; margin: 10px;width: 200px;" id="textbox2" type="text" /><br/>
+                                      <select style="width: 200px;padding:10px;margin:10px; " id="select2" name="Diagnosis">
                                       {#labtypes}
                                         <option class="1" value={idTitle}>{title}</option>
                                       {/labtypes}
@@ -322,6 +322,11 @@
 
     $(function() {
         $('#select').filterByText($('#textbox'), false);
+      $("select option").click(function(){
+        alert(1);
+      });
+       $(function() {
+        $('#select2').filterByText($('#textbox2'), false);
       $("select option").click(function(){
         alert(1);
       });
