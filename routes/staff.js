@@ -49,41 +49,41 @@ function LoadStaffInformation(res, email, patientHandler) {
 		    	client.end();
 		    });
 		},
-			function(callback) {
-				const client = dataBase.ConnectToDataBase();
-				client.connect();
-				var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
-								from employee\
-								natural join person per\
-								natural join positions p\
-								order by rating';
-				console.log(sqlQuery);
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
+							from employee\
+							natural join person per\
+							natural join positions p\
+							order by rating';
+			console.log(sqlQuery);
 
-				const query = client.query(sqlQuery);
-				query.on('row', function(row){
-					rating.push(row);
-				});
-				query.on("end", function(result){
-					callback();
-					client.end();
-				});
-			},
-			function(callback) {
-				const client = dataBase.ConnectToDataBase();
-				client.connect();
-				var sqlQuery = 'select title, rate from DiagnosisInfo\
-									order by rate';
-				console.log(sqlQuery);
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+				rating.push(row);
+			});
+			query.on("end", function(result){
+				callback();
+				client.end();
+			});
+		},
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			var sqlQuery = 'select title, rate from DiagnosisInfo\
+								order by rate';
+			console.log(sqlQuery);
 
-				const query = client.query(sqlQuery);
-				query.on('row', function(row){
-					epedemy.push(row);
-				});
-				query.on("end", function(result){
-					callback();
-					client.end();
-				});
-			},
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+				epedemy.push(row);
+			});
+			query.on("end", function(result){
+				callback();
+				client.end();
+			});
+		},
 
 		function(callback) {
 			patientHandler(results, appointmentInfo, epedemy, rating);
@@ -511,38 +511,74 @@ exports.submitAD = function(req, res) {
 
 exports.submitScans = function(req, res) {
 	sess = req.session;
-	//const client = dataBase.ConnectToDataBase();
-	//client.connect();
-	var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.scantype +'\', (SELECT COUNT(*)+1 FROM conclusion))\
-					INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))\
-					INSERT INTO xray VALUES(\''+'scan'+'\', \''+req.body.conclusion+'\', (SELECT COUNT(*) FROM conclusion))\'';
-					/*
-	var query = client.query(sqlQuery);
-	query.on("end", function(result){
-		client.end();
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+	async.series([
+		function(callback) {
+            var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.scantype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
+					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO xray VALUES(\''+'scan'+'\', \''+req.body.conclusion+'\', (SELECT COUNT(*) FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+                client.end();
+            });
+		},
+		],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
 	});
-	*/
-
 }
 
 exports.submitLabResult = function(req, res) {
 	sess = req.session;
-	//const client = dataBase.ConnectToDataBase();
-	//client.connect();
-	var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))\
-					INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))\
-					INSERT INTO generalizedAnalysis VALUES(\''+
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+	async.series([
+		function(callback) {
+            var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
+					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO generalizedAnalysis VALUES(\''+
 					'(SELECT idTitle FROM generalizedAnalysisTitles where title=\''+req.body.analystype+'\')'
 					+'\',(SELECT COUNT(*) FROM conclusion),\''+req.body.result+'\','+req.body.standart+')\'';
-	console.log(sqlQuery);
-/*
-	var query = client.query(sqlQuery);
-	query.on("end", function(result){
-		client.end();
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+                client.end();
+            });
+		},
+		],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
 	});
-	*/
 }
 
 /*Авторизация врача*/
