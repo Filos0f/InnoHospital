@@ -49,41 +49,41 @@ function LoadStaffInformation(res, email, patientHandler) {
 		    	client.end();
 		    });
 		},
-			function(callback) {
-				const client = dataBase.ConnectToDataBase();
-				client.connect();
-				var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
-								from employee\
-								natural join person per\
-								natural join positions p\
-								order by rating';
-				console.log(sqlQuery);
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			var sqlQuery = 'select p.title, per.firstname, per.secondname, rating\
+							from employee\
+							natural join person per\
+							natural join positions p\
+							order by rating';
+			console.log(sqlQuery);
 
-				const query = client.query(sqlQuery);
-				query.on('row', function(row){
-					rating.push(row);
-				});
-				query.on("end", function(result){
-					callback();
-					client.end();
-				});
-			},
-			function(callback) {
-				const client = dataBase.ConnectToDataBase();
-				client.connect();
-				var sqlQuery = 'select title, rate from DiagnosisInfo\
-									order by rate';
-				console.log(sqlQuery);
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+				rating.push(row);
+			});
+			query.on("end", function(result){
+				callback();
+				client.end();
+			});
+		},
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			var sqlQuery = 'select title, rate from DiagnosisInfo\
+								order by rate';
+			console.log(sqlQuery);
 
-				const query = client.query(sqlQuery);
-				query.on('row', function(row){
-					epedemy.push(row);
-				});
-				query.on("end", function(result){
-					callback();
-					client.end();
-				});
-			},
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+				epedemy.push(row);
+			});
+			query.on("end", function(result){
+				callback();
+				client.end();
+			});
+		},
 
 		function(callback) {
 			patientHandler(results, appointmentInfo, epedemy, rating);
@@ -278,8 +278,10 @@ exports.staff = function(req, res) {
 
 exports.newAppointment = function(req, res){
 	sess = req.session;
+ 
 	if(sess.idip) {
 		var results = [];
+		var doctorInfRet = [];
 		async.series([
 			function(callback) {
 				const client = dataBase.ConnectToDataBase();
@@ -313,23 +315,50 @@ exports.newAppointment = function(req, res){
 			function (callback) {
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
+				var sqlQuery = 'select title,roomn\
+									from person natural join employee natural join positions\
+									where idpos=\''+req.body.doctor+'\' and secondname=\''+req.body.doctorName+'\'';
+				const query = client.query(sqlQuery);
+				
+				query.on('row', function(row) {
+					doctorInfRet.push(row);
+					 
+					
+				});
+				query.on("end", function(result) {
+					 
+					 callback();
+
+					 client.end();
+				});
+			},
+
+			function (callback) {
+				const client = dataBase.ConnectToDataBase();
+				client.connect();
 				var sqlQuery = 'SELECT email from patient \
 	    						NATURAL JOIN person \
 	    						where idip = \'' + sess.idip + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 					results.push(row);
+					
 				});
 				query.on("end", function(result) {
-					var patientMail = results[0].email;
-					var roomN = 108; // сюда номер комнаты!
-					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + req.body.doctor
-						+" на " + req.body.date + " " + req.body.time + " кабинет: " + roomN;
-					console.log("Maile sender, message: " + message + " to email: " + patientMail);
+					
+					var patientMail = results[2].email;
+					var roomN = doctorInfRet[0].roomn; // сюда номер комнаты!
+					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + doctorInfRet[0].title
+						+" на " + req.body.date + " " + req.body.time + " кабинет: " + doctorInfRet[0].roomn;
+					console.log("Mail sender, message: " + message + " to email: " + patientMail);
 					mymailer.SendNotification(patientMail, message);
-					client.end();
+					 
+					 client.end();
 				});
 			}
+
+
+
 			],
 			function(err) {
 				console.log('ERROR');
@@ -515,38 +544,77 @@ exports.submitAD = function(req, res) {
 
 exports.submitScans = function(req, res) {
 	sess = req.session;
-	//const client = dataBase.ConnectToDataBase();
-	//client.connect();
-	var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.scantype +'\', (SELECT COUNT(*)+1 FROM conclusion))\
-					INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))\
-					INSERT INTO xray VALUES(\''+'scan'+'\', \''+req.body.conclusion+'\', (SELECT COUNT(*) FROM conclusion))\'';
-					/*
-	var query = client.query(sqlQuery);
-	query.on("end", function(result){
-		client.end();
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+	async.series([
+		function(callback) {
+            var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.scantype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
+					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO xray VALUES(\''+'scan'+'\', \''+req.body.conclusion+'\', (SELECT COUNT(*) FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                callback();
+                client.end();
+            });
+		},
+		],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
 	});
-	*/
-
 }
 
 exports.submitLabResult = function(req, res) {
 	sess = req.session;
-	//const client = dataBase.ConnectToDataBase();
-	//client.connect();
-	var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))\
-					INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))\
-					INSERT INTO generalizedAnalysis VALUES(\''+
+	const client = dataBase.ConnectToDataBase();
+	client.connect();
+	async.series([
+		function(callback) {
+            var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+				console.log("First query");
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
+					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                console.log("Second query");
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO generalizedAnalysis VALUES(\''+
 					'(SELECT idTitle FROM generalizedAnalysisTitles where title=\''+req.body.analystype+'\')'
 					+'\',(SELECT COUNT(*) FROM conclusion),\''+req.body.result+'\','+req.body.standart+')\'';
-	console.log(sqlQuery);
-/*
-	var query = client.query(sqlQuery);
-	query.on("end", function(result){
-		client.end();
+            const query = client.query(sqlQuery);
+			query.on("end", function(result) {
+                console.log("Threed query");
+                callback();
+                client.end();
+            });
+		},
+		],
+		function(err) {
+			if (err) return callback(err);
+	    	console.log('Both finished!');
 	});
-	*/
 }
 
 /*Авторизация врача*/
