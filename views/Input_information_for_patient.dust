@@ -234,9 +234,9 @@
                                
                                 <td>
                                       
-                                      <select style="width: 200px;padding:10px;margin:10px; " id="select2" name="Diagnosis">
+                                      <select style="width: 200px;padding:10px;margin:10px; " id="select2" name="analystype">
                                       {#labtypes}
-                                        <option class="1" value={idTitle}>{title}</option>
+                                        <option class="1" value={idtitle}>{title}</option>
                                       {/labtypes}
                                       </select>
                                       <br/>

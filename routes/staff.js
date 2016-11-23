@@ -582,6 +582,7 @@ exports.submitLabResult = function(req, res) {
             var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
+				console.log("First query");
                 callback();
             });
 		},
@@ -590,6 +591,7 @@ exports.submitLabResult = function(req, res) {
 					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
+                console.log("Second query");
                 callback();
             });
 		},
@@ -599,6 +601,7 @@ exports.submitLabResult = function(req, res) {
 					+'\',(SELECT COUNT(*) FROM conclusion),\''+req.body.result+'\','+req.body.standart+')\'';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
+                console.log("Threed query");
                 callback();
                 client.end();
             });
