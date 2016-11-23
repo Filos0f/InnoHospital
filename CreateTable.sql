@@ -1,8 +1,7 @@
 drop table Prescription;
 drop table Drug;
-drop table DiagnosisHasInfo;
-drop table DiagnosisInfo;
 drop table diagnosis;
+drop table DiagnosisInfo;
 drop table generalizedAnalysis;
 drop table generalizedAnalysisTitles;
 drop table XRay;
@@ -139,6 +138,14 @@ create table generalizedAnalysis (
 	foreign key (idTitle) references generalizedAnalysisTitles
 );
 
+create table DiagnosisInfo (
+	title varchar(256),
+	idTitle int,
+	nationalCode varchar(20),
+	rate real default(0),
+	primary key (idTitle)
+);
+
 create table diagnosis (
 	idTitle int,
 	idConclusion int,
@@ -146,14 +153,6 @@ create table diagnosis (
 	primary key (idConclusion),
 	foreign key (idConclusion) references Conclusion,
 	foreign key (idTitle) references DiagnosisInfo
-);
-
-create table DiagnosisInfo (
-	title varchar(256),
-	idTitle int,
-	nationalCode varchar(20),
-	rate real default(0),
-	primary key (idTitle)
 );
 
 create table Drug (

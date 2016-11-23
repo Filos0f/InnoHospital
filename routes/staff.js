@@ -139,13 +139,6 @@ exports.staffInfo = function(req, res, next){
     //res.render('staffMyInfo');
 };
 
-exports.staff = function(req, res) {
-
-    console.log("------------- Staff init -----------");
-
-    res.render('staff');
-};
-
 exports.Input_information_for_patient = function(req,res){
 	console.log(req.body.fname);
 	console.log(req.body.SecondNameTitle);
@@ -169,21 +162,33 @@ exports.StaffMain = function(req,res) {
 
 
 /*Авторизация врача*/
-exports.signinStaff = function (req, res) {
-    console.log("-------------LOG signinStaff-----------");
-    sess = req.session;
-    sess.email = req.body.email;
+exports.staff = function(req, res) {
+    console.log("------------- Staff init -----------");
+
+    var analizesTitle = JSON.parse(fs.readFileSync("title_of_analizis", "utf8"));
+    console.log("------------- Staff init 1-----------");
+    var diagnosesType = JSON.parse(fs.readFileSync("type_of_diagnoses", "utf8"));
+    console.log("------------- Staff init 2-----------");
+    var analizesType = JSON.parse(fs.readFileSync("type_of_typeAnaliz", "utf8"));
+    console.log("------------- Staff init 3-----------");
+    var EmployeePositionsId = JSON.parse(fs.readFileSync("types_of_id_employee", "utf8"));
+    console.log("------------- Staff init 4-----------");
+    var allStaff = JSON.parse(fs.readFileSync("Staff.txt", "utf8"));
+
+
+    console.log("------------- Staff init -----------");
 
     const staff = dataBase.ConnectToDataBase();
     staff.connect();
-    console.log(req.body.hashpassword);
 
 	function hash(key) {
+		var h = 0;
 		for (p = 0; p != key.length; p++) {
 			h = h * 31 + key.charAt(p);
 		}
 		return h;
 	};
+
 	console.log("------------- Staff position -----------");
 
     async.series([
@@ -268,7 +273,6 @@ exports.signinStaff = function (req, res) {
     ], function (err) {
         if(err) callback(err);
     });
-    console.log(sqlQuery);
 	res.render('staff');
 };
 
