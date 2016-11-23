@@ -37,7 +37,8 @@ function LoadStaffInformation(res, email, patientHandler) {
 							from patient p\
 							natural join visitschedule v \
 							natural join person per \
-							where idemp=\'' + results[0].idemp +'\''; 
+							where idemp=\'' + results[0].idemp +'\'' +
+							'order by v.day, v.starttime';
 			console.log(sqlQuery);
 
 			const query = client.query(sqlQuery);
@@ -330,22 +331,29 @@ exports.newAppointment = function(req, res){
 			},
 
 			function (callback) {
+				results = [];
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
-				var sqlQuery = 'SELECT email from patient \
+				var sqlQuery = 'SELECT email FROM patient \
 	    						NATURAL JOIN person \
-	    						where idip = \'' + sess.idip + '\'';
+	    						WHERE idip = \'' + sess.idip + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 					results.push(row);
 					
 				});
 				query.on("end", function(result) {
-					
-					var patientMail = results[2].email;
+					console.log("idip: " + sess.idip + "\n" + "results: " + results);
+					for(var i =0; i<results.length; i++) {
+						console.log(results[0].email);
+						for(var j=0; j<results[i].length; j++) {
+							console.log(results[i][j]);
+						}
+					}
+					var patientMail = results[0].email;
 					var roomN = doctorInfRet[0].roomn; // сюда номер комнаты!
 					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + doctorInfRet[0].title
-						+" на " + req.body.date + " " + req.body.time + " кабинет: " + doctorInfRet[0].roomn;
+						+" на " + req.body.date + " " + req.body.time + " кабинет: " + roomN;
 					console.log("Mail sender, message: " + message + " to email: " + patientMail);
 					mymailer.SendNotification(patientMail, message);
 					 
