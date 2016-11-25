@@ -149,6 +149,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="well">
+                                        <img src="http://images.pcmac.org/Uploads/SunflowerCountyCSD/SunflowerCountyCSD/Sites/News/got-questions.jpg" alt="Smiley face" height="42" width="42">
                                         <h3 style=" font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Patient History</h3>
                                           <p style="color: #00BFFF; font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;" align="center">Anamnesis</p>
                                           {#generalinfo}
