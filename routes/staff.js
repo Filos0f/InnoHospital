@@ -37,7 +37,8 @@ function LoadStaffInformation(res, email, patientHandler) {
 							from patient p\
 							natural join visitschedule v \
 							natural join person per \
-							where idemp=\'' + results[0].idemp +'\''; 
+							where idemp=\'' + results[0].idemp +'\'' +
+							'order by v.day, v.starttime';
 			console.log(sqlQuery);
 
 			const query = client.query(sqlQuery);
@@ -139,19 +140,14 @@ exports.staffInfo = function(req, res, next){
     //res.render('staffMyInfo');
 };
 
-exports.staff = function(req, res) {
-
-    console.log("------------- Staff init -----------");
-
-    res.render('staff');
-};
-
+/*
 exports.Input_information_for_patient = function(req,res){
-	console.log(req.body.fname);
-	console.log(req.body.SecondNameTitle);
+
+	//console.log(req.body.fname);
+	//console.log(req.body.SecondNameTitle);
     res.render('Input_information_for_patient');
 };
-
+*/
 exports.StaffMain = function(req,res) {
     sess = req.session;
     sess.email = req.body.email;
@@ -169,21 +165,31 @@ exports.StaffMain = function(req,res) {
 
 
 /*Авторизация врача*/
-exports.signinStaff = function (req, res) {
-    console.log("-------------LOG signinStaff-----------");
-    sess = req.session;
-    sess.email = req.body.email;
+exports.staff = function(req, res) {
+    console.log("------------- Staff init -----------");
+
+    var analizesTitle = JSON.parse(fs.readFileSync("title_of_analizis", "utf8"));
+    console.log("------------- Staff init 1-----------");
+    var diagnosesType = JSON.parse(fs.readFileSync("type_of_diagnoses", "utf8"));
+    console.log("------------- Staff init 3-----------");
+    var EmployeePositionsId = JSON.parse(fs.readFileSync("types_of_id_employee", "utf8"));
+    console.log("------------- Staff init 4-----------");
+    var allStaff = JSON.parse(fs.readFileSync("Staff.txt", "utf8"));
+
+
+    console.log("------------- Staff init -----------");
 
     const staff = dataBase.ConnectToDataBase();
     staff.connect();
-    console.log(req.body.hashpassword);
 
 	function hash(key) {
+		var h = 0;
 		for (p = 0; p != key.length; p++) {
 			h = h * 31 + key.charAt(p);
 		}
 		return h;
 	};
+
 	console.log("------------- Staff position -----------");
 
     async.series([
@@ -236,23 +242,14 @@ exports.signinStaff = function (req, res) {
 					   );
 
 				   }
-				   for(var k = 0; k < analizesType.length; ++k)
+				   for(var k = 0; k < analizesTitle.length; ++k)
 				   {
 					   console.log(k);
 					   db.query(
-						   'INSERT INTO conclusiontypes(idtype, title) \
+						   'INSERT INTO conclusiontypes(idtitle, title) \
                                VALUES($1,$2)',
-						   [analizesType[k]['id'], analizesType[k]['value']]
+						   [analizesTitle[k]['id'], analizesTitle[k]['title']]
 					   );
-				   }
-				   for(var m = 0; m < analizesTitle.length; ++m) {
-					   for (var j = 0; j < analizesTitle[m]['value'].length; ++j) {
-						   console.log(analizesTitle[m]['value'][j]['id'] + " " + analizesTitle[m]['value'][j]['title'] + " " + analizesTitle[m]['idType']);
-						   db.query(
-							   'INSERT INTO generalizedAnalysisTitles(idtitle, title, idType) \
-                VALUES($1,$2, $3)',
-							   [analizesTitle[m]['value'][j]['id'], analizesTitle[m]['value'][j]['title'], analizesTitle[m]['idType']]);
-					   }
 				   }
 				   for(var t = 0; t < diagnosesType.length; t++)
 				   {
@@ -268,7 +265,6 @@ exports.signinStaff = function (req, res) {
     ], function (err) {
         if(err) callback(err);
     });
-    console.log(sqlQuery);
 	res.render('staff');
 };
 
@@ -330,22 +326,29 @@ exports.newAppointment = function(req, res){
 			},
 
 			function (callback) {
+				results = [];
 				const client = dataBase.ConnectToDataBase();
 				client.connect();
-				var sqlQuery = 'SELECT email from patient \
+				var sqlQuery = 'SELECT email FROM patient \
 	    						NATURAL JOIN person \
-	    						where idip = \'' + sess.idip + '\'';
+	    						WHERE idip = \'' + sess.idip + '\'';
 				const query = client.query(sqlQuery);
 				query.on('row', function(row) {
 					results.push(row);
 					
 				});
 				query.on("end", function(result) {
-					
-					var patientMail = results[2].email;
+					console.log("idip: " + sess.idip + "\n" + "results: " + results);
+					for(var i =0; i<results.length; i++) {
+						console.log(results[0].email);
+						for(var j=0; j<results[i].length; j++) {
+							console.log(results[i][j]);
+						}
+					}
+					var patientMail = results[0].email;
 					var roomN = doctorInfRet[0].roomn; // сюда номер комнаты!
 					var message = "Добрый день! \n Вы записаны к врачу: " + req.body.doctorName+ " " + doctorInfRet[0].title
-						+" на " + req.body.date + " " + req.body.time + " кабинет: " + doctorInfRet[0].roomn;
+						+" на " + req.body.date + " " + req.body.time + " кабинет: " + roomN;
 					console.log("Mail sender, message: " + message + " to email: " + patientMail);
 					mymailer.SendNotification(patientMail, message);
 					 
@@ -434,8 +437,8 @@ exports.Input_information_for_patient = function(req,res){
         function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT * FROM generalizedAnalysisTitles \
-							WHERE idtype = \'2\'';
+            var sqlQuery = 'SELECT * FROM conclusiontypes \
+							WHERE idtitle > \'200\' AND idtitle < \'300\'';
             const query = client.query(sqlQuery);
             query.on('row', function(row) {
                 typeXrayRet.push(row);
@@ -464,9 +467,8 @@ exports.Input_information_for_patient = function(req,res){
 		function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT title, result from generalizedAnalysis \
+            var sqlQuery = 'SELECT title, result from ConclusionTypes \
 							NATURAL JOIN conclusion\
-							NATURAL JOIN ConclusionTypes \
 							NATURAL JOIN result\
 							NATURAL JOIN patient\
 							WHERE idip =\''+results[0].idip+'\'';
@@ -482,7 +484,8 @@ exports.Input_information_for_patient = function(req,res){
 		function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT * FROM generalizedAnalysisTitles';
+
+            var sqlQuery = 'SELECT * FROM conclusiontypes';
             const query = client.query(sqlQuery);
             query.on('row', function(row) {
                 labtypesRet.push(row);
@@ -536,12 +539,13 @@ exports.submitAD = function(req, res) {
 	console.log(getDate(0, 0));
 	console.log(req.body.Anamnesis);
 	console.log(req.body.Diagnosis);
-}
+};
 
 exports.submitScans = function(req, res) {
 	sess = req.session;
 	const client = dataBase.ConnectToDataBase();
 	client.connect();
+	var idEmpRet = [];
 	async.series([
 		function(callback) {
             var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.scantype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
@@ -551,8 +555,20 @@ exports.submitScans = function(req, res) {
             });
 		},
 		function(callback) {
-            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+'\'';
+            const query = client.query(sqlQuery);
+            query.on("on", function(result) {
+            	console.log('HERE');
+            	idEmpRet.push(result);
+            });
+			query.on("end", function(result) {
+                callback();
+            });
+		},
+		function(callback) {
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '
+            +req.session.idip+', \''
+			+ idEmpRet.idEmp+ ', (SELECT COUNT(*) FROM conclusion))';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
                 callback();
@@ -577,8 +593,10 @@ exports.submitLabResult = function(req, res) {
 	sess = req.session;
 	const client = dataBase.ConnectToDataBase();
 	client.connect();
+	var idempRet = [];
 	async.series([
 		function(callback) {
+			console.log("First " + req.body.analystype);
             var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
@@ -587,8 +605,26 @@ exports.submitLabResult = function(req, res) {
             });
 		},
 		function(callback) {
-            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            var curEmail = sess.email;
+            console.log("Email - " + sess.email);
+			var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
+			const query = client.query(sqlQuery);
+			query.on("row", function(row) {
+                console.log("HERE " + row.idemp + " " + row);
+                idempRet.push(row);
+			});
+			query.on("end", function(result) {
+
+				callback();
+			});
+		},
+		function(callback) {
+			var curEmail = sess.email;
+            console.log("Second" + getDate(0, 0) + " " + req.session.idip + " " + curEmail);
+            console.log(idempRet[0].idemp);
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', \''+ req.session.idip +'\','
+					+ idempRet[0].idemp+', (SELECT COUNT(*) FROM conclusion))';
+            console.log(sqlQuery);
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
                 console.log("Second query");
@@ -596,13 +632,13 @@ exports.submitLabResult = function(req, res) {
             });
 		},
 		function(callback) {
-            var sqlQuery = 'INSERT INTO generalizedAnalysis VALUES(\''+
-					'(SELECT idTitle FROM generalizedAnalysisTitles where title=\''+req.body.analystype+'\')'
-					+'\',(SELECT COUNT(*) FROM conclusion),\''+req.body.result+'\','+req.body.standart+')\'';
+            console.log("third");
+            var sqlQuery = 'INSERT INTO generalizedAnalysis VALUES(\
+            (SELECT COUNT(*) FROM conclusion),'
+            +req.body.result+',\''+req.body.standart+'\')';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
                 console.log("Threed query");
-                callback();
                 client.end();
             });
 		},
@@ -611,13 +647,14 @@ exports.submitLabResult = function(req, res) {
 			if (err) return callback(err);
 	    	console.log('Both finished!');
 	});
-}
+};
 
 /*Авторизация врача*/
 exports.signinStaff = function (req, res) {
 	console.log("-------------LOG signinStaff-----------");
 	sess = req.session;
 	    sess.email = req.body.email;
+	    console.log("Save email - " + sess.email);
 
         const staff = dataBase.ConnectToDataBase();
         staff.connect();
@@ -628,14 +665,14 @@ exports.signinStaff = function (req, res) {
             where email = \'' + req.body.email + '\'';
 
         const query = staff.query(sqlQuery);
-        console.log(sqlQuery);
+        //console.log(sqlQuery);
 
         const result = [];
         query.on('rows', function (row) {
-            console.log("------!!!!!!!!!--------" + row);
+            //console.log("------!!!!!!!!!--------" + row);
             result.push(row);
         });
-        console.log(sqlQuery);
+        //console.log(sqlQuery);
 
         query.on("end", function (result) {
             if (result.rows[0] === undefined) {
@@ -644,9 +681,6 @@ exports.signinStaff = function (req, res) {
                 var hashsalt = result.rows[0].hashsalt;
                 if (md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
                     LoadStaffInformation(res, sess.email, function (results, appointmentInfo, epidemy, rating) {
-                        console.log(appointmentInfo);
-                        console.log(epidemy);
-                        console.log(rating);
                         res.render('staffMain', {
                             patientappointment: appointmentInfo,
                             epidemy: epidemy,
@@ -662,34 +696,4 @@ exports.signinStaff = function (req, res) {
             }
             staff.end();
         });
-};
-
-exports.fillTheEpidemicBox = function (req, res) {
-    /*Fill the epidemic box in staffMain page*/
-    console.log("______FillTheEpidemicBox_______");
-};
-
-exports.showRatingBox = function (req, res) {
-    /*staffMain, 'rating' ref*/
-    console.log("______showRatingBox_______");
-};
-
-exports.saveAnamAndDiag = function (req, res) {
-    /*Input_information_for_patient Anamnesis&Diagnosis*/
-    console.log("______save Anamnesis&Diagnosis");
-};
-
-exports.labResultDone = function (req, res) {
-    /*In input_inform_for_patient, in Lab result box, button 'DONE'*/
-    Console.log('______LabResultsDone_______');
-};
-
-exports.scanSave = function (req, res) {
-    /*Save scan from input_blablabla_patient page*/
-    COnsole.log("______SaveScans_____________");
-};
-
-exports.createNewAppointment = function (req, res) {
-    /*createNewAppointment on input_info_for_patient page when click button save in NewAppointment box*/
-    Console.log("createNewAppointment");
 };
