@@ -374,7 +374,7 @@ exports.Input_information_for_patient = function(req,res){
 	FROM public.visitschedule \
 	NATURAL JOIN public.employee \
 	NATURAL JOIN public.person \
-	WHERE day = current_date\
+	WHERE day <= current_date\
 	AND\
 	(CURRENT_TIME-offsettime) <= starttime\
 	AND\
