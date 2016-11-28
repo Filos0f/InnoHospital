@@ -140,14 +140,6 @@ exports.staffInfo = function(req, res, next){
     //res.render('staffMyInfo');
 };
 
-/*
-exports.Input_information_for_patient = function(req,res){
-
-	//console.log(req.body.fname);
-	//console.log(req.body.SecondNameTitle);
-    res.render('Input_information_for_patient');
-};
-*/
 exports.StaffMain = function(req,res) {
     sess = req.session;
     sess.email = req.body.email;
@@ -606,11 +598,9 @@ exports.submitLabResult = function(req, res) {
 		},
 		function(callback) {
             var curEmail = sess.email;
-            console.log("Email - " + sess.email);
 			var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
 			const query = client.query(sqlQuery);
 			query.on("row", function(row) {
-                console.log("HERE " + row.idemp + " " + row);
                 idempRet.push(row);
 			});
 			query.on("end", function(result) {
