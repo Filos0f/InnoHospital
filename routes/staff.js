@@ -601,14 +601,9 @@ exports.submitLabResult = function(req, res) {
 			var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
 			const query = client.query(sqlQuery);
 			query.on("row", function(row) {
-<<<<<<< HEAD
                 console.log("HERE " + row.idemp + " " + row);
 
                 idempRet.push(row);
-
-=======
-                idempRet.push(row);
->>>>>>> eb65d21ab8ab96f6de26640736e87c60b4198bf8
 			});
 			query.on("end", function(result) {
 
