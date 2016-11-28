@@ -90,16 +90,16 @@ create table VisitSchedule (
 );
 
 create table ConclusionTypes (
-	idType varchar(256) NOT NULL,
+	idTitle varchar(256) NOT NULL,
 	title varchar(256) NOT NULL,
-	primary key(idType)
+	primary key(idTitle)
 );
 
 create table Conclusion (
-	idType varchar(256) NOT NULL,
+	idTitle varchar(256) NOT NULL,
 	idConclusion int,
 	primary key(idConclusion),
-	foreign key (idType) references ConclusionTypes 
+	foreign key (idTitle) references ConclusionTypes 
 );
 
 create table Result (
@@ -121,21 +121,12 @@ create table XRay (
 	foreign key (idConclusion) references Conclusion
 );
 
-create table generalizedAnalysisTitles (
-	idTitle varchar(256),
-	title varchar(1024),
-	idType int,
-	primary key(idTitle)
-);
-
 create table generalizedAnalysis (
-	idTitle varchar(256),
 	idConclusion int,
 	result real,
 	standard varchar(256),
 	primary key (idConclusion),
-	foreign key (idConclusion) references conclusion,
-	foreign key (idTitle) references generalizedAnalysisTitles
+	foreign key (idConclusion) references conclusion
 );
 
 create table DiagnosisInfo (

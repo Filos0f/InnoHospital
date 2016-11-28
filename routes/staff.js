@@ -168,8 +168,6 @@ exports.staff = function(req, res) {
     var analizesTitle = JSON.parse(fs.readFileSync("title_of_analizis", "utf8"));
     console.log("------------- Staff init 1-----------");
     var diagnosesType = JSON.parse(fs.readFileSync("type_of_diagnoses", "utf8"));
-    console.log("------------- Staff init 2-----------");
-    var analizesType = JSON.parse(fs.readFileSync("type_of_typeAnaliz", "utf8"));
     console.log("------------- Staff init 3-----------");
     var EmployeePositionsId = JSON.parse(fs.readFileSync("types_of_id_employee", "utf8"));
     console.log("------------- Staff init 4-----------");
@@ -241,23 +239,14 @@ exports.staff = function(req, res) {
 					   );
 
 				   }
-				   for(var k = 0; k < analizesType.length; ++k)
+				   for(var k = 0; k < analizesTitle.length; ++k)
 				   {
 					   console.log(k);
 					   db.query(
-						   'INSERT INTO conclusiontypes(idtype, title) \
+						   'INSERT INTO conclusiontypes(idtitle, title) \
                                VALUES($1,$2)',
-						   [analizesType[k]['id'], analizesType[k]['value']]
+						   [analizesTitle[k]['id'], analizesTitle[k]['title']]
 					   );
-				   }
-				   for(var m = 0; m < analizesTitle.length; ++m) {
-					   for (var j = 0; j < analizesTitle[m]['value'].length; ++j) {
-						   console.log(analizesTitle[m]['value'][j]['id'] + " " + analizesTitle[m]['value'][j]['title'] + " " + analizesTitle[m]['idType']);
-						   db.query(
-							   'INSERT INTO generalizedAnalysisTitles(idtitle, title, idType) \
-                VALUES($1,$2, $3)',
-							   [analizesTitle[m]['value'][j]['id'], analizesTitle[m]['value'][j]['title'], analizesTitle[m]['idType']]);
-					   }
 				   }
 				   for(var t = 0; t < diagnosesType.length; t++)
 				   {
@@ -438,8 +427,8 @@ exports.Input_information_for_patient = function(req,res){
         function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT * FROM generalizedAnalysisTitles \
-							WHERE idtype = \'2\'';
+            var sqlQuery = 'SELECT * FROM conclusiontypes \
+							WHERE idtitle > \'200\' AND idtitle < \'300\'';
             const query = client.query(sqlQuery);
             query.on('row', function(row) {
                 typeXrayRet.push(row);
@@ -486,7 +475,7 @@ exports.Input_information_for_patient = function(req,res){
 		function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT * FROM generalizedAnalysisTitles';
+            var sqlQuery = 'SELECT * FROM conclusiontypes';
             const query = client.query(sqlQuery);
             query.on('row', function(row) {
                 labtypesRet.push(row);
@@ -583,6 +572,7 @@ exports.submitLabResult = function(req, res) {
 	client.connect();
 	async.series([
 		function(callback) {
+			console.log("First " + req.body.analystype);
             var sqlQuery = 'INSERT INTO conclusion VALUES(\''+ req.body.analystype +'\', (SELECT COUNT(*)+1 FROM conclusion))';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
@@ -591,7 +581,8 @@ exports.submitLabResult = function(req, res) {
             });
 		},
 		function(callback) {
-            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', '+req.session.idip+', \''
+            console.log("Second" + getDate(0, 0) + " " + req.session.idip + " " + sess.email);
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', \''+ req.session.idip +'\', \''
 					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
@@ -600,9 +591,8 @@ exports.submitLabResult = function(req, res) {
             });
 		},
 		function(callback) {
-            var sqlQuery = 'INSERT INTO generalizedAnalysis VALUES(\''+
-					'(SELECT idTitle FROM generalizedAnalysisTitles where title=\''+req.body.analystype+'\')'
-					+'\',(SELECT COUNT(*) FROM conclusion),\''+req.body.result+'\','+req.body.standart+')\'';
+            console.log("third");
+            var sqlQuery = 'INSERT INTO generalizedAnalysis VALUES(\'(SELECT COUNT(*) FROM conclusion),\''+req.body.result+'\','+req.body.standart+')\'';
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
                 console.log("Threed query");
