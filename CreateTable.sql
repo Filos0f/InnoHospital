@@ -1,7 +1,7 @@
 drop table Prescription;
 drop table Drug;
-drop table diagnosis;
-drop table DiagnosisInfo;
+drop table diagnosis cascade;
+drop table DiagnosisInfo cascade;
 drop table generalizedAnalysis;
 drop table generalizedAnalysisTitles;
 drop table XRay;
@@ -163,3 +163,34 @@ create table Prescription (
 	foreign key (idIP) references Patient,
 	foreign key (idEmp) references Employee
 );
+
+CREATE OR REPLACE FUNCTION check_epedemy_update() RETURNS TRIGGER AS $$
+	BEGIN
+
+		UPDATE DiagnosisInfo
+				SET rate = (((
+					(select sum(rate) from diagnosisInfo
+						natural join diagnosis
+						inner join result ON (diagnosis.idconclusion = result.idconclusion) 
+						where diagnosis.idconclusion = (
+							Select count(*) from conclusion)
+							and (EXTRACT(MONTH FROM result.day)) = 
+							(EXTRACT(MONTH FROM NOW()))))+1)/30) +
+							((((select sum(rate) from diagnosisInfo
+								natural join diagnosis
+								inner join result ON (diagnosis.idconclusion = result.idconclusion)
+								where diagnosis.idConclusion = (
+									Select count(*) from conclusion) 
+									and (EXTRACT(YEAR FROM result.day)) = 
+									(EXTRACT(YEAR FROM result.day))))+1)/356)
+				Where DiagnosisInfo.idTitle = (select diagnosis.idtitle from diagnosis inner join conclusion on (diagnosis.idconclusion = conclusion.idconclusion) 
+								where diagnosis.idconclusion=(select count(*) from conclusion)); 
+				return OLD;
+				END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER epedemyTrg
+	AFTER INSERT ON diagnosis
+	FOR EACH STATEMENT
+	EXECUTE PROCEDURE check_epedemy_update();
