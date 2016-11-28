@@ -22,12 +22,14 @@ th{
     background-color:#CAFF70; 
     font-family: "Comic Sans MS", cursive, sans-serif;
     color: #FF6347;
+    padding:7px;
 }
 td{
     background-color: #FFF8DC;
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 16.5px;
     color:#CD950C;
+    padding: 7px;
 }
 
 ul.tab {
