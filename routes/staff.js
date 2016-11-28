@@ -57,7 +57,7 @@ function LoadStaffInformation(res, email, patientHandler) {
 							from employee\
 							natural join person per\
 							natural join positions p\
-							order by rating';
+							order by rating DESC';
 			console.log(sqlQuery);
 
 			const query = client.query(sqlQuery);
@@ -73,7 +73,7 @@ function LoadStaffInformation(res, email, patientHandler) {
 			const client = dataBase.ConnectToDataBase();
 			client.connect();
 			var sqlQuery = 'select title, rate from DiagnosisInfo\
-								order by rate';
+								order by rate DESC';
 			console.log(sqlQuery);
 
 			const query = client.query(sqlQuery);
@@ -531,6 +531,65 @@ exports.submitAD = function(req, res) {
 	console.log(getDate(0, 0));
 	console.log(req.body.Anamnesis);
 	console.log(req.body.Diagnosis);
+    sess = req.session;
+    const client = dataBase.ConnectToDataBase();
+    client.connect();
+    var idempRet = [];
+    async.series([
+            function(callback) {
+                console.log("First " + req.body.analystype);
+                var sqlQuery = 'INSERT INTO conclusion VALUES(000, (SELECT COUNT(*)+1 FROM conclusion))';
+                const query = client.query(sqlQuery);
+                query.on("end", function(result) {
+                    console.log("First query");
+                    callback();
+                });
+            },
+            function(callback) {
+                var curEmail = sess.email;
+                var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
+                const query = client.query(sqlQuery);
+                query.on("row", function(row) {
+                    console.log("HERE " + row.idemp + " " + row);
+
+                    idempRet.push(row);
+                });
+                query.on("end", function(result) {
+
+                    callback();
+                });
+            },
+            function(callback) {
+                var curEmail = sess.email;
+                console.log("Second" + getDate(0, 0) + " " + req.session.idip + " " + curEmail);
+                console.log(idempRet[0].idemp);
+                var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', \''+ req.session.idip +'\','
+                    + idempRet[0].idemp+', (SELECT COUNT(*) FROM conclusion))';
+                console.log(sqlQuery);
+                const query = client.query(sqlQuery);
+                query.on("end", function(result) {
+                    console.log("Second query");
+                    callback();
+                });
+            },
+            function(callback) {
+                console.log("third");
+                var sqlQuery = 'INSERT INTO diagnosis VALUES(\
+            (SELECT idTitle FROM diagnosisInfo where nationalCode = \''+req.body.Diagnosis+'\'),'
+                    +'(SELECT COUNT(*) FROM conclusion),\''+req.body.Anamnesis+'\')';
+                const query = client.query(sqlQuery);
+                query.on("end", function(result) {
+                    console.log("Threed query");
+                    client.end();
+                });
+            },
+        ],
+        function(err) {
+            if (err) return callback(err);
+            console.log('Both finished!');
+        });
+
+
 };
 
 exports.submitScans = function(req, res) {
