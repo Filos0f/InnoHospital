@@ -360,15 +360,25 @@ exports.newAppointment = function(req, res){
     res.render('Input_information_for_patient');
 };
 
-exports.Input_information_for_patient = function(req,res){	
+exports.Input_information_for_patient = function(req,res){
+	console.log('Input info for patient ' + req.body.idipTitle);
+
 	sess = req.session;
     email = sess.email; 
     const client = dataBase.ConnectToDataBase();
 	client.connect();
 	var now = new Date();
 	//var time = (now.getHours() - (now.getMinutes() > '40:00' ? 1 : - 1)) + ':00';
-	var sqlQuery = 'select idip from visitschedule\
-					where day > \'' + getDate(0, 1) + '\'';
+	var sqlQuery = 'SELECT idip \
+	FROM public.visitschedule \
+	NATURAL JOIN public.employee \
+	NATURAL JOIN public.person \
+	WHERE day = current_date\
+	AND\
+	(CURRENT_TIME-offsettime) <= starttime\
+	AND\
+	email = \''+sess.email+
+	'\'ORDER BY day, starttime';
 	const query = client.query(sqlQuery);
 	var results = [];
 	query.on('row', function(row) {

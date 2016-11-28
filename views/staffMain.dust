@@ -79,7 +79,8 @@
                         <th id=timeHeader>Date and Time</th>
                         <th id=firstNameHeader>First name</th>
                         <th id=secondNameHeader>Second name</th>
-                        
+                        <th id=idipHeader>idip</th>
+
                         
                     </tr>
                     </thead>
@@ -91,6 +92,7 @@
                         <td class="visistTimeTitle" name="visitTimeTitile">{day};&nbsp;{starttime}</td>
                         <td class="FirstNameTitle"  name="FirstNameTitle">{firstname}</td>
                         <td class="SecondNameTitle" name="SecondNameTitle">{secondname}</td>
+                        <td class="idipTitle" name="idipTitle">{idip}</td>
                         <td class="declineButt" name="declineBtt" action='/declineAppointment' method='get'>
                             <table>
                                 <tr>
