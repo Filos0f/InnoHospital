@@ -376,7 +376,7 @@ exports.Input_information_for_patient = function(req,res){
 	NATURAL JOIN public.person \
 	WHERE day <= current_date\
 	AND\
-	(CURRENT_TIME-offsettime) <= starttime\
+	(CURRENT_TIME-offsettime+ \'03:00:00\'::time) <= starttime\
 	AND\
 	email = \''+sess.email+
 	'\'ORDER BY day, starttime';
