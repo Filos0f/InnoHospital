@@ -64,12 +64,6 @@ app.get('/staff', 				require('./routes/staff').staff);
 app.post('/appointmentBtt', 		require('./routes/staff').Input_information_for_patient);
 
 app.get('/backToStaffMain', 	require('./routes/staff').StaffMain);
-app.post('/epidStatBox',		require('./routes/staff').fillTheEpidemicBox);
-app.post('/ratingBox',			require('./routes/staff').showRatingBox);
-app.post('/saveAnamAndDiag',	require('./routes/staff').saveAnamAndDiag);
-app.post('/labResultsDone', 	require('./routes/staff').labResultDone);
-app.post('/scanSave', 			require('./routes/staff').scanSave);
-app.post('/createNewAppointment',require('./routes/staff').createNewAppointment);
 app.post('/submitAD',			require('./routes/staff').submitAD);
 app.post('/submitLabResult',	require('./routes/staff').submitLabResult);
 app.post('/submitScans',		require('./routes/staff').submitScans);
