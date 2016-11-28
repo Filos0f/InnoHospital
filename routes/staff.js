@@ -472,7 +472,7 @@ exports.Input_information_for_patient = function(req,res){
 		function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT title, result from generalizedAnalysis \
+            var sqlQuery = 'SELECT title, result from generalizedAnalysisTitles \
 							NATURAL JOIN conclusion\
 							NATURAL JOIN ConclusionTypes \
 							NATURAL JOIN result\
@@ -490,7 +490,7 @@ exports.Input_information_for_patient = function(req,res){
 		function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT * FROM generalizedAnalysisTitles';
+            var sqlQuery = 'SELECT * FROM generalizedAnalysis';
             const query = client.query(sqlQuery);
             query.on('row', function(row) {
                 labtypesRet.push(row);
