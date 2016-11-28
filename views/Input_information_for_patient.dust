@@ -40,7 +40,8 @@
             <span class="icon-bar"></span>
 
           </button>
-          <a class="navbar-brand" href="#">My work</a>
+            <a class="navbar-brand text" type="submit" id="headNavBar" name="navBar" href="/backToStaffMain"
+               action="/backToStaffMain" method="post">InnoHospital</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -148,6 +149,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="well">
+                                        <img src="http://images.pcmac.org/Uploads/SunflowerCountyCSD/SunflowerCountyCSD/Sites/News/got-questions.jpg" alt="Smiley face" height="42" width="42">
                                         <h3 style=" font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;">Patient History</h3>
                                           <p style="color: #00BFFF; font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;" align="center">Anamnesis</p>
                                           {#generalinfo}
