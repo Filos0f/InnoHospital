@@ -101,7 +101,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 				natural join employee \
 				natural join positions \
 				natural join person\
-				where idip=\'' + results[0].idip +'\''; 
+				where idip=\'' + results[0].idip +'\' and visitschedule.day >= current_date';
 
 			const query = client.query(sqlQuery);
 			query.on('row', function(row){

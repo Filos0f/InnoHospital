@@ -37,8 +37,9 @@ function LoadStaffInformation(res, email, patientHandler) {
 							from patient p\
 							natural join visitschedule v \
 							natural join person per \
-							where idemp=\'' + results[0].idemp +'\'' +
-							'order by v.day, v.starttime';
+							where idemp=\'' + results[0].idemp +'\'\
+							and v.day >= current_date\
+							order by v.day, v.starttime';
 			console.log(sqlQuery);
 
 			const query = client.query(sqlQuery);
@@ -142,8 +143,8 @@ exports.staffInfo = function(req, res, next){
 
 exports.StaffMain = function(req,res) {
     sess = req.session;
-    sess.email = req.body.email;
-	if(sess.email != null) {
+    email = sess.email;
+	if(email != null) {
         LoadStaffInformation(res, sess.email, function (results, appointmentInfo, epidemy, rating) {
             console.log(appointmentInfo);
             console.log(epidemy);
