@@ -19,12 +19,15 @@ body{
 border-color: white;
 }
 th{
-    background-color:#EEF3E2; 
+    background-color:#CAFF70; 
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    color: #FF6347;
 }
 td{
-    background-color: #6495ED;
-    font-family: "New Century Schoolbook", serif ;
+    background-color: #FFF8DC;
+    font-family: "Lucida Console", Monaco, monospace;
     font-size: 16.5px;
+    color:#CD950C;
 }
 
 ul.tab {
@@ -66,6 +69,6 @@ ul.tab li a:focus, .active {
 .tabcontent {
     display: none;
     
-    border: 1px solid #ccc;
+     
     border-top: none; 
 }

@@ -135,29 +135,39 @@
     </div>
   </div>
 <div class="container-fluid" id="right">
-  <div id="Rating" class="tabcontent">
-    <h2>Rating</h2>
+				  <div id="Rating" class="tabcontent">
+				    <h2>Rating</h2>
 
-     <table style="width:100%; border: 1;
-    border-collapse: collapse;">
-  <tr>
-    <th>Position</th>
-    <th>first name</th>
-    <th>second name</th>
-    <th>rating</th>
-  </tr>
-  {#rating}
-  <tr>
-    <td>{title}</td>
-    <td>{firstname}</td>
-    <td>{secondname}</td>
-    <td>{rating}</td>
-  </tr>
-   {/rating}
-</table>
+				   <div class="wrapMe">
+					     <table style="width:100%; border-style: groove;;
+					     background-color: green;">
+					  <tr>
+					    <th>Position</th>
+					    <th>first name</th>
+					    <th>second name</th>
+					    <th>rating</th>
+					  </tr>
+					  
+					  {#rating}
+					  <tr>
+					    <td>{title}</td>
+					    <td>{firstname}</td>
+					    <td>{secondname}</td>
+					    <td>{rating}</td>
+					  </tr>
+					   {/rating}
+					</table>
+				</div>
 
+				</div>
 </div>
-</div>
+		<style type="text/css">
+				 .wrapMe{
+				 	margin-top: 5px;
+				 	height: 450px;
+				 	overflow: auto;
+				 }
+		</style>
 <div class="col-lg-7">
   <div class="container-fluid" id="right">
   <div id="Appointments" class="tabcontent">
