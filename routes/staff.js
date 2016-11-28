@@ -465,9 +465,8 @@ exports.Input_information_for_patient = function(req,res){
 		function(callback) {
         	const client = dataBase.ConnectToDataBase();
             client.connect();
-            var sqlQuery = 'SELECT title, result from generalizedAnalysisTitles \
+            var sqlQuery = 'SELECT title, result from ConclusionTypes \
 							NATURAL JOIN conclusion\
-							NATURAL JOIN ConclusionTypes \
 							NATURAL JOIN result\
 							NATURAL JOIN patient\
 							WHERE idip =\''+results[0].idip+'\'';
@@ -579,6 +578,7 @@ exports.submitLabResult = function(req, res) {
 	sess = req.session;
 	const client = dataBase.ConnectToDataBase();
 	client.connect();
+	var idempRet = [];
 	async.series([
 		function(callback) {
 			console.log("First " + req.body.analystype);
@@ -590,9 +590,25 @@ exports.submitLabResult = function(req, res) {
             });
 		},
 		function(callback) {
-            console.log("Second" + getDate(0, 0) + " " + req.session.idip + " " + sess.email);
-            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', \''+ req.session.idip +'\', \''
-					+ '(SELECT idemp FROM employee NATURAL JOIN person where email=\''+sess.email+')\', (SELECT COUNT(*) FROM conclusion))';
+            var curEmail = sess.email;
+			var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
+			const query = client.query(sqlQuery);
+			query.on("row", function(row) {
+                console.log("HERE " + row.idemp + " " + row);
+                idempRet.push(result);
+			});
+			query.on("end", function(result) {
+
+				callback();
+			});
+		},
+		function(callback) {
+			var curEmail = sess.email;
+            console.log("Second" + getDate(0, 0) + " " + req.session.idip + " " + curEmail);
+            console.log(idempRet.idemp);
+            var sqlQuery = 'INSERT INTO result VALUES(\''+ getDate(0, 0)+ '\', \''+ req.session.idip +'\','
+					+ idempRet.idemp+', (SELECT COUNT(*) FROM conclusion))';
+            console.log(sqlQuery);
             const query = client.query(sqlQuery);
 			query.on("end", function(result) {
                 console.log("Second query");
