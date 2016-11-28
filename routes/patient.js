@@ -43,6 +43,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 	var results = [];
 	var appointmentInfo = [];
 	var rating = [];
+	var diagnosis = [];
 	var nameOfEmp = [];
 	var dates=[];
 	async.series([
@@ -132,6 +133,27 @@ function LoadPatientInformation(res, email, patientHandler) {
 					client.end();
 				});
 			},
+            function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                console.log('Start diagnos');
+                var sqlQuery = 'select res.day, inf.title, d.anamnes\
+								from diagnosis d\
+								natural join result res\
+								natural join diagnosisinfo inf\
+								where res.idip=\'' + results[0].idip +'\'';
+                console.log(sqlQuery);
+
+                const query = client.query(sqlQuery);
+                query.on('row', function(row){
+                    diagnosis.push(row);
+
+                });
+                query.on("end", function(result){
+                    callback();
+                    client.end();
+                });
+            },
 
 		function(callback) {
 
@@ -151,7 +173,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 			//console.log("month - " + nameOfEmp[0].day.getMonth());
 			//console.log("day - " + nameOfEmp[0].day.getDay());
 
-			patientHandler(results, appointmentInfo, rating, nameOfEmp,dates);
+			patientHandler(results, appointmentInfo, rating, nameOfEmp,dates, diagnosis);
 		},
 		],
 		function(err) {
@@ -165,8 +187,8 @@ exports.get_patient_cabinet = function(req, res){
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates) {
-			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,suka:dates})
+		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp, dates, diagnosis) {
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,suka:dates, Card: diagnosis})
 		});
 	}
 };
@@ -192,14 +214,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates, diagnosis) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,suka:dates})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,suka:dates, Card: diagnosis})
 			    }
 			    else {
 					//not right password or email

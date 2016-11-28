@@ -365,7 +365,7 @@ exports.Input_information_for_patient = function(req,res){
 	console.log('Input info for patient ' + req.body.idipTitle);
 
 	sess = req.session;
-    email = sess.email; 
+    email = sess.email;
     const client = dataBase.ConnectToDataBase();
 	client.connect();
 	var now = new Date();
@@ -381,6 +381,7 @@ exports.Input_information_for_patient = function(req,res){
 	email = \''+sess.email+
 	'\'ORDER BY day, starttime';
 	const query = client.query(sqlQuery);
+	console.log(sqlQuery);
 	var results = [];
 	query.on('row', function(row) {
     	results.push(row);

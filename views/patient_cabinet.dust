@@ -92,34 +92,50 @@
      
     </div>
 
+<div class="col-lg-7">
+  <div class="container-fluid" id="right">
+  <div id="Card" class="tabcontent">
+    <h2>Patien's Card History</h2>
 
-<div id="Card" class="tabcontent">
-  <div class="container">
-  <h1>Patien's Card History</h1>
-     
-      <button data-toggle='collapse' data-target="#record1" class="btn btn-info btn-sm">
-        <h3>Date: { }</h3></button>
-        <br />
-        <div id="record1" class="collapse"> Doctor's Record info here (from Generalized Analysis entity)
-            <p>General Text</p>
-            <p><strong>Diagnosis: </strong></p>
-            <p><strong>Prescribtion: </strong></p>
-        </div>
-     
-  </div>
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Date</th>
+    <th>Diagnosis</th>
+    <th>Anamnez</th>
+  </tr>
+  {#medcard}
+  <tr>
+    <td>{day}</td>
+    <td>{diagnosis}</td>
+    <td>{anamnez}</td>
+  </tr>
+   {/medcard}
+</table>
 </div>
-<div id="Analysis" class="tabcontent">
- <div class="container">
-  <h1>Patien's Analysis results</h1>
-     
-      <button data-toggle='collapse' data-target="#record2" class="btn btn-info btn-sm">
-        <h3>Date: { }</h3></button>
-        <br />
-        <div id="record2" class="collapse">
-              Laborant info and lab report results go here
-             
-        </div>
-  </div>
+
+<div class="col-lg-7">
+  <div class="container-fluid" id="right">
+  <div id="Analysis" class="tabcontent">
+    <h2>Patien's Analysis results</h2>
+
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Date</th>
+    <th>Analisis</th>
+    <th>Standart</th>
+    <th>Result</th>
+  </tr>
+  {#analisis}
+  <tr>
+    <td>{day}</td>
+    <td>{title}</td>
+    <td>{standart}</td>
+    <td>{result}</td>
+  </tr>
+   {/analisis}
+</table>
 </div>
 
 <div id="Scans" class="tabcontent">
@@ -135,6 +151,7 @@
         </div>
     </div>
   </div>
+
 <div class="container-fluid" id="right">
 				  <div id="Rating" class="tabcontent">
 				    <h2>Rating</h2>
