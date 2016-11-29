@@ -558,12 +558,12 @@ exports.submitAD = function(req, res) {
                 });
             },
             function(callback) {
+    			console.log("Email " + sess.email);
                 var curEmail = sess.email;
                 var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
                 const query = client.query(sqlQuery);
                 query.on("row", function(row) {
                     console.log("HERE " + row.idemp + " " + row);
-
                     idempRet.push(row);
                 });
                 query.on("end", function(result) {

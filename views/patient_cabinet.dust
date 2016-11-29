@@ -27,7 +27,7 @@
 </ul>
 <!--
       <li class="active"><a class="glyphicon glyphicon-home" href="/">&nbsp;Exit</a></li>
-      <li><a href="/PatientCard">Med Card</a></li>
+      <li><a href="/Card">Med Card</a></li>
       <li><a href="/analysis">Analysis</a></li> 
       <li><a href="/Scans">Scans</a></li>
       <li><a href="/Rating">Rating</a></li> -->
@@ -102,16 +102,18 @@
   <tr>
     <th>Date</th>
     <th>Diagnosis</th>
-    <th>Anamnez</th>
+    <th>Anamnes</th>
   </tr>
-  {#medcard}
+
+  {#card}
   <tr>
     <td>{day}</td>
-    <td>{diagnosis}</td>
-    <td>{anamnez}</td>
+    <td>{title}</td>
+    <td>{anamnes}</td>
   </tr>
-   {/medcard}
+   {/card}
 </table>
+
 </div>
 
 <div class="col-lg-7">
@@ -131,7 +133,7 @@
   <tr>
     <td>{day}</td>
     <td>{title}</td>
-    <td>{standart}</td>
+    <td>{standard}</td>
     <td>{result}</td>
   </tr>
    {/analisis}
