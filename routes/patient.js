@@ -43,6 +43,8 @@ function LoadPatientInformation(res, email, patientHandler) {
 	var results = [];
 	var appointmentInfo = [];
 	var rating = [];
+	var diagnosis = [];
+	var analisis = [];
 	var nameOfEmp = [];
 	var dates=[];
 	async.series([
@@ -101,7 +103,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 				natural join employee \
 				natural join positions \
 				natural join person\
-				where idip=\'' + results[0].idip +'\''; 
+				where idip=\'' + results[0].idip +'\' and visitschedule.day >= current_date';
 
 			const query = client.query(sqlQuery);
 			query.on('row', function(row){
@@ -132,7 +134,47 @@ function LoadPatientInformation(res, email, patientHandler) {
 					client.end();
 				});
 			},
-
+            function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                console.log('Start diagnosis');
+                var sqlQuery = 'select res.day, inf.title, d.anamnes\
+								from diagnosis d\
+								natural join result res\
+								natural join diagnosisinfo inf\
+								where res.idip=\'' + results[0].idip +'\'';
+                console.log(sqlQuery);
+                const query = client.query(sqlQuery);
+                query.on('row', function(row){
+                	console.log(row);
+                    diagnosis.push(row);
+                });
+                query.on("end", function(result){
+                    callback();
+                    client.end();
+                });
+            },
+            function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                console.log('Start analisis');
+                var sqlQuery = 'select res.day, con.title, an.standard, an.result\
+								from generalizedanalysis an\
+								natural join result res\
+								natural join conclusiontypes con\
+								natural join conclusion\
+								where res.idip=\'' + results[0].idip +'\'';
+                console.log(sqlQuery);
+                const query = client.query(sqlQuery);
+                query.on('row', function(row){
+                    console.log(row);
+                    analisis.push(row);
+                });
+                query.on("end", function(result){
+                    callback();
+                    client.end();
+                });
+            },
 		function(callback) {
 
 			for (var i = 0; i < nameOfEmp.length; i++) {
@@ -151,7 +193,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 			//console.log("month - " + nameOfEmp[0].day.getMonth());
 			//console.log("day - " + nameOfEmp[0].day.getDay());
 
-			patientHandler(results, appointmentInfo, rating, nameOfEmp,dates);
+			patientHandler(results, appointmentInfo, rating, nameOfEmp, dates, diagnosis, analisis);
 		},
 		],
 		function(err) {
@@ -165,8 +207,8 @@ exports.get_patient_cabinet = function(req, res){
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates) {
-			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,suka:dates})
+		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp, dates, diagnosis, analisis) {
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,suka:dates, card: diagnosis, analisis: analisis})
 		});
 	}
 };
@@ -192,14 +234,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates, diagnosis, analisis) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,suka:dates})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,suka:dates, card: diagnosis, analisis: analisis})
 			    }
 			    else {
 					//not right password or email

@@ -37,8 +37,9 @@ function LoadStaffInformation(res, email, patientHandler) {
 							from patient p\
 							natural join visitschedule v \
 							natural join person per \
-							where idemp=\'' + results[0].idemp +'\'' +
-							'order by v.day, v.starttime';
+							where idemp=\'' + results[0].idemp +'\'\
+							and v.day >= current_date\
+							order by v.day, v.starttime';
 			console.log(sqlQuery);
 
 			const query = client.query(sqlQuery);
@@ -142,8 +143,8 @@ exports.staffInfo = function(req, res, next){
 
 exports.StaffMain = function(req,res) {
     sess = req.session;
-    sess.email = req.body.email;
-	if(sess.email != null) {
+    email = sess.email;
+	if(email != null) {
         LoadStaffInformation(res, sess.email, function (results, appointmentInfo, epidemy, rating) {
             console.log(appointmentInfo);
             console.log(epidemy);
@@ -364,7 +365,7 @@ exports.Input_information_for_patient = function(req,res){
 	console.log('Input info for patient ' + req.body.idipTitle);
 
 	sess = req.session;
-    email = sess.email; 
+    email = sess.email;
     const client = dataBase.ConnectToDataBase();
 	client.connect();
 	var now = new Date();
@@ -373,13 +374,14 @@ exports.Input_information_for_patient = function(req,res){
 	FROM public.visitschedule \
 	NATURAL JOIN public.employee \
 	NATURAL JOIN public.person \
-	WHERE day = current_date\
+	WHERE day <= current_date\
 	AND\
-	(CURRENT_TIME-offsettime) <= starttime\
+	(CURRENT_TIME-offsettime+ \'03:00:00\'::time) <= starttime\
 	AND\
 	email = \''+sess.email+
 	'\'ORDER BY day, starttime';
 	const query = client.query(sqlQuery);
+	console.log(sqlQuery);
 	var results = [];
 	query.on('row', function(row) {
     	results.push(row);
@@ -556,12 +558,12 @@ exports.submitAD = function(req, res) {
                 });
             },
             function(callback) {
+    			console.log("Email " + sess.email);
                 var curEmail = sess.email;
                 var sqlQuery = 'SELECT idemp FROM employee NATURAL JOIN person where email=\''+curEmail+'\'';
                 const query = client.query(sqlQuery);
                 query.on("row", function(row) {
                     console.log("HERE " + row.idemp + " " + row);
-
                     idempRet.push(row);
                 });
                 query.on("end", function(result) {
