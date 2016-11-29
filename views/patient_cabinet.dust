@@ -64,6 +64,7 @@
 
 {/patient}
   </div>
+   
  </div>
 </div>
 
@@ -210,13 +211,16 @@
       <h3>Set data</h3>
 
       <form method="post" action="/newAppointment">
-      
-       <span>
+      <input type="text" name="date" id="date" readonly="readonly" size="12" />&nbsp;
+                    <input type=time name="time" min=8:00 max=19:00 step=1200>
+                  <br>
+        
        <!--
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
-              <input type=time name="time" min=8:00 max=19:00 step=1200>  </span> -->
+                </span> -->
               <br><br>
                    <h2 class="bold">Choose doctor</h2></p>
+                   
                   <span>
                 <select name="doctor" id="doctor">
 
@@ -232,9 +236,9 @@
                         <option  data-group="{idpos}" value='{secondname}'>{firstname}&nbsp;{secondname}</option>
                     {/nameofemp}
                          
-                    <select>
+                    </select>
                     <br>
-                    <input type="text" name="date" id="date" readonly="readonly" size="12" />
+
                     </span>
                </div>
 
@@ -248,8 +252,38 @@
     </div>
   </div>
 </div>
+<button type="button"   id="rating" class="btn btn-info btn-sm" data-toggle="modal" data-target="#RatingModal">Open Modal</button>
+<p id="output"></p>
 
- 
+ <!-- Rating Modal window-->
+<div id="RatingModal" class="modal fade" role="dialog">
+  <div class="modal-dialog ">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Please leave a feedback</h4>
+      </div>
+      <div class="modal-body">
+      <form action="/" method="post">
+      <h5>Name of the doctor: </h5>
+         <select name="feedback">
+           <option value="1">Good</option>
+           <option value="0">Neutral</option>
+           <option value="-1">Bad</option>
+         </select>
+      </div>
+      <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Submit">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
   
 </body>
 
@@ -258,8 +292,36 @@
   <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
 
   <script>
-  
-  
+  $(document).ready(function(){ 
+  var app_dates='2016-11-28 21:30:00';
+  function clock(){
+var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            document.getElementById('rating').innerHTML = date;
+
+            var res = setTimeout(clock, 1000);
+            return date+"";
+            }
+
+var t=clock();
+
+t=t.split(" ");
+            var t2_d=t[0].split("-");
+            var t2_t=t[1].split(":");
+
+var t1=app_dates.split(" ");
+            var t1_d=t1[0].split("-");
+            var t1_t=t1[1].split(":");
+           
+           console.log(t2_d+"  "+t2_t+" "+t1_d+" "+t1_t);
+            
+           
+            if(parseInt(t1_d[2])<parseInt(t2_d[2])&&(parseInt(t1_d[1])==parseInt(t2_d[1]))){document.getElementById("rating").click();}
+            else if(parseInt(t1_d[2])==parseInt(t2_d[2])&&(parseInt(t1_t[0])<parseInt(t2_t[0]))&&(parseInt(t1_d[1])==parseInt(t2_d[1])))
+            {document.getElementById("rating").click();}
+
+
+
+
 var availableDates=[];
   
   {#suka}
@@ -311,6 +373,7 @@ function openTab(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
+});
 </script>
      
 </html>
