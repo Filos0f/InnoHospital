@@ -493,7 +493,7 @@ exports.Input_information_for_patient = function(req,res){
         function(callback) {
 			var contents = fs.readFileSync('photo.txt', 'utf8');
 			var dates=[];
-			dates.push({'base64' : contents});
+			dates.push({'base64' : "data:image/png;base64,"+contents});
 			res.render('Input_information_for_patient',
 				{diagnosisInformation:diagnosisRet,
 					positions:positionsRet,

@@ -1,0 +1,60 @@
+<html>
+<head>
+
+</head>
+<body>
+
+<input type="file" onchange="readURL(this);" />
+<img id="img" src="#" alt="your image" />
+<button id="sendData"">Save</button>
+</body>
+
+<script class="jsbin" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript">
+	function readURL(input) {
+		console.log("Here!!!!!!!!");
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+		var imgElem = document.getElementById('img');
+
+		   
+		$('#sendData').click(function(){
+			console.log("HERE");
+		var imgData = JSON.stringify(getBase64Image(imgElem));
+		console.log(imgData);
+		  $.ajax({
+		  url: '/sendingScan',
+		  dataType: 'json',
+		  data: imgData,
+		  type: 'POST',
+		  success: function(data) {
+		    console.log(data);
+		    }
+		  });
+		});
+
+		function getBase64Image(imgElem) {
+		    var canvas = document.createElement("canvas");
+		    canvas.width = imgElem.clientWidth;
+		    canvas.height = imgElem.clientHeight;
+		    var ctx = canvas.getContext("2d");
+		    ctx.drawImage(imgElem, 0, 0);
+		    var dataURL = canvas.toDataURL("image/png");
+		    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+		}
+
+	</script>
+
+</html>
