@@ -94,7 +94,7 @@
     </div>
 
 <div class="col-lg-7">
-  <div class="container-fluid" id="right">
+  <div class="container-fluid" id="">
   <div id="Card" class="tabcontent">
     <h2>Patien's Card History</h2>
 
@@ -155,12 +155,14 @@
     </div>
   </div>
 
+
+<div class="col-lg-7">
 <div class="container-fluid" id="right">
 				  <div id="Rating" class="tabcontent">
 				    <h2>Rating</h2>
 
 				   <div class="wrapMe">
-					     <table style="width:100%; border-style: groove;;
+					     <table style="width:500px !important; border-style: groove;;
 					     background-color: green;">
 					  <tr>
 					    <th>Position</th>
@@ -187,8 +189,10 @@
 				 	margin-top: 5px;
 				 	height: 450px;
 				 	overflow: auto;
+          width: 510px;
 				 }
 		</style>
+    </div>
 <div class="col-lg-7">
   <div class="container-fluid" id="right">
   <div id="Appointments" class="tabcontent">
@@ -271,7 +275,7 @@
     </div>
   </div>
 </div>
-<button type="button"   id="rating" class="btn btn-info btn-sm" data-toggle="modal" data-target="#RatingModal">Open Modal</button>
+<button type="button" style="display: none;"  id="rating" class="btn btn-info btn-sm" data-toggle="modal" data-target="#RatingModal">Open Modal</button>
 <p id="output"></p>
 
  <!-- Rating Modal window-->
@@ -285,8 +289,13 @@
         <h4 class="modal-title">Please leave a feedback</h4>
       </div>
       <div class="modal-body">
-      <form action="/" method="post">
-      <h5>Name of the doctor: </h5>
+      <form action="/submit_feedback" method="post">
+      
+   
+  
+      <h5 style="color:#8B008B; font-weight: 7px;">Name of the doctor: {#oldDates}{firstname}&nbsp;{secondname} {/oldDates}</h5>
+      <p style="color:#8A2BE2; font-weight: 5px;">Past appointment's date: {#oldDates}{old}{/oldDates}</p>
+      
          <select name="feedback">
            <option value="1">Good</option>
            <option value="0">Neutral</option>
@@ -294,7 +303,7 @@
          </select>
       </div>
       <div class="modal-footer">
-      <input type="submit" class="btn btn-primary" value="Submit">
+      <input type="submit" class="btn btn-primary" ata-dismiss="modal" value="Submit">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
       </div>
@@ -303,8 +312,10 @@
 
   </div>
 </div>
-  
+
+
 </body>
+ 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -312,7 +323,12 @@
 
   <script>
   $(document).ready(function(){ 
-  var app_dates='2016-11-28 21:30:00';
+    var old=[];
+  var app_dates='2016-11-29 21:30:00';
+      {#oldDates}
+          old.push('{old}');
+      {/oldDates}
+      console.log(old);
   function clock(){
 var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
             document.getElementById('rating').innerHTML = date;
@@ -325,27 +341,26 @@ var t=clock();
 
 t=t.split(" ");
             var t2_d=t[0].split("-");
-            var t2_t=t[1].split(":");
+          
 
-var t1=app_dates.split(" ");
-            var t1_d=t1[0].split("-");
-            var t1_t=t1[1].split(":");
+ 
+            var t1_d=old[1].split("-");
+             console.log(t2_d+"|"+t1_d);
            
-           console.log(t2_d+"  "+t2_t+" "+t1_d+" "+t1_t);
+           
             
            
-            if(parseInt(t1_d[2])<parseInt(t2_d[2])&&(parseInt(t1_d[1])==parseInt(t2_d[1]))){document.getElementById("rating").click();}
-            else if(parseInt(t1_d[2])==parseInt(t2_d[2])&&(parseInt(t1_t[0])<parseInt(t2_t[0]))&&(parseInt(t1_d[1])==parseInt(t2_d[1])))
-            {document.getElementById("rating").click();}
+            if(parseInt(t1_d[0])<parseInt(t2_d[2])&&(parseInt(t1_d[1])==parseInt(t2_d[1]))&&(parseInt(t1_d[2])==parseInt(t2_d[0]))){document.getElementById("rating").click();}
+             
 
 
 
 
 var availableDates=[];
   
-  {#suka}
+  {#dates}
     availableDates.push('{data}');
-  {/suka}
+  {/dates}
   console.log(availableDates);
    
   
@@ -379,7 +394,9 @@ $(function(){
     });
 });
 
-function openTab(evt, cityName) {
+
+});
+  function openTab(evt, cityName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -392,7 +409,6 @@ function openTab(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-});
 </script>
      
 </html>

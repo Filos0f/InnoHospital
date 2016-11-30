@@ -47,6 +47,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 	var analisis = [];
 	var nameOfEmp = [];
 	var dates=[];
+	var oldDates=[];
 	async.series([
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
@@ -109,6 +110,27 @@ function LoadPatientInformation(res, email, patientHandler) {
 			query.on('row', function(row){
 				console.log("Row added");
 		    	appointmentInfo.push(row);
+		    });
+		    query.on("end", function(result){
+		    	callback();
+		    	client.end();
+		    });
+		},
+		function(callback) {
+			const client = dataBase.ConnectToDataBase();
+			client.connect();
+			console.log("Ya zawel")
+    		var sqlQuery = 'select day,firstname,secondname\
+    		from  visitschedule\
+				natural join employee \
+				natural join positions \
+				natural join person\
+				where idip=\'' + results[0].idip +'\' and visitschedule.day < current_date';
+				console.log(sqlQuery);
+			const query = client.query(sqlQuery);
+			query.on('row', function(row){
+				console.log("Row added");
+		    	oldDates.push(row);
 		    });
 		    query.on("end", function(result){
 		    	callback();
@@ -181,19 +203,25 @@ function LoadPatientInformation(res, email, patientHandler) {
 				 var str=nameOfEmp[i].day+'';
 			str=str.split(" ");
 
-			 
-			//nameOfEmp[i].day=DateFormatter(str[1],str[2],str[3]);
+				
 			dates.push({"data" :DateFormatter(str[1],str[2],str[3])});
 
 			}
-			console.log(dates[0].data);
+			var str=oldDates[0].day+'';
+				 console.log(str);
+				 str=str.split(" ");
+			console.log(oldDates.length +"  , "+oldDates[0].day+"||| "+DateFormatter(str[1],str[2],str[3]));
+		 
+			 
+				  
+			oldDates.push({"old" :DateFormatter(str[1],str[2],str[3])});
+             
+			
 			
 
-			//console.log("year - " + nameOfEmp[0].day.getYear());
-			//console.log("month - " + nameOfEmp[0].day.getMonth());
-			//console.log("day - " + nameOfEmp[0].day.getDay());
+			 
 
-			patientHandler(results, appointmentInfo, rating, nameOfEmp, dates, diagnosis, analisis);
+			patientHandler(results, appointmentInfo, rating, nameOfEmp, dates, diagnosis, analisis,oldDates);
 		},
 		],
 		function(err) {
@@ -208,7 +236,7 @@ exports.get_patient_cabinet = function(req, res){
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
 		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp, dates, diagnosis, analisis) {
-			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,suka:dates, card: diagnosis, analisis: analisis})
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,dates:dates, card: diagnosis, analisis: analisis})
 		});
 	}
 };
@@ -234,14 +262,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates, diagnosis, analisis) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates, diagnosis, analisis,oldDates) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,suka:dates, card: diagnosis, analisis: analisis})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,dates:dates, card: diagnosis, analisis: analisis,oldDates:oldDates})
 			    }
 			    else {
 					//not right password or email
@@ -363,6 +391,12 @@ exports.newAppointment = function(req, res){
 		res.redirect('patient_cabinet')
 };
 
+exports.submit_feedback = function(req, res){
+
+	console.log(req.body.feedback);
+	res.redirect('patient_cabinet');
+
+};
 exports.medCard = function(req, res){
 	res.render('patientCard');
 };

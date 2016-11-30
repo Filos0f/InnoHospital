@@ -1,11 +1,11 @@
 body{
-	background-image: url(http://cdn.paper4pc.com/images/sexy-girl-wallpaper-1.jpg);
-    /*url(http://eskipaper.com/images/free-simple-phone-backgrounds-1.jpg);*/
+	background-image: url(http://eskipaper.com/images/free-simple-phone-backgrounds-1.jpg);
+    /*url(http://cdn.paper4pc.com/images/sexy-girl-wallpaper-1.jpg);*/
 	font-family: "Lato", sans-serif;
 }
 .PersonalInfo{
 	margin:20px;
-	width:60%;
+	width:340px;
 	background-image: url(https://lh3.googleusercontent.com/-ZqUEzS0GJjk/T6QM4EWK1fI/AAAAAAAAAGE/OHNjHYK9Mf8/s128/BG-4.png);
 	border-radius: 10px;
 }
@@ -15,7 +15,7 @@ body{
     overflow-x: hidden;
 }
 #right{
- 
+ width: 100%;
 border-color: white;
 }
 th{
@@ -71,6 +71,6 @@ ul.tab li a:focus, .active {
 .tabcontent {
     display: none;
     
-     
+    
     border-top: none; 
 }
