@@ -55,6 +55,7 @@ app.post('/newAppointment', 	require('./routes/patient').newAppointment);
 app.get('/PatientCard', 		require('./routes/patient').medCard);
 app.get('/Scans', 				require('./routes/patient').scans);
 app.get('/analysis', 			require('./routes/patient').analysis);
+app.post('/submit_feedback', 	require('./routes/patient').submit_feedback);
 
 
 //Staff handlers
