@@ -370,18 +370,9 @@ exports.Input_information_for_patient = function(req,res){
 	client.connect();
 	var now = new Date();
 	//var time = (now.getHours() - (now.getMinutes() > '40:00' ? 1 : - 1)) + ':00';
-	var sqlQuery = 'SELECT idip \
-	FROM public.visitschedule \
-	NATURAL JOIN public.employee \
-	NATURAL JOIN public.person \
-	WHERE day <= current_date\
-	AND\
-	(CURRENT_TIME-offsettime+ \'03:00:00\'::time) <= starttime\
-	AND\
-	email = \''+sess.email+
-	'\'ORDER BY day, starttime';
+	var sqlQuery = 'select idip from visitschedule\
+					where day > \'' + getDate(0, 1) + '\'';
 	const query = client.query(sqlQuery);
-	console.log(sqlQuery);
 	var results = [];
 	query.on('row', function(row) {
     	results.push(row);
@@ -500,13 +491,17 @@ exports.Input_information_for_patient = function(req,res){
             });
 		},
         function(callback) {
+			var contents = fs.readFileSync('photo.txt', 'utf8');
+			var dates=[];
+			dates.push({'base64' : contents});
 			res.render('Input_information_for_patient',
 				{diagnosisInformation:diagnosisRet,
 					positions:positionsRet,
 					nameofemp:nameofempRet,
 					scanstype:typeXrayRet,
 					scans:scansRet,
-					labtypes:labtypesRet});
+					labtypes:labtypesRet,
+					photo:dates});
 		},
     	],
 		function(err) {
