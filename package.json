@@ -1,0 +1,25 @@
+{
+   "name": "InnoHospital",
+   "version": "0.0.1",
+   "private": true,
+   "scripts": {
+     "start": "node app.js"
+   },
+   "dependencies": {
+     "body-parser":"*",
+     "consolidate":"*",
+     "dust":"*",
+     "dustjs-helpers":"*",
+     "dustjs-linkedin":"*",
+     "express": "3.3.8",
+     "nconf": "*",
+     "winston": "*",
+     "pg":"*",
+     "js-md5":"*",
+     "connect-pg-simple":"*",
+     "express-session":"*",
+     "node-fs":"*",
+     "async":"*",
+     "nodemailer":"*"
+   }
+ } 
