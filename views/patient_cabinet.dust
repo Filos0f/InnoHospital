@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="css/patient_cabinet.css">
  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=ABeeZee:400,400italic">
+  
  
 
   <title>Patient's Cabinet</title>
@@ -26,7 +27,7 @@
 </ul>
 <!--
       <li class="active"><a class="glyphicon glyphicon-home" href="/">&nbsp;Exit</a></li>
-      <li><a href="/PatientCard">Med Card</a></li>
+      <li><a href="/Card">Med Card</a></li>
       <li><a href="/analysis">Analysis</a></li> 
       <li><a href="/Scans">Scans</a></li>
       <li><a href="/Rating">Rating</a></li> -->
@@ -63,6 +64,7 @@
 
 {/patient}
   </div>
+   
  </div>
 </div>
 
@@ -91,34 +93,52 @@
      
     </div>
 
+<div class="col-lg-7">
+  <div class="container-fluid" id="right">
+  <div id="Card" class="tabcontent">
+    <h2>Patien's Card History</h2>
 
-<div id="Card" class="tabcontent">
-  <div class="container">
-  <h1>Patien's Card History</h1>
-     
-      <button data-toggle='collapse' data-target="#record1" class="btn btn-info btn-sm">
-        <h3>Date: { }</h3></button>
-        <br />
-        <div id="record1" class="collapse"> Doctor's Record info here (from Generalized Analysis entity)
-            <p>General Text</p>
-            <p><strong>Diagnosis: </strong></p>
-            <p><strong>Prescribtion: </strong></p>
-        </div>
-     
-  </div>
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Date</th>
+    <th>Diagnosis</th>
+    <th>Anamnes</th>
+  </tr>
+
+  {#card}
+  <tr>
+    <td>{day}</td>
+    <td>{title}</td>
+    <td>{anamnes}</td>
+  </tr>
+   {/card}
+</table>
+
 </div>
-<div id="Analysis" class="tabcontent">
- <div class="container">
-  <h1>Patien's Analysis results</h1>
-     
-      <button data-toggle='collapse' data-target="#record2" class="btn btn-info btn-sm">
-        <h3>Date: { }</h3></button>
-        <br />
-        <div id="record2" class="collapse">
-              Laborant info and lab report results go here
-             
-        </div>
-  </div>
+
+<div class="col-lg-7">
+  <div class="container-fluid" id="right">
+  <div id="Analysis" class="tabcontent">
+    <h2>Patien's Analysis results</h2>
+
+     <table style="width:100%; border: 1;
+    border-collapse: collapse;">
+  <tr>
+    <th>Date</th>
+    <th>Analisis</th>
+    <th>Standart</th>
+    <th>Result</th>
+  </tr>
+  {#analisis}
+  <tr>
+    <td>{day}</td>
+    <td>{title}</td>
+    <td>{standard}</td>
+    <td>{result}</td>
+  </tr>
+   {/analisis}
+</table>
 </div>
 
 <div id="Scans" class="tabcontent">
@@ -134,6 +154,7 @@
         </div>
     </div>
   </div>
+
 <div class="container-fluid" id="right">
 				  <div id="Rating" class="tabcontent">
 				    <h2>Rating</h2>
@@ -209,12 +230,16 @@
       <h3>Set data</h3>
 
       <form method="post" action="/newAppointment">
-      
-       <span>
+      <input type="text" name="date" id="date" readonly="readonly" size="12" />&nbsp;
+                    <input type=time name="time" min=8:00 max=19:00 step=1200>
+                  <br>
+        
+       <!--
              <input type=date name="date" min=2014-09-08 style="margin-right: 10px;">  
-              <input type=time name="time" min=8:00 max=19:00 step=1200>  </span>
+                </span> -->
               <br><br>
                    <h2 class="bold">Choose doctor</h2></p>
+                   
                   <span>
                 <select name="doctor" id="doctor">
 
@@ -230,7 +255,9 @@
                         <option  data-group="{idpos}" value='{secondname}'>{firstname}&nbsp;{secondname}</option>
                     {/nameofemp}
                          
-                    <select>
+                    </select>
+                    <br>
+
                     </span>
                </div>
 
@@ -244,14 +271,95 @@
     </div>
   </div>
 </div>
+<button type="button"   id="rating" class="btn btn-info btn-sm" data-toggle="modal" data-target="#RatingModal">Open Modal</button>
+<p id="output"></p>
 
+ <!-- Rating Modal window-->
+<div id="RatingModal" class="modal fade" role="dialog">
+  <div class="modal-dialog ">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Please leave a feedback</h4>
+      </div>
+      <div class="modal-body">
+      <form action="/" method="post">
+      <h5>Name of the doctor: </h5>
+         <select name="feedback">
+           <option value="1">Good</option>
+           <option value="0">Neutral</option>
+           <option value="-1">Bad</option>
+         </select>
+      </div>
+      <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Submit">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+  
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+
   <script>
+  $(document).ready(function(){ 
+  var app_dates='2016-11-28 21:30:00';
+  function clock(){
+var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            document.getElementById('rating').innerHTML = date;
+
+            var res = setTimeout(clock, 1000);
+            return date+"";
+            }
+
+var t=clock();
+
+t=t.split(" ");
+            var t2_d=t[0].split("-");
+            var t2_t=t[1].split(":");
+
+var t1=app_dates.split(" ");
+            var t1_d=t1[0].split("-");
+            var t1_t=t1[1].split(":");
+           
+           console.log(t2_d+"  "+t2_t+" "+t1_d+" "+t1_t);
+            
+           
+            if(parseInt(t1_d[2])<parseInt(t2_d[2])&&(parseInt(t1_d[1])==parseInt(t2_d[1]))){document.getElementById("rating").click();}
+            else if(parseInt(t1_d[2])==parseInt(t2_d[2])&&(parseInt(t1_t[0])<parseInt(t2_t[0]))&&(parseInt(t1_d[1])==parseInt(t2_d[1])))
+            {document.getElementById("rating").click();}
+
+
+
+
+var availableDates=[];
+  
+  {#suka}
+    availableDates.push('{data}');
+  {/suka}
+  console.log(availableDates);
+   
+  
+ 
+ function available(date) {
+  dmy = date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+  if ($.inArray(dmy, availableDates) != -1) {
+    return [true, "","Available"];
+  } else {
+    return [false,"","unAvailable"];
+  }
+}
+
+$('#date').datepicker({ beforeShowDay: available });
 $(function(){
     $('#doctor').on('change', function(){
         var val = $(this).val();
@@ -284,6 +392,7 @@ function openTab(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
+});
 </script>
      
 </html>

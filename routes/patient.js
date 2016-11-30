@@ -6,12 +6,47 @@ exports.patient = function(req, res){
 	console.log("------------- PATIENT -----------");
 	res.render('patient');
 };
+function DateFormatter(month,day,year){
+	var monthnew;
+	switch(month){
+		case 'Jan':monthnew=1;
+		break;
+		case 'Feb':monthnew=2;
+		break;
+		case 'Mar':monthnew=3;
+		break;
+		case 'Apr':monthnew=4;
+		break;
+		case 'May':monthnew=5;
+		break;
+		case 'Jun':monthnew=6;
+		break;
+		case 'Jul':monthnew=7;
+		break;
+		case 'Aug':monthnew=8;
+		break;
+		case 'Sep':monthnew=9;
+		break;
+		case 'Oct':monthnew=10;
+		break;
+		case 'Nov':monthnew=11;
+		break;
+		case 'Dec':monthnew=12;
+		break;
+	}
+	var result;
+	result=day+"-"+monthnew+"-"+year;
+	return result;
+}
 
 function LoadPatientInformation(res, email, patientHandler) {	
 	var results = [];
 	var appointmentInfo = [];
 	var rating = [];
+	var diagnosis = [];
+	var analisis = [];
 	var nameOfEmp = [];
+	var dates=[];
 	async.series([
 		function(callback) {
 			const client = dataBase.ConnectToDataBase();
@@ -47,7 +82,8 @@ function LoadPatientInformation(res, email, patientHandler) {
             function(callback) {
                 const client = dataBase.ConnectToDataBase();
                 client.connect();
-                var sqlQuery = 'SELECT firstname, secondname, p.idpos from employee NATURAL JOIN person NATURAL JOIN positions p';
+                var sqlQuery = 'SELECT firstname, secondname, p.idpos,roomn,day\
+                 from employee NATURAL JOIN person NATURAL JOIN positions p NATURAL JOIN WorkingSchedule';
                 const query = client.query(sqlQuery);
                 query.on('row', function(row) {
                     nameOfEmp.push(row);
@@ -67,7 +103,7 @@ function LoadPatientInformation(res, email, patientHandler) {
 				natural join employee \
 				natural join positions \
 				natural join person\
-				where idip=\'' + results[0].idip +'\''; 
+				where idip=\'' + results[0].idip +'\' and visitschedule.day >= current_date';
 
 			const query = client.query(sqlQuery);
 			query.on('row', function(row){
@@ -98,8 +134,66 @@ function LoadPatientInformation(res, email, patientHandler) {
 					client.end();
 				});
 			},
+            function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                console.log('Start diagnosis');
+                var sqlQuery = 'select res.day, inf.title, d.anamnes\
+								from diagnosis d\
+								natural join result res\
+								natural join diagnosisinfo inf\
+								where res.idip=\'' + results[0].idip +'\'';
+                console.log(sqlQuery);
+                const query = client.query(sqlQuery);
+                query.on('row', function(row){
+                	console.log(row);
+                    diagnosis.push(row);
+                });
+                query.on("end", function(result){
+                    callback();
+                    client.end();
+                });
+            },
+            function(callback) {
+                const client = dataBase.ConnectToDataBase();
+                client.connect();
+                console.log('Start analisis');
+                var sqlQuery = 'select res.day, con.title, an.standard, an.result\
+								from generalizedanalysis an\
+								natural join result res\
+								natural join conclusiontypes con\
+								natural join conclusion\
+								where res.idip=\'' + results[0].idip +'\'';
+                console.log(sqlQuery);
+                const query = client.query(sqlQuery);
+                query.on('row', function(row){
+                    console.log(row);
+                    analisis.push(row);
+                });
+                query.on("end", function(result){
+                    callback();
+                    client.end();
+                });
+            },
 		function(callback) {
-			patientHandler(results, appointmentInfo, rating, nameOfEmp);
+
+			for (var i = 0; i < nameOfEmp.length; i++) {
+				 var str=nameOfEmp[i].day+'';
+			str=str.split(" ");
+
+			 
+			//nameOfEmp[i].day=DateFormatter(str[1],str[2],str[3]);
+			dates.push({"data" :DateFormatter(str[1],str[2],str[3])});
+
+			}
+			console.log(dates[0].data);
+			
+
+			//console.log("year - " + nameOfEmp[0].day.getYear());
+			//console.log("month - " + nameOfEmp[0].day.getMonth());
+			//console.log("day - " + nameOfEmp[0].day.getDay());
+
+			patientHandler(results, appointmentInfo, rating, nameOfEmp, dates, diagnosis, analisis);
 		},
 		],
 		function(err) {
@@ -113,8 +207,8 @@ exports.get_patient_cabinet = function(req, res){
 	sess = req.session;
 	console.log("Email session - " + sess.email);
 	if(sess.email) {
-		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp) {
-			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp})
+		LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp, dates, diagnosis, analisis) {
+			res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo,rating:rating, nameofemp:nameofemp,suka:dates, card: diagnosis, analisis: analisis})
 		});
 	}
 };
@@ -140,14 +234,14 @@ exports.post_patient_cabinet = function(req, res, next){
     });
 
     query.on("end", function(result){
-    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp) {
+    	LoadPatientInformation(res, sess.email, function(results, appointmentInfo, rating, nameofemp,dates, diagnosis, analisis) {
 			if(result.rows[0] === undefined){
 		    	res.redirect('/patient');
 			}
 			else{
 			    var hashsalt = result.rows[0].hashsalt;
 			    if(md5(req.body.hashpassword + hashsalt) == result.rows[0].hashpassword) {
-					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp})
+					res.render('patient_cabinet', {patient:results[0],positions:results,appointment:appointmentInfo, rating:rating, nameofemp:nameofemp,suka:dates, card: diagnosis, analisis: analisis})
 			    }
 			    else {
 					//not right password or email
